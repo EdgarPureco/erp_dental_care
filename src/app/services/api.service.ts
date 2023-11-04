@@ -12,7 +12,7 @@ import { Capacitor, CapacitorHttp } from '@capacitor/core';
 })
 export class ApiService {
 
-  private baseUrl = Capacitor.getPlatform()== 'web' ? 'http://localhost:5000/api/' : 'http://192.168.200.23:5000/api/';
+  private baseUrl = Capacitor.getPlatform()== 'web' ? 'http://localhost:5000/api/' : 'http://192.168.136.233:5000/api/';
   private headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -66,12 +66,13 @@ export class ApiService {
   }
 
   public updateDentist(id: string, obj: any) {
-    const body = JSON.stringify(createDentist(obj));
     const options = {
       url: this.baseUrl + 'dentists/'+id,
       headers: this.headers,
-      data: body
+      data: JSON.stringify(createDentist(obj))
     };
+    console.log(options);
+    
     return CapacitorHttp.put(options)
   }
 
@@ -306,24 +307,5 @@ export class ApiService {
     return CapacitorHttp.get(options)
   }
   
-  // ! Frequencies
-  
-  public getFrequencies() {
-    const options = {
-      url: this.baseUrl + 'get/frequencies',
-      headers: this.headers,
-    };
-    return CapacitorHttp.get(options)
-  }
-
-  // ! Week days
-
-  public getWeekDays() {
-    const options = {
-      url: this.baseUrl + 'get/weekdays',
-      headers: this.headers,
-    };
-    return CapacitorHttp.get(options)
-  }
 
 }

@@ -42,16 +42,6 @@ export class DentistsAComponent implements OnInit {
     professional_license: null,
     hired_at: null,
     position: null,
-    monday: null,
-    tuesday: null,
-    wednesday: null,
-    thursday: null,
-    friday: null,
-    saturday: null,
-    sunday: null,
-    start_time: null,
-    end_time: null,
-    frequency_id: null,
     time: null
   });
 
@@ -70,21 +60,6 @@ export class DentistsAComponent implements OnInit {
     professional_license: null,
     hired_at: null,
     position: null,
-    monday: null,
-    tuesday: null,
-    wednesday: null,
-    thursday: null,
-    friday: null,
-    saturday: null,
-    sunday: null,
-    start_time: null,
-    end_time: null,
-    start_hour: null,
-    start_minute: null,
-    end_hour: null,
-    end_minute: null,
-    frequency_id: null,
-    frequency: null,
     time: null
   });
 
@@ -96,7 +71,6 @@ export class DentistsAComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
-    this.api.getFrequencies().then((response:any) => { this.frequencies = response.data });
   }
 
   getData() {
@@ -126,8 +100,9 @@ export class DentistsAComponent implements OnInit {
   }
 
   onSubmitEdit() {
-    this.api.updateDentist(this.dentist.id, this.dentistForm.value).then(
-      (response:any) => { this.modalEdit = false }
+    this.api.updateDentist(this.dentist.id, this.dentistEditForm.value).then(
+      (response:any) => { this.modalEdit = false, console.log(response.data) }, (e:any) => console.log(e.data)
+      
     );
     this.dentistEditForm.reset();
   }

@@ -161,46 +161,6 @@
                   <ion-input formControlName="position" label="Posición" [maxlength]="60"
                     placeholder="Posición"></ion-input>
                 </ion-item>
-                <ion-item>
-                  <ion-list>
-                    <ion-row>
-                      <ion-checkbox formControlName="monday" labelPlacement="start">Lunes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="tuesday" labelPlacement="start">Martes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="wednesday" labelPlacement="start">Miércoles</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="thursday" labelPlacement="start">Jueves</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="friday" labelPlacement="start">Viernes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="saturday" labelPlacement="start">Sábado</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="sunday" labelPlacement="start">Domingo</ion-checkbox>
-                    </ion-row>
-                  </ion-list>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime presentation="time" formControlName="start_time"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Salida</ion-label>
-                  <ion-datetime presentation="time" formControlName="end_time"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-select formControlName="frequency_id" label="Frecuencia" placeholder="Seleccione">
-                    <div *ngFor="let item of frequencies">
-                      <ion-select-option [value]="item.id">{{item.name}}</ion-select-option>
-                    </div>
-                  </ion-select>
-                </ion-item>
 
               </ion-list>
 
@@ -245,28 +205,6 @@
               Teléfono: {{dentist.person.phone}} <br>
               Correo: {{dentist.user.email}} <br><br>
 
-              <h1>Alergias:</h1>
-              <ion-list *ngIf="dentist.allergies.length">
-                <ion-item>
-                  Abejas
-                </ion-item>
-              </ion-list>
-              <ng-template [ngIf]="dentist.allergies.length===0">
-                <h2>Sin datos.</h2>
-              </ng-template>
-              <!-- <br>
-              <h1>Citas:</h1>
-              <ion-list>
-                <ion-item>
-                  10 de Octubre 2023
-                </ion-item>
-                <ion-item>
-                  18 de Octubre 2023
-                </ion-item>
-                <ion-item>
-                  18 de Noviembre 2023
-                </ion-item> 
-              </ion-list> -->
             </ion-card-content>
           </ion-card>
 
@@ -355,44 +293,6 @@
                 <ion-item>
                   <ion-input [(ngModel)]="dentist.position" formControlName="position" label="Posición" [maxlength]="60"
                     placeholder="Posición"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-list>
-                    <ion-row>
-                      <ion-checkbox formControlName="monday" labelPlacement="start">Lunes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="tuesday" labelPlacement="start">Martes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="wednesday" labelPlacement="start">Miércoles</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="thursday" labelPlacement="start">Jueves</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="friday" labelPlacement="start">Viernes</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="saturday" labelPlacement="start">Sábado</ion-checkbox>
-                    </ion-row>
-                    <ion-row>
-                      <ion-checkbox formControlName="sunday" labelPlacement="start">Domingo</ion-checkbox>
-                    </ion-row>
-                  </ion-list>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime [(ngModel)]="dentist.start_time" presentation="time" formControlName="start_time"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Salida</ion-label>
-                  <ion-datetime [(ngModel)]="dentist.end_time" presentation="time" formControlName="end_time"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-select [(ngModel)]="dentist.frequency.id" formControlName="frequency_id" label="Frecuencia" placeholder="Seleccione">
-                    <ion-select-option *ngFor="let item of frequencies"[value]="item.id">{{item.name}}</ion-select-option>
-                  </ion-select>
                 </ion-item>
 
               </ion-list>
