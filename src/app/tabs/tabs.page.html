@@ -1,20 +1,47 @@
 <ion-tabs>
 
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="tab1" href="/tabs/tab1">
-      <ion-icon aria-hidden="true" name="triangle"></ion-icon>
-      <ion-label>Tab 1</ion-label>
+  <ion-tab-bar class="menu-tabs" slot="bottom">
+
+    <ion-tab-button class="tab" tab="users" to="/admin/users">
+      <ion-icon class="tab-icon" aria-hidden="true" name="person"></ion-icon>
+      <ion-label class="tab-label">Usuarios</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="tab2" href="/tabs/tab2">
-      <ion-icon aria-hidden="true" name="ellipse"></ion-icon>
-      <ion-label>Tab 2</ion-label>
+    <ion-tab-button class="tab" tab="dentists" to="/admin/dentists">
+      <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 448 512"><path d="M186.1 52.1C169.3 39.1 148.7 32 127.5 32C74.7 32 32 74.7 32 127.5v6.2c0 15.8 3.7 31.3 10.7 45.5l23.5 47.1c4.5 8.9 7.6 18.4 9.4 28.2l36.7 205.8c2 11.2 11.6 19.4 22.9 19.8s21.4-7.4 24-18.4l28.9-121.3C192.2 323.7 207 312 224 312s31.8 11.7 35.8 28.3l28.9 121.3c2.6 11.1 12.7 18.8 24 18.4s20.9-8.6 22.9-19.8l36.7-205.8c1.8-9.8 4.9-19.3 9.4-28.2l23.5-47.1c7.1-14.1 10.7-29.7 10.7-45.5v-2.1c0-55-44.6-99.6-99.6-99.6c-24.1 0-47.4 8.8-65.6 24.6l-3.2 2.8 19.5 15.2c7 5.4 8.2 15.5 2.8 22.5s-15.5 8.2-22.5 2.8l-24.4-19-37-28.8z"/></svg>
+      <ion-label class="tab-label">Dentistas</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="tab3" href="/tabs/tab3">
-      <ion-icon aria-hidden="true" name="square"></ion-icon>
-      <ion-label>Tab 3</ion-label>
+    <ion-tab-button class="tab" tab="patients" to="/admin/patients">
+      <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 576 512"><path d="M48 0C21.5 0 0 21.5 0 48V256H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v64H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v80c0 26.5 21.5 48 48 48H265.9c-6.3-10.2-9.9-22.2-9.9-35.1c0-46.9 25.8-87.8 64-109.2V271.8 48c0-26.5-21.5-48-48-48H48zM152 64h16c8.8 0 16 7.2 16 16v24h24c8.8 0 16 7.2 16 16v16c0 8.8-7.2 16-16 16H184v24c0 8.8-7.2 16-16 16H152c-8.8 0-16-7.2-16-16V152H112c-8.8 0-16-7.2-16-16V120c0-8.8 7.2-16 16-16h24V80c0-8.8 7.2-16 16-16zM512 272a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM288 477.1c0 19.3 15.6 34.9 34.9 34.9H541.1c19.3 0 34.9-15.6 34.9-34.9c0-51.4-41.7-93.1-93.1-93.1H381.1c-51.4 0-93.1 41.7-93.1 93.1z"/></svg>
+      <ion-label class="tab-label">Pacientes</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button class="tab" tab="inventory" to="/admin/inventory">
+      <ion-icon class="tab-icon" aria-hidden="true" name="clipboard"></ion-icon>
+      <ion-label class="tab-label">Inventario</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button class="tab" tab="supplies" to="/admin/supplies">
+      <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512"><path d="M441 7l32 32 32 32c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-15-15L417.9 128l55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-72-72L295 73c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l55 55L422.1 56 407 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0zM210.3 155.7l61.1-61.1c.3 .3 .6 .7 1 1l16 16 56 56 56 56 16 16c.3 .3 .6 .6 1 1l-191 191c-10.5 10.5-24.7 16.4-39.6 16.4H97.9L41 505c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l57-57V325.3c0-14.9 5.9-29.1 16.4-39.6l43.3-43.3 57 57c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-57-57 41.4-41.4 57 57c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-57-57z"/></svg>
+      <ion-label class="tab-label">Insumos</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button class="tab" tab="services" to="/admin/services">
+      <ion-icon class="tab-icon" aria-hidden="true" name="sparkles"></ion-icon>
+      <ion-label class="tab-label">Servicios</ion-label>
+    </ion-tab-button>
+
+    <!-- <ion-tab-button class="tab" tab="schedule" to="/admin/schedule/">
+      <ion-icon class="tab-icon" aria-hidden="true" name="book"></ion-icon>
+      <ion-label class="tab-label">Agendas</ion-label>
+    </ion-tab-button> -->
+
+    <ion-tab-button class="tab" tab="appointments" to="/admin/appointments">
+      <ion-icon class="tab-icon" aria-hidden="true" name="today"></ion-icon>
+      <ion-label class="tab-label">Citas</ion-label>
+    </ion-tab-button>
+
   </ion-tab-bar>
 
 </ion-tabs>

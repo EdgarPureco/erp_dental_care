@@ -1,0 +1,448 @@
+<div class="ion-page">
+
+  <app-vertical-menu-admin></app-vertical-menu-admin>
+
+  <ion-content id="main-content">
+    <div style="margin: 6% 2% 0 2%;">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dentistas</ion-card-title>
+          <ion-card-subtitle>
+            <ion-searchbar animated="true" placeholder="Buscar"></ion-searchbar>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="data">
+
+            <ion-card *ngFor="let item of data">
+              <ion-card-content>
+                <ion-item-group>
+                  <ion-item>
+                    <ion-label>
+                      <h1>{{item.person.name + " " +
+                        item.person.surname + " " +
+                        item.person.lastname}}</h1>
+                      <p>22 años</p>
+                      <p>Proxima cita: Lunes 15 de febrero</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-item-group>
+                <ion-item-group style="margin-left: 5%;">
+                  <ion-button (click)="openDetails(item.id)" color="secondary">
+                    <ion-icon aria-hidden="true" name="eye"></ion-icon>
+                  </ion-button>
+
+                  <ion-button (click)="openEdit(item.id)">
+                    <ion-icon aria-hidden="true" name="pencil"></ion-icon>
+                  </ion-button>
+                  <ion-button (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
+                      name="trash"></ion-icon>
+                  </ion-button>
+                </ion-item-group>
+
+              </ion-card-content>
+            </ion-card>
+
+
+
+          </ion-list>
+          <ion-list *ngIf="data.length===0">
+            <ion-list-header>
+              <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+            </ion-list-header>
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+              </ion-thumbnail>
+              <ion-label>
+                <h3>
+                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+                </p>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <ion-fab (click)="openAdd()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <!-- Start Modal Add Dentist -->
+
+    <ion-modal [isOpen]="modalAdd" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Agregar Dentista</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalAdd=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list>
+            <form (ngSubmit)="onSubmit()" [formGroup]="dentistForm">
+              <ion-list class="ion-margin">
+                <ion-item>
+                  <ion-input formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="surname" [maxlength]="45" label="Apellido Paterno"
+                    placeholder="Apellido Paterno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="lastname" [maxlength]="45" label="Apellido Materno"
+                    placeholder="Apellido Materno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="birthday" display-format="DD.MM.YYYY"
+                    [max]="maxDateBirth"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-row>
+                    <ion-list>
+                      <ion-radio-group formControlName="sex" name="Sexo" value=true>
+                        <ion-label>Sexo:</ion-label>
+                        <ion-row>
+                          <ion-col>
+                            <ion-radio [value]=false>Femenino</ion-radio>
+                          </ion-col>
+                          <ion-col>
+                            <ion-radio [value]=true>Masculino</ion-radio>
+                          </ion-col>
+                        </ion-row>
+                      </ion-radio-group>
+                    </ion-list>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="address" [maxlength]="255" label="Dirección"
+                    placeholder="Dirección"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="cp" label="Código Postal" [maxlength]="5" type="text"
+                    placeholder="Código Postal"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="phone" label="Teléfono" type="tel" placeholder="000-000-00-00"
+                    [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input formControlName="email" [maxlength]="100" label="Correo" type="email"
+                    placeholder="ejemplo@ejemplo.com"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="password" [maxlength]="60" label="Contraseña" type="password"
+                    placeholder="Contraseña"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input formControlName="professional_license" [maxlength]="45" label="Licencia Profesional"
+                    placeholder="Licencia Profesional"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="hired_at" display-format="DD.MM.YYYY"
+                    [max]="maxDate"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="position" label="Posición" [maxlength]="60"
+                    placeholder="Posición"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-list>
+                    <ion-row>
+                      <ion-checkbox formControlName="monday" labelPlacement="start">Lunes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="tuesday" labelPlacement="start">Martes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="wednesday" labelPlacement="start">Miércoles</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="thursday" labelPlacement="start">Jueves</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="friday" labelPlacement="start">Viernes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="saturday" labelPlacement="start">Sábado</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="sunday" labelPlacement="start">Domingo</ion-checkbox>
+                    </ion-row>
+                  </ion-list>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Hora de Inicio</ion-label>
+                  <ion-datetime presentation="time" formControlName="start_time"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Hora de Salida</ion-label>
+                  <ion-datetime presentation="time" formControlName="end_time"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-select formControlName="frequency_id" label="Frecuencia" placeholder="Seleccione">
+                    <div *ngFor="let item of frequencies">
+                      <ion-select-option [value]="item.id">{{item.name}}</ion-select-option>
+                    </div>
+                  </ion-select>
+                </ion-item>
+
+              </ion-list>
+
+              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
+                [disabled]="!dentistForm.valid">
+                Guardar <ion-icon slot="end" name="save"></ion-icon>
+              </ion-button>
+            </form>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Modal Add Dentist -->
+
+
+    <!-- Start Delete Details Dentist -->
+    <ion-modal [isOpen]="modalDetails" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Detalles</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalDetails=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-card *ngIf="dentist!==null">
+            <img src="https://ionicframework.com/docs/img/demos/card-media.png" />
+            <ion-card-header>
+              <ion-card-title>{{dentist.person.name + " " +
+                dentist.person.surname + " " +
+                dentist.person.lastname}}</ion-card-title>
+              <ion-card-subtitle>Fecha Nacimiento: {{dentist.person.birthday}}</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              Dirección: {{dentist.person.address}} <br>
+              Sexo: {{dentist.person.sex == true ? "Masculino" : "Femenino" }} <br>
+              C.P: {{dentist.person.cp}} <br>
+              Teléfono: {{dentist.person.phone}} <br>
+              Correo: {{dentist.user.email}} <br><br>
+
+              <h1>Alergias:</h1>
+              <ion-list *ngIf="dentist.allergies.length">
+                <ion-item>
+                  Abejas
+                </ion-item>
+              </ion-list>
+              <ng-template [ngIf]="dentist.allergies.length===0">
+                <h2>Sin datos.</h2>
+              </ng-template>
+              <!-- <br>
+              <h1>Citas:</h1>
+              <ion-list>
+                <ion-item>
+                  10 de Octubre 2023
+                </ion-item>
+                <ion-item>
+                  18 de Octubre 2023
+                </ion-item>
+                <ion-item>
+                  18 de Noviembre 2023
+                </ion-item> 
+              </ion-list> -->
+            </ion-card-content>
+          </ion-card>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Details Add Dentist -->
+
+
+
+    <!-- Start Modal Edit Dentist -->
+
+    <ion-modal [isOpen]="modalEdit" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Editar Dentista</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalEdit=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list *ngIf="dentist!==null">
+            <form (ngSubmit)="onSubmitEdit()" [formGroup]="dentistEditForm">
+              <ion-list class="ion-margin">
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.name" formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.surname" formControlName="surname" [maxlength]="45" label="Apellido Paterno"
+                    placeholder="Apellido Paterno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.lastname" formControlName="lastname" [maxlength]="45" label="Apellido Materno"
+                    placeholder="Apellido Materno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="birthday" display-format="DD.MM.YYYY"
+                    [max]="maxDateBirth" [(ngModel)]="dentist.person.birthday"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-row>
+                    <ion-list>
+                      <ion-radio-group formControlName="sex" name="Sexo" [(ngModel)]="dentist.person.sex">
+                        <ion-label>Sexo:</ion-label>
+                        <ion-row>
+                          <ion-col>
+                            <ion-radio [value]=false>Femenino</ion-radio>
+                          </ion-col>
+                          <ion-col>
+                            <ion-radio [value]=true>Masculino</ion-radio>
+                          </ion-col>
+                        </ion-row>
+                      </ion-radio-group>
+                    </ion-list>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.address" formControlName="address" [maxlength]="255" label="Dirección"
+                    placeholder="Dirección"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.cp" formControlName="cp" label="Código Postal" [maxlength]="5" type="text"
+                    placeholder="Código Postal"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.person.phone" formControlName="phone" label="Teléfono" type="tel" placeholder="000-000-00-00"
+                    [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.user.email" formControlName="email" [maxlength]="100" label="Correo" type="email"
+                    placeholder="ejemplo@ejemplo.com"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.professional_license" formControlName="professional_license" [maxlength]="45" label="Licencia Profesional"
+                    placeholder="Licencia Profesional"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="hired_at" display-format="DD.MM.YYYY"
+                    [max]="maxDate" [(ngModel)]="dentist.hired_at"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="dentist.position" formControlName="position" label="Posición" [maxlength]="60"
+                    placeholder="Posición"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-list>
+                    <ion-row>
+                      <ion-checkbox formControlName="monday" labelPlacement="start">Lunes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="tuesday" labelPlacement="start">Martes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="wednesday" labelPlacement="start">Miércoles</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="thursday" labelPlacement="start">Jueves</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="friday" labelPlacement="start">Viernes</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="saturday" labelPlacement="start">Sábado</ion-checkbox>
+                    </ion-row>
+                    <ion-row>
+                      <ion-checkbox formControlName="sunday" labelPlacement="start">Domingo</ion-checkbox>
+                    </ion-row>
+                  </ion-list>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Hora de Inicio</ion-label>
+                  <ion-datetime [(ngModel)]="dentist.start_time" presentation="time" formControlName="start_time"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Hora de Salida</ion-label>
+                  <ion-datetime [(ngModel)]="dentist.end_time" presentation="time" formControlName="end_time"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-select [(ngModel)]="dentist.frequency.id" formControlName="frequency_id" label="Frecuencia" placeholder="Seleccione">
+                    <ion-select-option *ngFor="let item of frequencies"[value]="item.id">{{item.name}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+
+              </ion-list>
+              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
+                [disabled]="!dentistForm.valid">
+                Guardar <ion-icon slot="end" name="save"></ion-icon>
+              </ion-button>
+            </form>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Modal Edit Dentist -->
+
+
+
+    <!-- Start Delete Delete Dentist -->
+    <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Eliminar Dentista</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalDelete=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list>
+            <ion-item>
+              <h3>¿Estás seguro de eliminar este paciente?</h3>
+            </ion-item>
+          </ion-list>
+
+          <div style="margin: 45% 20px 0 20px">
+            <ion-button expand="block" color="danger" (click)="modalDelete=false"><ion-icon aria-hidden="true"
+                name="close"></ion-icon>Cancelar</ion-button>
+            <ion-button expand="block" (click)="deleteDentist()"><ion-icon aria-hidden="true"
+                name="checkmark"></ion-icon> Aceptar</ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Delete Delete Dentist -->
+
+
+    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+
+  </ion-content>
+
+
+</div>

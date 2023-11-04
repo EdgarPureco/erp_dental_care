@@ -1,0 +1,341 @@
+<div class="ion-page">
+
+  <app-vertical-menu-admin></app-vertical-menu-admin>
+
+  <ion-content id="main-content">
+    <div style="margin: 6% 2% 0 2%;">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Pacientes</ion-card-title>
+          <ion-card-subtitle>
+            <ion-searchbar animated="true" placeholder="Buscar"></ion-searchbar>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="data">
+
+            <ion-card *ngFor="let item of data">
+              <ion-card-content>
+                <ion-item-group>
+                  <ion-item>
+                    <ion-label>
+                      <h1>{{item.person.name + " " +
+                        item.person.surname + " " +
+                        item.person.lastname}}</h1>
+                      <p>22 años</p>
+                      <p>Proxima cita: Lunes 15 de febrero</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-item-group>
+                <ion-item-group style="margin-left: 5%;">
+                  <ion-button (click)="openDetails(item.id)" color="secondary">
+                    <ion-icon aria-hidden="true" name="eye"></ion-icon>
+                  </ion-button>
+
+                  <ion-button (click)="openEdit(item.id)">
+                    <ion-icon aria-hidden="true" name="pencil"></ion-icon>
+                  </ion-button>
+                  <ion-button (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
+                      name="trash"></ion-icon>
+                  </ion-button>
+                </ion-item-group>
+
+              </ion-card-content>
+            </ion-card>
+
+
+
+          </ion-list>
+          <ion-list *ngIf="data.length===0">
+            <ion-list-header>
+              <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+            </ion-list-header>
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+              </ion-thumbnail>
+              <ion-label>
+                <h3>
+                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+                </p>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <ion-fab (click)="openAdd()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <!-- Start Modal Add Patient -->
+
+    <ion-modal [isOpen]="modalAdd" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Agregar Paciente</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalAdd=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list>
+            <form (ngSubmit)="onSubmit()" [formGroup]="patientForm">
+              <ion-list class="ion-margin">
+                <ion-item>
+                  <ion-input formControlName="name" label="Nombre" placeholder="Nombre"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="surname" label="Apellido Paterno"
+                    placeholder="Apellido Paterno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="lastname" label="Apellido Materno"
+                    placeholder="Apellido Materno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="birthday" display-format="DD.MM.YYYY"
+                    [max]="maxDate"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-row>
+                    <ion-list>
+                      <ion-radio-group formControlName="sex" name="Sexo" value=true>
+                        <ion-label>Sexo:</ion-label>
+                        <ion-row>
+                          <ion-col>
+                            <ion-radio [value]=false>Femenino</ion-radio>
+                          </ion-col>
+                          <ion-col>
+                            <ion-radio [value]=true>Masculino</ion-radio>
+                          </ion-col>
+                        </ion-row>
+                      </ion-radio-group>
+                    </ion-list>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="address" label="Dirección" placeholder="Dirección"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="cp" label="Código Postal" maxlength="5"
+                    placeholder="Código Postal"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="phone" label="Teléfono" type="tel" placeholder="000-000-00-00"
+                    [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input formControlName="email" label="Correo" type="email"
+                    placeholder="ejemplo@ejemplo.com"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="password" label="Contraseña" type="password" value="password"></ion-input>
+                </ion-item>
+              </ion-list>
+
+              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
+                [disabled]="!patientForm.valid">
+                Guardar <ion-icon slot="end" name="save"></ion-icon>
+              </ion-button>
+            </form>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Modal Add Patient -->
+
+
+    <!-- Start Delete Details Patient -->
+    <ion-modal [isOpen]="modalDetails" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Detalles</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalDetails=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-card *ngIf="patient!==null">
+            <img src="https://ionicframework.com/docs/img/demos/card-media.png" />
+            <ion-card-header>
+              <ion-card-title>{{patient.person.name + " " +
+                patient.person.surname + " " +
+                patient.person.lastname}}</ion-card-title>
+              <ion-card-subtitle>Fecha Nacimiento: {{patient.person.birthday}}</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              Dirección: {{patient.person.address}} <br>
+              Sexo: {{patient.person.sex == true ? "Masculino" : "Femenino" }} <br>
+              C.P: {{patient.person.cp}} <br>
+              Teléfono: {{patient.person.phone}} <br>
+              Correo: {{patient.user.email}} <br><br>
+
+              <h1>Alergias:</h1>
+              <ion-list *ngIf="patient.allergies.length">
+                <ion-item *ngFor="let al of patient.allergies" class="ion-text-capitalize">
+                  {{al.name}}
+                </ion-item>
+              </ion-list>
+              <ng-template [ngIf]="patient.allergies.length===0">
+                <h2>Sin alergias.</h2>
+              </ng-template>
+              <!-- <br>
+              <h1>Citas:</h1>
+              <ion-list>
+                <ion-item>
+                  10 de Octubre 2023
+                </ion-item>
+                <ion-item>
+                  18 de Octubre 2023
+                </ion-item>
+                <ion-item>
+                  18 de Noviembre 2023
+                </ion-item> 
+              </ion-list> -->
+            </ion-card-content>
+          </ion-card>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Details Add Patient -->
+
+
+
+    <!-- Start Modal Edit Patient -->
+
+    <ion-modal [isOpen]="modalEdit" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Editar Paciente</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalEdit=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list *ngIf="patient!==null">
+            <form (ngSubmit)="onSubmitEdit()" [formGroup]="patientEditForm">
+              <ion-list class="ion-margin">
+                <ion-item>
+                  <ion-input formControlName="name" label="Nombre" [(ngModel)]="patient.person.name"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="surname" label="Apellido Paterno"
+                    [(ngModel)]="patient.person.surname"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="lastname" label="Apellido Materno"
+                    [(ngModel)]="patient.person.lastname"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-datetime presentation="day-month-year" formControlName="birthday" display-format="DD.MM.YYYY"
+                    [max]="maxDate" [(ngModel)]="patient.person.birthday"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-row>
+                    <ion-list>
+                      <ion-radio-group formControlName="sex" name="Sexo" [(ngModel)]="patient.person.sex">
+                        <ion-label>Sexo:</ion-label>
+                        <ion-row>
+                          <ion-col>
+                            <ion-radio [value]="false">Femenino</ion-radio>
+                          </ion-col>
+                          <ion-col>
+                            <ion-radio [value]="true">Masculino</ion-radio>
+                          </ion-col>
+                        </ion-row>
+                      </ion-radio-group>
+                    </ion-list>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="address" label="Dirección"
+                    [(ngModel)]="patient.person.address"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="cp" label="Código Postal" maxlength="5"
+                    [(ngModel)]="patient.person.cp"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="phone" label="Teléfono" type="tel" [maskito]="phoneMask"
+                    [maskitoElement]="maskPredicate" [(ngModel)]="patient.person.phone"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-input formControlName="email" label="Correo" type="email"
+                    [(ngModel)]="patient.user.email"></ion-input>
+                </ion-item>
+              </ion-list>
+
+              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
+                [disabled]="!patientForm.valid">
+                Guardar <ion-icon slot="end" name="save"></ion-icon>
+              </ion-button>
+            </form>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Modal Edit Patient -->
+
+
+
+    <!-- Start Delete Delete Patient -->
+    <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Eliminar Paciente</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalDelete=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list>
+            <ion-item>
+              <h3>¿Estás seguro de eliminar este paciente?</h3>
+            </ion-item>
+          </ion-list>
+
+          <div style="margin: 45% 20px 0 20px">
+            <ion-button expand="block" color="danger" (click)="modalDelete=false"><ion-icon aria-hidden="true"
+                name="close"></ion-icon>Cancelar</ion-button>
+            <ion-button expand="block" (click)="deletePatient()"><ion-icon aria-hidden="true"
+                name="checkmark"></ion-icon> Aceptar</ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Delete Delete Patient -->
+
+
+    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+
+  </ion-content>
+
+
+</div>

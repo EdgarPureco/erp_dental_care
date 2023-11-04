@@ -1,7 +1,13 @@
 {
   "name": "erp_dental_care",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "plugins": {
+        "CapacitorHttp": {
+          "enabled": true
+        }
+      }
+    }
   },
   "type": "angular"
 }

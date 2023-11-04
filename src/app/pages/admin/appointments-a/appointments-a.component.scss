@@ -1,0 +1,13 @@
+.water-mark{
+    max-width: 4vw; 
+    position: fixed; 
+    z-index: 99;
+    bottom: 0;
+    margin: 1vw;
+    opacity: 50%;
+
+    @media (max-width: 768px) {
+        min-width: 12vw; 
+        margin: 0 0 1vh 3vw;
+    }
+}
