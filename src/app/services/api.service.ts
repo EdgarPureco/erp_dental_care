@@ -234,24 +234,12 @@ export class ApiService {
 
   public getAppointments() {
 
-    const today = new Date();
-    const nextMonth = new Date();
-    nextMonth.setMonth(today.getMonth() + 1);
-
-    const body = {
-      dentist_id: 1,
-      patient_id: 1,
-      start_date: today.toISOString(),
-      end_date: nextMonth.toISOString()
-    };
-
     const options = {
       url: this.baseUrl + 'appointment/list',
-      headers: this.headers,
-      data: body
+      headers: this.headers
     };
 
-    return CapacitorHttp.post(options)
+    return CapacitorHttp.get(options)
   }
 
   public getMyAppointments(path: string) {
