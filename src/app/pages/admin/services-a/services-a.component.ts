@@ -108,9 +108,9 @@ export class ServicesAComponent implements OnInit {
     this.api.getService(id).then((response:any) => {
 
       this.service = response.data
-      console.log(response.supplies);
+      console.log(response.data.supplies);
       
-      response.supplies.forEach((item: any) => {
+      response.data.supplies.forEach((item: any) => {
         console.log(item);
         
         this.suppliesAdded.push({ "supply_id": item.supply.id, "quantity": item.quantity })
