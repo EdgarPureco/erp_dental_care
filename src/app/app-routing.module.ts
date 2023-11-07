@@ -14,6 +14,7 @@ import { ServicesAComponent } from './pages/admin/services-a/services-a.componen
 import { Roles } from './models/roles';
 import { AuthGuard } from './guards/auth.guard';
 import { AppointmentsAComponent } from './pages/admin/appointments-a/appointments-a.component';
+import { AccountPComponent } from './pages/patient/account-p/account-p.component';
 
 const routes: Routes = [
   {
@@ -75,6 +76,18 @@ const routes: Routes = [
             canActivate: [AuthGuard],
             data: { roles: [Roles.Dentist] }
           },
+          {
+            path: 'account',
+            component: HomeDComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Dentist] }
+          },
+          {
+            path: 'appointments',
+            component: HomeDComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Dentist] }
+          },
         ]
       },
       {
@@ -83,7 +96,27 @@ const routes: Routes = [
         children: [
           {
             path: 'home',
-            component: HomePComponent
+            component: HomePComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Patient] }
+          },
+          {
+            path: 'account',
+            component: AccountPComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Patient] }
+          },
+          {
+            path: 'appointments',
+            component: AccountPComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Patient] }
+          },
+          {
+            path: 'services',
+            component: AccountPComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Patient] }
           },
         ]
       },

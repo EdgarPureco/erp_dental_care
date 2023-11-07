@@ -132,16 +132,6 @@ export class DentistsAComponent implements OnInit {
     })
   }
 
-  editDentist(id: any) {
-    this.api.updateDentist(id, this.dentistForm.value).then(
-      (response:any) => {
-        this.dentist = null
-        this.modalEdit = false
-        this.getData();
-      }
-    )
-  }
-
   deleteDentist() {
     this.api.deleteDentist(this.dentist.id).then(
       (response:any) => {

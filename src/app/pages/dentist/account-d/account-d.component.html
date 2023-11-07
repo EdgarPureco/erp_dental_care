@@ -1,0 +1,130 @@
+<div class="ion-page">
+
+  <app-vertical-menu-dentist></app-vertical-menu-dentist>
+<ion-content>
+  <div id="main-content">
+    <div style="margin: 6% 2% 0 2%;">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Mi Cuenta</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="data">
+  
+            <ion-item>
+              <ion-label>
+                <h1>{{data.person.name + " " + data.person.surname + " " + data.person.lastname}}</h1>
+                <p>Sexo: {{data.person.sex}}</p>
+                <p>Fecha de Nacimiento: {{data.person.birthday}}</p>
+                <p>Dirección: {{data.person.address}}</p>
+                <p>Código Postal: {{data.person.cp}}</p>
+                <p>Teléfono: {{data.person.phone}}</p>
+                <p>Correo Electrónico: {{data.user.email}}</p>
+              </ion-label>
+            </ion-item>
+  
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  
+  
+
+    <ion-fab (click)="openEdit()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="pencil"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <!-- Start Modal Edit Cita -->
+
+    <ion-modal [isOpen]="modalEdit" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Editar Información</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalEdit=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list *ngIf="data!==null">
+            <form (ngSubmit)="onSubmitEdit()" [formGroup]="dataEditForm">
+              <ion-list class="ion-margin">
+                <ion-item>
+                  <ion-label>Nombre</ion-label>
+                  <ion-input [(ngModel)]="data.person.name" formControlName="name" [maxlength]="45" placeholder="Nombre"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Apellido Paterno</ion-label>
+                  <ion-input [(ngModel)]="data.person.surname" formControlName="surname" [maxlength]="45" placeholder="Apellido Paterno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Apellido Materno</ion-label>
+                  <ion-input [(ngModel)]="data.person.lastname" formControlName="lastname" [maxlength]="45" placeholder="Apellido Materno"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Cumpleaños</ion-label>
+                  <ion-datetime presentation="day-month-year" [(ngModel)]="data.person.birthday" formControlName="birthday" display-format="DD.MM.YYYY"
+                    [max]="maxDateBirth"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                  <ion-row>
+                    <ion-list>
+                      <ion-radio-group formControlName="sex" name="Sexo" [(ngModel)]="data.person.sex">
+                        <ion-label>Sexo:</ion-label>
+                        <ion-row>
+                          <ion-col>
+                            <ion-radio [value]=false>Femenino</ion-radio>
+                          </ion-col>
+                          <ion-col>
+                            <ion-radio [value]=true>Masculino</ion-radio>
+                          </ion-col>
+                        </ion-row>
+                      </ion-radio-group>
+                    </ion-list>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Dirección</ion-label>
+                  <ion-input [(ngModel)]="data.person.address" formControlName="address" [maxlength]="255" placeholder="Dirección"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Código Postal</ion-label>
+                  <ion-input [(ngModel)]="data.person.cp" formControlName="cp" [maxlength]="5" type="text" placeholder="Código Postal"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input [(ngModel)]="data.person.phone" formControlName="phone" label="Teléfono" type="tel" placeholder="000-000-00-00"
+                    [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Correo</ion-label>
+                  <ion-input [(ngModel)]="data.user.email" formControlName="email" [maxlength]="100" type="email" placeholder="ejemplo@ejemplo.com"></ion-input>
+                </ion-item>
+                <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
+                  [disabled]="!dataEditForm.valid">
+                  Guardar <ion-icon slot="end" name="save"></ion-icon>
+                </ion-button>
+              </ion-list>
+            </form>
+            
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <!-- End Modal Edit Cita -->
+
+
+
+   
+
+    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+
+  </ion-content>
+
+
+</div>

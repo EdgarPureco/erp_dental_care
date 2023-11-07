@@ -2,17 +2,19 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HomePComponent } from './home-p.component';
+import { AccountPComponent } from './account-p.component';
 import { VerticalMenuPatientModule } from 'src/app/components/vertical-menu-patient/vertical-menu-patient.module';
+import { MaskitoModule } from '@maskito/angular';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     ReactiveFormsModule,
-    VerticalMenuPatientModule
+    VerticalMenuPatientModule,
+    MaskitoModule
   ],
-  declarations: [HomePComponent],
-  exports: [HomePComponent]
+  declarations: [AccountPComponent],
+  exports: [AccountPComponent]
 })
-export class HomePModule {}
+export class AccountPModule {}

@@ -9,3 +9,4 @@ import { SuppliesAModule } from './pages/admin/supplies-a/supplies-a.module';
 import { ServicesAModule } from './pages/admin/services-a/services-a.module';
 import { HomeDModule } from './pages/dentist/home-d/home-d.module';
 import {AppointmentsAModule } from './pages/admin/appointments-a/appointments-a.module';
+import { AccountPModule } from './pages/patient/account-p/account-p.module';

@@ -40,6 +40,14 @@ export class ApiService {
     this.router.navigate(['pages/login']);
   }
 
+  public getMyInfo(path: string) {
+    const options = {
+      url: this.baseUrl + path + '/me',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
   // ! Dentists
 
   public getDentists() {
@@ -244,7 +252,7 @@ export class ApiService {
 
   public getMyAppointments(path: string) {
     const options = {
-      url: this.baseUrl + path + '/my/sells',
+      url: this.baseUrl + path + '/my/appointments',
       headers: this.headers,
     };
     return CapacitorHttp.get(options)
