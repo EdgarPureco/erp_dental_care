@@ -78,7 +78,7 @@
       </ion-fab-button>
     </ion-fab>
 
-    <!-- Start Modal Add Dentist -->
+    <!-- Start Modal Add Cita -->
 
     <ion-modal [isOpen]="modalAdd" (willDismiss)="onWillDismiss()">
       <ng-template>
@@ -97,21 +97,32 @@
               <ion-list class="ion-margin">
 
                 <ion-item>
-                  <ion-input formControlName="dentist_id" type="number" label="Dentista"
-                    placeholder="Dentista"></ion-input>
+                  <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
+                    formControlName="dentist_id">
+                    <div *ngFor="let item of dentists">
+                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
+                        item.person.lastname}}</ion-select-option>
+                    </div>
+                  </ion-select>
+                </ion-item>
+
+                <ion-item>
+                  <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
+                    formControlName="patient_id">
+                    <div *ngFor="let item of patients">
+                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
+                        item.person.lastname}}</ion-select-option>
+                    </div>
+                  </ion-select>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Hora de Inicio</ion-label>
+                  <ion-datetime presentation="time" formControlName="start_date"></ion-datetime>
                 </ion-item>
                 <ion-item>
-                  <ion-input formControlName="patient_id" type="number" label="Paciente"
-                    placeholder="Paciente"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-datetime formControlName="start_date" display-format="DD.MM.YYYY"
-                    [max]="maxDateBirth"></ion-datetime>
-                </ion-item>
-                <br>
-                <ion-item>
-                  <ion-datetime formControlName="end_date" display-format="DD.MM.YYYY"
-                    [max]="maxDate"></ion-datetime>
+                  <ion-label>Hora de Fin</ion-label>
+                  <ion-datetime presentation="time" formControlName="end_date"></ion-datetime>
                 </ion-item>
 
 
@@ -126,10 +137,10 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <!-- End Modal Add Dentist -->
+    <!-- End Modal Add Cita -->
 
 
-    <!-- Start Delete Details Dentist -->
+    <!-- Start Details Cita -->
     <ion-modal [isOpen]="modalDetails" (willDismiss)="onWillDismiss()">
       <ng-template>
         <ion-header>
@@ -163,11 +174,11 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <!-- End Details Add Dentist -->
+    <!-- End Details Cita -->
 
 
 
-    <!-- Start Modal Edit Dentist -->
+    <!-- Start Modal Edit Cita -->
 
     <ion-modal [isOpen]="modalEdit" (willDismiss)="onWillDismiss()">
       <ng-template>
@@ -184,18 +195,36 @@
           <ion-list *ngIf="appointment!==null">
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="appointmentEditForm">
               <ion-list class="ion-margin">
-                
+
                 <ion-item>
-                  <ion-input [(ngModel)]="appointment.person.dentist_id" formControlName="dentist_id" [maxlength]="45" label="Dentista"
-                    placeholder="Dentista"></ion-input>
+                  <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
+                    formControlName="dentist_id">
+                    <div *ngFor="let item of patients">
+                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
+                        item.person.lastname}}</ion-select-option>
+                    </div>
+                  </ion-select>
+                </ion-item>
+
+                <ion-item>
+                  <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
+                    formControlName="patient_id">
+                    <div *ngFor="let item of patients">
+                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
+                        item.person.lastname}}</ion-select-option>
+                    </div>
+                  </ion-select>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Hora de Inicio</ion-label>
+                  <ion-datetime [(ngModel)]="appointment.start_date" presentation="time"
+                    formControlName="start_date"></ion-datetime>
                 </ion-item>
                 <ion-item>
-                  <ion-input [(ngModel)]="appointment.person.patient_id" formControlName="patient_id" [maxlength]="45" label="Paciente"
-                    placeholder="Paciente"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-datetime formControlName="start_date" display-format="DD.MM.YYYY"
-                    [max]="maxDateBirth" [(ngModel)]="appointment.person.start_date"></ion-datetime>
+                  <ion-label>Hora de Salida</ion-label>
+                  <ion-datetime [(ngModel)]="appointment.end_date" presentation="time"
+                    formControlName="end_date"></ion-datetime>
                 </ion-item>
 
 
@@ -209,11 +238,11 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <!-- End Modal Edit Dentist -->
+    <!-- End Modal Edit Cita -->
 
 
 
-    <!-- Start Delete Delete Dentist -->
+    <!-- Start Delete Cita -->
     <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
       <ng-template>
         <ion-header>
@@ -228,7 +257,7 @@
 
           <ion-list>
             <ion-item>
-              <h3>¿Estás seguro de eliminar esta cita?</h3>
+              <h3>¿Estás seguro de cancelar esta cita?</h3>
             </ion-item>
           </ion-list>
 
@@ -241,7 +270,7 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <!-- End Delete Delete Dentist -->
+    <!-- End Delete Cita -->
 
 
     <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>

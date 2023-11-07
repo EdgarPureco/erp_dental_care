@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-home-p',
@@ -7,8 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePComponent  implements OnInit {
 
-  constructor() { }
+  constructor(private api: ApiService) {
+    let fechaActual = new Date();
 
-  ngOnInit() {}
+    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
+
+  
+  }
+
+  data: any[] = [];
+
+  ngOnInit() {
+    this.getData();
+  }
+
+  getData() {
+    this.api.getMyAppointments('patients').then((response:any) => {
+      this.data = response.data;
+    });
+  }
+
+  
 
 }

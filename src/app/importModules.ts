@@ -7,4 +7,5 @@ import { PatientsAModule } from './pages/admin/patients-a/patients-a.module';
 import { DentistsAModule } from './pages/admin/dentists-a/dentists-a.module';
 import { SuppliesAModule } from './pages/admin/supplies-a/supplies-a.module';
 import { ServicesAModule } from './pages/admin/services-a/services-a.module';
+import { HomeDModule } from './pages/dentist/home-d/home-d.module';
 import {AppointmentsAModule } from './pages/admin/appointments-a/appointments-a.module';

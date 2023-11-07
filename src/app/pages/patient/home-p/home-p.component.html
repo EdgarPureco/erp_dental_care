@@ -1,3 +1,90 @@
-<p>
-  home-p works!
-</p>
+<div class="ion-page">
+
+  <app-vertical-menu-patient></app-vertical-menu-patient>
+
+  <ion-content id="main-content">
+    <div style="margin: 6% 2% 0 2%;">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Bienvenido - Mis Citas</ion-card-title>
+          <ion-card-subtitle>
+            <ion-searchbar animated="true" placeholder="Buscar"></ion-searchbar>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="data">
+
+            <ion-card *ngFor="let item of data">
+              <ion-card-content>
+                <ion-item-group>
+                  <ion-item>
+                    <ion-label>
+                      <h1>{{item.person.name + " " +
+                        item.person.dentist_id + " " +
+                        item.person.patient_id}}</h1>
+                      <p>22 años</p>
+                      <p>Proxima cita: Lunes 15 de febrero</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-item-group>
+                <!-- <ion-item-group style="margin-left: 5%;">
+                  <ion-button (click)="openDetails(item.id)" color="secondary">
+                    <ion-icon aria-hidden="true" name="eye"></ion-icon>
+                  </ion-button>
+
+                  <ion-button (click)="openEdit(item.id)">
+                    <ion-icon aria-hidden="true" name="pencil"></ion-icon>
+                  </ion-button>
+                  <ion-button (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
+                      name="trash"></ion-icon>
+                  </ion-button>
+                </ion-item-group> -->
+
+              </ion-card-content>
+            </ion-card>
+
+
+
+          </ion-list>
+          
+          <ion-list *ngIf="data.length===0">
+            <ion-list-header>
+              <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+            </ion-list-header>
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+              </ion-thumbnail>
+              <ion-label>
+                <h3>
+                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+                </p>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <!-- <ion-fab (click)="openAdd()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab> -->
+
+
+
+
+    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+
+  </ion-content>
+
+
+</div>

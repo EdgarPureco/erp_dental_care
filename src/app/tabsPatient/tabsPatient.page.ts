@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-tabsPatient',
@@ -7,6 +8,10 @@ import { Component } from '@angular/core';
 })
 export class TabsPatientPage {
 
-  constructor() {}
+  constructor(private api: ApiService) {}
+
+  logout(){
+    this.api.logout()
+  }
 
 }

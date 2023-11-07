@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-vertical-menu-admin',
-  templateUrl: './vertical-menu-admin.component.html',
-  styleUrls: ['./vertical-menu-admin.component.scss'],
+  selector: 'app-vertical-menu-dentist',
+  templateUrl: './vertical-menu-dentist.component.html',
+  styleUrls: ['./vertical-menu-dentist.component.scss'],
 })
-export class VerticalMenuAdminComponent {
+export class VerticalMenuDentistComponent {
 
   constructor(private api: ApiService) { }
 

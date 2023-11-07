@@ -26,8 +26,7 @@ export class LoginComponent  implements OnInit {
 
   onSubmitLogin() {
     this.api.login(this.loginForm.value).then((response:any) => {
-      console.log("HALO", response.data.message.includes("User logged successfully"));
-      
+
       if (response.data.message.includes("User logged successfully")) {
 
         localStorage.setItem('isLoggedIn', "true");

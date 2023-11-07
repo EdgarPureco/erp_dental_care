@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Allergy, Patient, createPatient } from '../models/patient'
+import { createPatient } from '../models/patient'
 import { createDentist } from '../models/dentist';
 import { createSupply } from '../models/supply';
 import { createService } from '../models/service';
 import { Capacitor, CapacitorHttp } from '@capacitor/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private baseUrl = Capacitor.getPlatform()== 'web' ? 'http://localhost:5000/api/' : 'http://192.168.136.233:5000/api/';
+  private baseUrl = Capacitor.getPlatform() == 'web' ? 'http://localhost:5000/api/' : 'http://192.168.136.233:5000/api/';
   private headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   //  ! Login
 
   public login(obj: any) {
-    
+
     const options = {
       url: this.baseUrl + 'login',
       headers: this.headers,
@@ -33,6 +32,12 @@ export class ApiService {
       },
     };
     return CapacitorHttp.post(options);
+  }
+  
+  public logout() {
+
+    localStorage.clear();
+    this.router.navigate(['pages/login']);
   }
 
   // ! Dentists
@@ -67,12 +72,12 @@ export class ApiService {
 
   public updateDentist(id: string, obj: any) {
     const options = {
-      url: this.baseUrl + 'dentists/'+id,
+      url: this.baseUrl + 'dentists/' + id,
       headers: this.headers,
       data: JSON.stringify(createDentist(obj))
     };
     console.log(options);
-    
+
     return CapacitorHttp.put(options)
   }
 
@@ -147,7 +152,7 @@ export class ApiService {
       url: this.baseUrl + 'services/' + id,
       headers: this.headers,
     };
-    return CapacitorHttp.get( options)
+    return CapacitorHttp.get(options)
   }
 
   public insertService(obj: any, supplies: any[]) {
@@ -249,6 +254,14 @@ export class ApiService {
     return CapacitorHttp.post(options)
   }
 
+  public getMyAppointments(path: string) {
+    const options = {
+      url: this.baseUrl + path + '/my/sells',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
   public getAppointment(id: string) {
     const options = {
       url: this.baseUrl + 'appointment/' + id,
@@ -260,6 +273,8 @@ export class ApiService {
   public insertAppointment(obj: any) {
 
     const body = JSON.stringify(obj);
+    console.log(body);
+
     const options = {
       url: this.baseUrl + 'appointment',
       headers: this.headers,
@@ -306,6 +321,6 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
-  
+
 
 }

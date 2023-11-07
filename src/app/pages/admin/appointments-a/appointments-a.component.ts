@@ -17,14 +17,14 @@ export class AppointmentsAComponent implements OnInit {
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
 
-    this.maxDateBirth = fechaActual;
+  
   }
 
   data: any[] = [];
-  frequencies: any[] = [];
+  patients: any[] = [];
+  dentists: any[] = [];
+  suppliesAdded: any[] = [];
   appointment: any = null
-  maxDateBirth: Date;
-  maxDate = new Date();
 
   appointmentForm = this.formBuilder.group({
     dentist_id: null,
@@ -55,6 +55,12 @@ export class AppointmentsAComponent implements OnInit {
     this.api.getAppointments().then((response:any) => {
       this.data = response.data;
     });
+    this.api.getPatients().then((response:any) => {
+      this.dentists = response.data;
+    });
+    this.api.getDentists().then((response:any) => {
+      this.patients = response.data;
+    });
   }
 
   openAdd() {
@@ -66,8 +72,11 @@ export class AppointmentsAComponent implements OnInit {
     this.api.insertAppointment(this.appointmentForm.value).then(
       (response:any) => {
         this.modalAdd = false
+        console.log(response);
         this.appointmentForm.reset();
         this.getData()
+      },
+      (e:any)=>{console.log(e.message);
       }
     );
   }
@@ -77,6 +86,9 @@ export class AppointmentsAComponent implements OnInit {
     this.modalDetails = false
     this.modalEdit = false
     this.modalDelete = false
+  }
+
+  handleChange(e: any) {
   }
 
   onSubmitEdit() {
