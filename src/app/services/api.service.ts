@@ -287,6 +287,8 @@ export class ApiService {
       headers: this.headers,
       data: body
     };
+    console.log(options);
+    
     return CapacitorHttp.put(options)
   }
 

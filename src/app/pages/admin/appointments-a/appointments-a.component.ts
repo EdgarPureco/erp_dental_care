@@ -72,11 +72,11 @@ export class AppointmentsAComponent implements OnInit {
     this.api.insertAppointment(this.appointmentForm.value).then(
       (response:any) => {
         this.modalAdd = false
-        console.log(response);
+        console.log(response.data);
         this.appointmentForm.reset();
         this.getData()
       },
-      (e:any)=>{console.log(e.message);
+      (e:any)=>{console.log("HALO", e);
       }
     );
   }
@@ -92,8 +92,10 @@ export class AppointmentsAComponent implements OnInit {
   }
 
   onSubmitEdit() {
-    this.api.updateAppointment(this.appointment.id, this.appointmentForm.value).then(
-      (response:any) => { this.modalEdit = false }
+    this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
+      (response:any) => { this.modalEdit = false, this.getData() },
+      (e:any)=>{console.log("HALO", e);
+      }
     );
     this.appointmentEditForm.reset();
   }
