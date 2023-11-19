@@ -209,11 +209,35 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
+  public getSupplyBuys(id: string) {
+    const options = {
+      url: this.baseUrl + 'supplies/' + id + "/buys",
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+  public getSupplySells(id: string) {
+    const options = {
+      url: this.baseUrl + 'supplies/' + id + "/sells",
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
 
   public insertSupply(obj: any) {
     const body = JSON.stringify(createSupply(obj));
     const options = {
       url: this.baseUrl + 'supplies',
+      headers: this.headers,
+      data: body
+    };
+    return CapacitorHttp.post(options)
+  }
+  
+  public buySupply(obj: any) {
+    const body = JSON.stringify(obj);
+    const options = {
+      url: this.baseUrl + 'supplies/buys',
       headers: this.headers,
       data: body
     };

@@ -6,11 +6,11 @@ import { ApiService } from 'src/app/services/api.service';
 
 
 @Component({
-  selector: 'app-appointments-a',
-  templateUrl: './appointments-a.component.html',
-  styleUrls: ['./appointments-a.component.scss'],
+  selector: 'app-appointments-d',
+  templateUrl: './appointments-d.component.html',
+  styleUrls: ['./appointments-d.component.scss'],
 })
-export class AppointmentsAComponent implements OnInit {
+export class AppointmentsDComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();
@@ -52,14 +52,8 @@ export class AppointmentsAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getAppointments().then((response:any) => {
+    this.api.getMyAppointments('dentist').then((response:any) => {
       this.data = response.data;
-    });
-    this.api.getPatients().then((response:any) => {
-      this.dentists = response.data;
-    });
-    this.api.getDentists().then((response:any) => {
-      this.patients = response.data;
     });
   }
 

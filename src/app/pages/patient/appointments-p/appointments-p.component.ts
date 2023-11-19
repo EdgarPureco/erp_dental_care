@@ -6,11 +6,11 @@ import { ApiService } from 'src/app/services/api.service';
 
 
 @Component({
-  selector: 'app-appointments-a',
-  templateUrl: './appointments-a.component.html',
-  styleUrls: ['./appointments-a.component.scss'],
+  selector: 'app-appointments-p',
+  templateUrl: './appointments-p.component.html',
+  styleUrls: ['./appointments-p.component.scss'],
 })
-export class AppointmentsAComponent implements OnInit {
+export class AppointmentsPComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();

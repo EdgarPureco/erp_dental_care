@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { SuppliesAComponent } from './supplies-a.component';
+import { AppointmentsDComponent } from './appointments-d.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaskitoModule } from '@maskito/angular';
-import { VerticalMenuAdminModule } from 'src/app/components/vertical-menu-admin/vertical-menu-admin.module';
+import { VerticalMenuDentistModule } from 'src/app/components/vertical-menu-dentist/vertical-menu-dentist.module';
 
 
 
@@ -14,9 +14,9 @@ import { VerticalMenuAdminModule } from 'src/app/components/vertical-menu-admin/
     CommonModule,
     ReactiveFormsModule,
     MaskitoModule,
-    VerticalMenuAdminModule
+    VerticalMenuDentistModule
   ],
-  declarations: [SuppliesAComponent],
-  exports: [SuppliesAComponent]
+  declarations: [AppointmentsDComponent],
+  exports: [AppointmentsDComponent]
 })
-export class SuppliesAModule {}
+export class AppointmentsDModule {}
