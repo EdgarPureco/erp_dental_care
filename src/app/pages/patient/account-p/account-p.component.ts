@@ -24,6 +24,8 @@ export class AccountPComponent  implements OnInit {
 
   maxDateBirth: Date;
   data: any = null
+  allergies:any[] = []
+  allergiesAdded:any[] = []
   modalEdit = false
 
   dataEditForm = this.formBuilder.group({
@@ -41,26 +43,72 @@ export class AccountPComponent  implements OnInit {
 
   getData() {
     this.api.getMyInfo('patients').then((response:any) => {
-      this.data = response.data;console.log( "HALO",response.data)
+      this.data = response.data; this.allergies=response.data.allergies;console.log( "HALO",this.data.person.name)
     });
   }
 
   openEdit() {
     this.modalEdit = true
+    this.api.getAllergies().then((response:any) => {
+      this.allergies=response.data
+    });
   }
 
   onSubmitEdit() {
-    this.api.updateDentist(this.data.id, this.dataEditForm.value).then(
-      (response:any) => { this.modalEdit = false }, (e:any) => console.log(e.data)
+    console.log(this.allergiesAdded);
+    
+    // this.api.updateDentist(this.data.id, this.dataEditForm.value).then(
+    //   (response:any) => { this.modalEdit = false }, (e:any) => console.log(e.data)
       
-    );
-    this.dataEditForm.reset();
+    // );
+    // this.dataEditForm.reset();
   }
 
  
   onWillDismiss() {
     this.modalEdit = false
   }
+
+  handleChange(e: any) {
+    this.allergiesAdded.push(
+      { "id": parseInt(e.detail.value), 
+      "name": this.allergies[this.findIndexById(e.detail.value)].name 
+    });
+  }
+
+  addName(e: any, id: number) {
+    this.allergiesAdded.map(item => {
+      if (item.id === id) {
+        item.name = e.detail.value
+        return item;
+      } else {
+        return item;
+      }
+    });
+  }
+
+  removeAllergy(id: any) {
+    this.allergiesAdded = this.allergiesAdded.filter((item) => item.id !== id);
+  }
+
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.allergies.length; i++) {
+      if (this.allergies[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+   itemExists(id: number): boolean {
+    if(this.allergiesAdded.some(item => item.supply_id === id)){
+      return false
+    }
+    return true
+}
 
    // Secondary Functions
 

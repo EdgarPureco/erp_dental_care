@@ -5,6 +5,7 @@ import { createSupply } from '../models/supply';
 import { createService } from '../models/service';
 import { Capacitor, CapacitorHttp } from '@capacitor/core';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ApiService {
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private datePipe: DatePipe) { }
 
   //  ! Login
 
@@ -33,7 +34,7 @@ export class ApiService {
     };
     return CapacitorHttp.post(options);
   }
-  
+
   public logout() {
 
     localStorage.clear();
@@ -209,6 +210,15 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
+  
+  public getSupplyInventory(id: string) {
+    const options = {
+      url: this.baseUrl + 'supplies/' + id + '/inventory',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
   public getSupplyBuys(id: string) {
     const options = {
       url: this.baseUrl + 'supplies/' + id + "/buys",
@@ -233,14 +243,25 @@ export class ApiService {
     };
     return CapacitorHttp.post(options)
   }
-  
+
   public buySupply(obj: any) {
-    const body = JSON.stringify(obj);
+    let body:any = null;
+
+    if (obj.expiration_date !== null) {
+      const tmp: Date = new Date(obj.expiration_date);
+      obj.expiration_date = this.datePipe.transform(tmp, 'yyyy-MM-dd')
+      body = JSON.stringify(obj);
+    }else{
+      body = JSON.stringify({supply_id: obj.supply_id, quantity: obj.quantity});
+    }
+
     const options = {
       url: this.baseUrl + 'supplies/buys',
       headers: this.headers,
       data: body
     };
+    console.log(body);
+
     return CapacitorHttp.post(options)
   }
 
@@ -312,7 +333,7 @@ export class ApiService {
       data: body
     };
     console.log(options);
-    
+
     return CapacitorHttp.put(options)
   }
 

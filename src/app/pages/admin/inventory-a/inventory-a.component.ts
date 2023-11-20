@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -10,19 +11,21 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class InventoryAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
   }
 
   data: any[] = [];
+  inventory: any[] = [];
   buys: any[] = [];
   sells: any[] = [];
+  supply_id: any = null
   supply: any = null
+  expires = false
 
   supplyForm = this.formBuilder.group({
-    supply_id: 0,
+    supply_id: null,
     quantity: null,
-    expiration_date: null,
-    
+    expiration_date: null
   });
 
 
@@ -36,22 +39,26 @@ export class InventoryAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getSupplies().then((response:any) => { this.data = response.data, console.log(response.data);
+    this.api.getSupplies().then((response:any) => { this.data = response.data;
      });
   }
 
-  openAdd(id:number) {
+  openAdd(id:any) {
     this.modalAdd = true
-    this.supplyForm.value.supply_id = id
+    this.supply_id = id
   }
-
+  
   onSubmit() {
- 
+    
+    this.supplyForm.value.supply_id = this.supply
     this.api.buySupply(this.supplyForm.value).then(
       (response:any) => {
         this.modalAdd = false
         this.supplyForm.reset();
         this.getData()
+        this.presentToast()
+        console.log(response.data);
+        
       }
     );
   }
@@ -69,6 +76,10 @@ export class InventoryAComponent implements OnInit {
     this.api.getSupply(id).then((response:any) => {
       this.supply = response.data;
     })
+    this.api.getSupplyInventory(id).then((response:any) => {
+      this.inventory = response.data; console.log(response.data);
+      
+    })
   }
 
   openBuys(id: any) {
@@ -76,7 +87,8 @@ export class InventoryAComponent implements OnInit {
     this.modalBuys = true
 
     this.api.getSupplyBuys(id).then((response:any) => {
-      this.buys = response.data;
+      this.buys = response.data, console.log(response.data);
+      ;
     })
   }
   openSells(id: any) {
@@ -84,10 +96,22 @@ export class InventoryAComponent implements OnInit {
     this.modalSells = true
 
     this.api.getSupplySells(id).then((response:any) => {
-      this.sells = response.data;
+      this.sells = response.data, console.log(response.data);
+      ;
     })
   }
 
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
+
+    await toast.present();
+  }
 
 
 }

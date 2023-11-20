@@ -9,7 +9,7 @@
           <ion-card-title>Mi Cuenta</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <ion-list *ngIf="data.person">
+          <ion-list *ngIf="data">
   
             <ion-item>
               <ion-label>
@@ -20,6 +20,17 @@
                 <p>Código Postal: {{data.person.cp}}</p>
                 <p>Teléfono: {{data.person.phone}}</p>
                 <p>Correo Electrónico: {{data.user.email}}</p>
+                <br>
+                <h1>Alergias:</h1>
+                <br>
+              <ion-list *ngIf="data.allergies.length">
+                <ion-item *ngFor="let al of data.allergies" class="ion-text-capitalize">
+                  {{al.name}}
+                </ion-item>
+              </ion-list>
+              <ng-template [ngIf]="data.allergies.length===0">
+                <h2>Sin alergias.</h2>
+              </ng-template>
               </ion-label>
             </ion-item>
   
@@ -105,6 +116,30 @@
                   <ion-label>Correo</ion-label>
                   <ion-input [(ngModel)]="data.user.email" formControlName="email" [maxlength]="100" type="email" placeholder="ejemplo@ejemplo.com"></ion-input>
                 </ion-item>
+                <br>
+                <label>Alergias</label>
+                <ion-item>
+                  <ion-select
+                    aria-label="Agregar Insumo"
+                    placeholder="Agregar Insumo"
+                    (ionChange)="handleChange($event)"
+                  >
+                  <div *ngFor="let item of allergies">
+                    <ion-select-option *ngIf="itemExists(item.id)" [value]="item.id">{{item.name}}</ion-select-option>
+                  </div>
+                  </ion-select>
+                </ion-item>
+                <br>
+                <label *ngIf="allergiesAdded.length">Insumos</label>
+                <ion-item *ngFor="let item of allergiesAdded">
+                      <ion-input [id]="item.supply_id"  [label]="allergies[findIndexById(item.supply_id)].name" type="number"
+                      (ionChange)="addName($event, item.id)"
+                    [value]="item.quantity"></ion-input>
+                    <ion-button style="margin-left: 10px;" (click)="removeAllergy(item.id)" color="danger"><ion-icon aria-hidden="true"
+                      name="trash"></ion-icon>
+                  </ion-button>
+                </ion-item>
+
                 <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
                   [disabled]="!dataEditForm.valid">
                   Guardar <ion-icon slot="end" name="save"></ion-icon>
