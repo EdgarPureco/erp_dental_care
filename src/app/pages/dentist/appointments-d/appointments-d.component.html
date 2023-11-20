@@ -19,8 +19,7 @@
                 <ion-item-group>
                   <ion-item>
                     <ion-label>
-                      <h1>{{item.start_date
-                        }}</h1>
+                      <h1>{{formatDateToLetter(item.start_date)}}</h1>
                       <p>Dentista: {{item.dentist.person.name + " "+ item.dentist.person.surname + " " + item.dentist.person.lastname}}</p>
                       <p>Paciente: {{item.patient.person.name + " "+ item.patient.person.surname + " " + item.patient.person.lastname}}</p>
                     </ion-label>
@@ -154,8 +153,8 @@
 
           <ion-card *ngIf="appointment!==null">
             <ion-card-header>
-              <ion-card-title>Inicio: {{appointment.start_date}}</ion-card-title>
-              <ion-card-subtitle>Fin: {{appointment.end_date}}</ion-card-subtitle>
+              <ion-card-title>Inicio: {{formatDateToLetter(appointment.start_date)}}</ion-card-title>
+              <ion-card-subtitle>Fin: {{formatDateToLetter(appointment.end_date)}}</ion-card-subtitle>
             </ion-card-header>
 
             <ion-card-content>

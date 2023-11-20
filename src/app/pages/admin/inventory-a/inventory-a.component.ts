@@ -113,5 +113,14 @@ export class InventoryAComponent implements OnInit {
     await toast.present();
   }
 
+// Secondary Functions
+
+formatDateToLetter(date: any) {
+  var startDate = new Date(date);
+
+  const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+
+  return formattedDate;
+}
 
 }

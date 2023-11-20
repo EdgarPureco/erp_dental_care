@@ -132,24 +132,13 @@ export class AppointmentsDComponent implements OnInit {
 
 
 
+// Secondary Functions
 
-  // Secondary Functions
+formatDateToLetter(date: any) {
+  var startDate = new Date(date);
 
-  readonly phoneMask: MaskitoOptions = {
-    mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
-  };
+  const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
-  readonly cardMask: MaskitoOptions = {
-    mask: [
-      ...Array(3).fill(/\d/),
-      ' ',
-      ...Array(3).fill(/\d/),
-      ' ',
-      ...Array(4).fill(/\d/),
-    ],
-  };
-
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
-
-
+  return formattedDate;
+}
 }

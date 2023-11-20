@@ -174,8 +174,8 @@
               <ion-item *ngFor="let item of buys">
                 <ion-card>
                   <ion-card-header>
-                    <ion-card-title *ngIf="item.expiration_date">Caduca: {{item.expiration_date}}</ion-card-title>
-                    <ion-card-title>Comprado: {{item.buy_date}}</ion-card-title>
+                    <ion-card-title *ngIf="item.expiration_date">Caduca: {{formatDateToLetter(item.expiration_date)}}</ion-card-title>
+                    <ion-card-title>Comprado: {{formatDateToLetter(item.buy_date)}}</ion-card-title>
                   </ion-card-header>
 
                   <ion-card-content>
@@ -229,8 +229,8 @@
                 <ion-item *ngFor="let item of inventory">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title *ngIf="item.expiration_date">Caduca: {{item.expiration_date}}</ion-card-title>
-                      <ion-card-title>Comprado: {{item.buy_date}}</ion-card-title>
+                      <ion-card-title *ngIf="item.expiration_date">Caduca: {{formatDateToLetter(item.expiration_date)}}</ion-card-title>
+                      <ion-card-title>Comprado: {{formatDateToLetter(item.buy_date)}}</ion-card-title>
                     </ion-card-header>
 
                     <ion-card-content>
