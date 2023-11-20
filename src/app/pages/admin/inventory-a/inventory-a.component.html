@@ -29,16 +29,16 @@
                 </ion-item-group>
                 <ion-item-group>
                   <ion-button (click)="openDetails(item.id)" color="secondary">
-                    <ion-icon aria-hidden="true" name="eye"></ion-icon>
+                    Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
                   </ion-button>
 
-                  <ion-button (click)="openAdd(item.id)">
+                  <ion-button (click)="openAdd(item.id)" color="primary">
                     Comprar <ion-icon slot="end" aria-hidden="true" name="bag-add"></ion-icon>
                   </ion-button>
-                  <ion-button (click)="openSells(item.id)">
+                  <ion-button (click)="openSells(item.id)" color="medium">
                     Ventas <ion-icon slot="end" aria-hidden="true" name="cash"></ion-icon>
                   </ion-button>
-                  <ion-button (click)="openBuys(item.id)">
+                  <ion-button (click)="openBuys(item.id)" color="medium">
                     Compras <ion-icon slot="end" aria-hidden="true" name="cart"></ion-icon>
                   </ion-button>
                 </ion-item-group>
