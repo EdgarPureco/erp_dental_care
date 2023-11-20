@@ -44,6 +44,7 @@ export class AppointmentsAComponent implements OnInit {
   modalAdd = false
   modalDetails = false
   modalEdit = false
+  modalFinish = false
   modalDelete = false
   maxPL = 6
 
@@ -85,6 +86,7 @@ export class AppointmentsAComponent implements OnInit {
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
+    this.modalFinish = false
     this.modalDelete = false
   }
 
@@ -119,6 +121,23 @@ export class AppointmentsAComponent implements OnInit {
 
   }
 
+  openFinish(id: any) {
+    this.modalFinish = true
+    this.api.getAppointment(id).then((response:any) => {
+      this.appointment = response.data
+    })
+  }
+
+
+  finishAppointment() {
+    this.api.finishAppointment(this.appointment.id).then(
+      (response:any) => {
+        this.modalFinish = false
+        this.getData();
+      }
+    )
+  }
+
   openDelete(id: any) {
     this.modalDelete = true
     this.api.getAppointment(id).then((response:any) => {
@@ -135,6 +154,8 @@ export class AppointmentsAComponent implements OnInit {
       }
     )
   }
+  
+  
 
 
 

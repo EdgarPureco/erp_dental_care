@@ -337,9 +337,17 @@ export class ApiService {
     return CapacitorHttp.put(options)
   }
 
-  public deleteAppointment(id: any) {
+  public finishAppointment(id: any) {
     const options = {
       url: this.baseUrl + 'appointment/' + id,
+      headers: this.headers,
+    };
+    return CapacitorHttp.delete(options)
+  }
+ 
+  public deleteAppointment(id: any) {
+    const options = {
+      url: this.baseUrl + 'appointment/' + id + '/finish',
       headers: this.headers,
     };
     return CapacitorHttp.delete(options)
