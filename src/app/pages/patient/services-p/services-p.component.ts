@@ -18,23 +18,7 @@ export class ServicesPComponent implements OnInit {
   suppliesAdded: any[] = [];
   service: any = null
 
-  serviceForm = this.formBuilder.group({
-    name: null,
-    price: null,
-    supplies: null
-
-  });
-
-  serviceEditForm = this.formBuilder.group({
-    name: null,
-    price: null,
-    supplies: null
-  });
-
-  modalAdd = false
   modalDetails = false
-  modalEdit = false
-  modalDelete = false
 
   ngOnInit() {
     this.getData();
@@ -43,54 +27,6 @@ export class ServicesPComponent implements OnInit {
   getData() {
     this.api.getPatientServices().then((response:any) => { this.data = response.data });
   }
-
-  openAdd() {
-    this.modalAdd = true
-  }
-
-  handleChange(e: any) {
-    this.suppliesAdded.push(
-      { "supply_id": parseInt(e.detail.value), 
-      "quantity": 1, 
-      "name": this.supplies[this.findIndexById(e.detail.value)].name 
-    });
-  }
-
-  addQuantity(e: any, id: number) {
-    this.suppliesAdded.map(item => {
-      if (item.supply_id === id) {
-        item.quantity = parseInt(e.detail.value)
-        return item;
-      } else {
-        return item;
-      }
-    });
-  }
-
-  removeSupply(id: any) {
-    this.suppliesAdded = this.suppliesAdded.filter((item) => item.id !== id);
-  }
-
-  onSubmit() {
-
-    this.api.insertService(this.serviceForm.value, this.suppliesAdded).then(
-      (response:any) => {
-        this.presentToast()
-        this.serviceForm.reset();
-        this.getData()
-        this.modalAdd = false
-      }
-    );
-  }
-
-  onWillDismiss() {
-    this.modalAdd = false
-    this.modalDetails = false
-    this.modalEdit = false
-    this.modalDelete = false
-    this.suppliesAdded = []
-  }
-
 
 
   openDetails(id: any) {
@@ -101,55 +37,11 @@ export class ServicesPComponent implements OnInit {
       this.service = response.data;
     })
   }
-
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getService(id).then((response:any) => {
-
-      this.service = response.data
-      console.log(response.data.supplies);
-      
-      response.data.supplies.forEach((item: any) => {
-        console.log(item);
-        
-        this.suppliesAdded.push({ "supply_id": item.supply.id, "quantity": item.quantity })
-      });
-      console.log(this.suppliesAdded);
-      
-    })
-
-  }
-
-  onSubmitEdit() {
-    console.log(this.suppliesAdded);
-
-    this.api.updateService(this.service.id, this.serviceEditForm.value, this.suppliesAdded).then(
-      (response:any) => {
-        this.presentToast()
-        this.service = null
-        this.getData();
-        this.modalEdit = false
-      }
-    );
-    this.serviceEditForm.reset();
-  }
-
-  openDelete(id: any) {
-    this.modalDelete = true
-    this.api.getService(id).then((response:any) => {
-      this.service = response.data
-    })
+  onWillDismiss() {
+    this.modalDetails = false
   }
 
 
-  deleteService() {
-    this.api.deleteService(this.service.id).then(
-      (response:any) => {
-        this.modalDelete = false
-        this.getData();
-      }
-    )
-  }
 
   findIndexById(id: string): number {
     let index = -1;

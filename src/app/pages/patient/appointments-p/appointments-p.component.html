@@ -29,13 +29,6 @@
                   <ion-button (click)="openDetails(item.id)" color="secondary">
                     Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
                   </ion-button>
-
-                  <ion-button (click)="openEdit(item.id)">
-                    <ion-icon aria-hidden="true" name="pencil"></ion-icon>
-                  </ion-button>
-                  <ion-button (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
-                      name="ban"></ion-icon>
-                  </ion-button>
                 </ion-item-group>
 
               </ion-card-content>
@@ -70,72 +63,6 @@
 
     </div>
 
-    <ion-fab (click)="openAdd()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button>
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-
-    <!-- Start Modal Add Cita -->
-
-    <ion-modal [isOpen]="modalAdd" (willDismiss)="onWillDismiss()">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Agregar Cita</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="modalAdd=false"><ion-icon name="close"></ion-icon></ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-
-          <ion-list>
-            <form (ngSubmit)="onSubmit()" [formGroup]="appointmentForm">
-              <ion-list class="ion-margin">
-
-                <ion-item>
-                  <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
-                    formControlName="dentist_id">
-                    <div *ngFor="let item of dentists">
-                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
-                        item.person.lastname}}</ion-select-option>
-                    </div>
-                  </ion-select>
-                </ion-item>
-
-                <ion-item>
-                  <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
-                    formControlName="patient_id">
-                    <div *ngFor="let item of patients">
-                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
-                        item.person.lastname}}</ion-select-option>
-                    </div>
-                  </ion-select>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime formControlName="start_date"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Fin</ion-label>
-                  <ion-datetime formControlName="end_date"></ion-datetime>
-                </ion-item>
-
-
-              </ion-list>
-
-              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!appointmentForm.valid">
-                Guardar <ion-icon slot="end" name="save"></ion-icon>
-              </ion-button>
-            </form>
-          </ion-list>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-    <!-- End Modal Add Cita -->
 
 
     <!-- Start Details Cita -->
@@ -174,72 +101,8 @@
 
 
 
-    <!-- Start Modal Edit Cita -->
-
-    <ion-modal [isOpen]="modalEdit" (willDismiss)="onWillDismiss()">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Editar Cita</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="modalEdit=false"><ion-icon name="close"></ion-icon></ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-
-          <ion-list *ngIf="appointment!==null">
-            <form (ngSubmit)="onSubmitEdit()" [formGroup]="appointmentEditForm">
-              <ion-list class="ion-margin">
-
-                <ion-item>
-                  <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
-                    formControlName="dentist_id" [(ngModel)]="appointment.dentist.id" >
-                    <div *ngFor="let item of dentists">
-                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
-                        item.person.lastname}}</ion-select-option>
-                    </div>
-                  </ion-select>
-                </ion-item>
-
-                <ion-item>
-                  <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
-                    formControlName="patient_id" [(ngModel)]="appointment.patient.id">
-                    <div *ngFor="let item of patients">
-                      <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
-                        item.person.lastname}}</ion-select-option>
-                    </div>
-                  </ion-select>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.start_date"
-                    formControlName="start_date"></ion-datetime>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Hora de Salida</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.end_date"
-                    formControlName="end_date"></ion-datetime>
-                </ion-item>
-
-
-              </ion-list>
-              <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!appointmentForm.valid">
-                Guardar <ion-icon slot="end" name="save"></ion-icon>
-              </ion-button>
-            </form>
-          </ion-list>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-    <!-- End Modal Edit Cita -->
-
-
-
     <!-- Start Delete Cita -->
-    <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
+    <!-- <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
       <ng-template>
         <ion-header>
           <ion-toolbar>
@@ -265,7 +128,7 @@
           </div>
         </ion-content>
       </ng-template>
-    </ion-modal>
+    </ion-modal> -->
     <!-- End Delete Cita -->
 
 

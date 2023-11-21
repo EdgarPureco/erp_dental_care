@@ -26,25 +26,9 @@ export class AppointmentsPComponent implements OnInit {
   suppliesAdded: any[] = [];
   appointment: any = null
 
-  appointmentForm = this.formBuilder.group({
-    dentist_id: null,
-    patient_id: null,
-    start_date: null,
-    end_date: null,
 
-  });
 
-  appointmentEditForm = this.formBuilder.group({
-    dentist_id: null,
-    patient_id: null,
-    start_date: null,
-    end_date: null,
-  });
-
-  modalAdd = false
   modalDetails = false
-  modalEdit = false
-  modalDelete = false
   maxPL = 6
 
   ngOnInit() {
@@ -57,47 +41,10 @@ export class AppointmentsPComponent implements OnInit {
     });
   }
 
-  openAdd() {
-    this.modalAdd = true
-  }
-
-  onSubmit() {
-
-    this.api.insertAppointment(this.appointmentForm.value).then(
-      (response:any) => {
-        console.log(response.data);
-        this.presentToast()
-        this.appointmentForm.reset();
-        this.getData()
-        this.modalAdd = false
-      },
-      (e:any)=>{console.log("HALO", e);
-      }
-    );
-  }
-
   onWillDismiss() {
-    this.modalAdd = false
     this.modalDetails = false
-    this.modalEdit = false
-    this.modalDelete = false
   }
 
-  handleChange(e: any) {
-  }
-
-  onSubmitEdit() {
-    this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
-      (response:any) => { 
-        this.presentToast()
-        this.getData() 
-        this.modalEdit = false
-      },
-      (e:any)=>{console.log("HALO", e);
-      }
-    );
-    this.appointmentEditForm.reset();
-  }
 
   openDetails(id: any) {
 
@@ -108,32 +55,6 @@ export class AppointmentsPComponent implements OnInit {
     })
   }
 
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getAppointment(id).then((response:any) => {
-      this.appointment = response.data,
-      console.log(this.appointment);
-      
-    })
-
-  }
-
-  openDelete(id: any) {
-    this.modalDelete = true
-    this.api.getAppointment(id).then((response:any) => {
-      this.appointment = response.data
-    })
-  }
-
-
-  deleteAppointment() {
-    this.api.deleteAppointment(this.appointment.id).then(
-      (response:any) => {
-        this.modalDelete = false
-        this.getData();
-      }
-    )
-  }
 
 
   async presentToast() {
