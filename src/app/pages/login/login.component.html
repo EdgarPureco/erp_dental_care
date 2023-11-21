@@ -3,19 +3,15 @@
     <ion-img class="logo" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
     <br>
     <form (ngSubmit)="onSubmitLogin()" [formGroup]="loginForm">
-      <ion-list class="ion-margin">
-        <ion-item>
-          <ion-input [(ngModel)]="login.email" formControlName="email" type="email" label="Email" labelPlacement="floating" helperText="Enter a valid email"
-          errorText="Invalid email" ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input [(ngModel)]="login.password" formControlName="password" label="Password" labelPlacement="floating" type="password"></ion-input>
-        </ion-item>
 
-      </ion-list>
-      <ion-button expand="block" color="dark" type="submit"
-        [disabled]="!loginForm.valid">
-        Iniciar Sesión <ion-icon slot="end" name="save"></ion-icon>
+      <ion-input [(ngModel)]="login.email" formControlName="email" type="email" label="Email"
+        labelPlacement="floating"></ion-input>
+
+      <ion-input [(ngModel)]="login.password" formControlName="password" label="Password" labelPlacement="floating"
+        type="password"></ion-input>
+      <br>
+      <ion-button expand="block" color="dark" type="submit" [disabled]="!loginForm.valid">
+        Iniciar Sesión
       </ion-button>
     </form>
 
