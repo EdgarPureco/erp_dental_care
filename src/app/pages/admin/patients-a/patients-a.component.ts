@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CheckboxCustomEvent } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -12,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class PatientsAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -23,6 +24,8 @@ export class PatientsAComponent implements OnInit {
   data: any[] = [];
   patient: any = null
   maxDate: Date;
+  imageSrc: SafeResourceUrl | undefined;
+  base64String: string | undefined;
 
   patientForm = this.formBuilder.group({
     name: null,
@@ -58,33 +61,62 @@ export class PatientsAComponent implements OnInit {
     this.getData();
   }
 
-  getData(){
-    this.api.getPatients().then((response:any) => { this.data = response.data, console.log(response);
-     });
+  getData() {
+    this.api.getPatients().then((response: any) => {
+      this.data = response.data, console.log(response.data);
+    });
   }
 
-  openAdd(){
+  openAdd() {
     this.modalAdd = true
   }
+
   onSubmit() {
-    this.api.insertPatient(this.patientForm.value).then(
-      (response:any) => {this.modalAdd = false
-      this.patientForm.reset();
-      this.getData()}
+    this.api.insertPatient(this.patientForm.value, this.base64String).then(
+      (response: any) => {
+        this.modalAdd = false
+        this.patientForm.reset();
+        this.imageSrc = undefined
+        this.base64String = undefined
+        this.getData()
+      }
     );
   }
 
-  onWillDismiss(){
+  onWillDismiss() {
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
     this.modalDelete = false
+    this.imageSrc = undefined
+    this.base64String = undefined
   }
+
   
+  openDetails(id: any) {
+
+    this.modalDetails = true
+
+    this.api.getPatient(id).then((response: any) => {
+      this.patient = response.data;
+    })
+  }
+
+  openEdit(id: any) {
+    this.modalEdit = true
+    this.api.getPatient(id).then((response: any) => {
+      this.patient = response.data
+      this.imageSrc = this.getImgSrcFromBase64(response.data.user.image)
+      this.base64String = response.data.user.image
+    })
+  }
+
   onSubmitEdit() {
-    this.api.updatePatient(this.patient.id, this.patientEditForm.value).then(
-      (response:any) => {
+    this.api.updatePatient(this.patient.id, this.patientEditForm.value, this.base64String).then(
+      (response: any) => {
         this.patient = null
+        this.imageSrc = undefined
+        this.base64String = undefined
         this.modalEdit = false
         this.getData();
       }
@@ -92,36 +124,9 @@ export class PatientsAComponent implements OnInit {
     this.patientEditForm.reset();
   }
 
-  openDetails(id: any) {
-
-    this.modalDetails = true
-
-    this.api.getPatient(id).then((response:any) => {
-      this.patient = response.data;
-    })
-  }
-
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getPatient(id).then((response:any) => {
-      this.patient = response.data
-    })
-    if(this.patient!==null){
-      this.patientEditForm.value.name = this.patient.name
-      this.patientEditForm.value.surname = this.patient.surname
-      this.patientEditForm.value.lastname = this.patient.lastname
-      this.patientEditForm.value.birthday = this.patient.birthday
-      this.patientEditForm.value.sex = this.patient.sex
-      this.patientEditForm.value.address = this.patient.address
-      this.patientEditForm.value.cp = this.patient.cp
-      this.patientEditForm.value.phone = this.patient.phone
-      this.patientEditForm.value.email = this.patient.email
-    }
-  }
-
   openDelete(id: any) {
     this.modalDelete = true
-    this.api.getPatient(id).then((response:any) => {
+    this.api.getPatient(id).then((response: any) => {
       this.patient = response.data
     })
   }
@@ -130,14 +135,41 @@ export class PatientsAComponent implements OnInit {
 
   deletePatient() {
     this.api.deletePatient(this.patient.id).then(
-      (response:any) => {
+      (response: any) => {
         this.modalDelete = false
         this.getData();
       }
     )
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
 
+      reader.onload = (e) => {
+        this.imageSrc = e.target?.result as string;
+        this.convertToBase64(file);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  convertToBase64(file: File): void {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      this.base64String = reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  getImgSrcFromBase64(base64String: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
+  }
 
 
   // Secondary Functions

@@ -95,6 +95,12 @@
           <ion-list>
             <form (ngSubmit)="onSubmit()" [formGroup]="patientForm">
               <ion-list class="ion-margin">
+                <ion-item *ngIf="imageSrc">
+                  <img [src]="imageSrc"  />
+                </ion-item>
+                <ion-item>
+                  <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile" />
+                </ion-item>
                 <ion-item>
                   <ion-input formControlName="name" label="Nombre" placeholder="Nombre"></ion-input>
                 </ion-item>
@@ -160,7 +166,7 @@
     <!-- End Modal Add Patient -->
 
 
-    <!-- Start Delete Details Patient -->
+    <!-- Start Details Patient -->
     <ion-modal [isOpen]="modalDetails" (willDismiss)="onWillDismiss()">
       <ng-template>
         <ion-header>
@@ -174,7 +180,8 @@
         <ion-content>
 
           <ion-card *ngIf="patient!==null">
-            <img src="https://ionicframework.com/docs/img/demos/card-media.png" />
+            <img [src]="getImgSrcFromBase64(patient.user.image)" />
+            <h5>{{patient.user.image}}</h5>
             <ion-card-header>
               <ion-card-title>{{patient.person.name + " " +
                 patient.person.surname + " " +
@@ -225,6 +232,12 @@
           <ion-list *ngIf="patient!==null">
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="patientEditForm">
               <ion-list class="ion-margin">
+                <ion-item *ngIf="imageSrc">
+                  <img [src]="imageSrc"  />
+                </ion-item>
+                <ion-item>
+                  <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile" />
+                </ion-item>
                 <ion-item>
                   <ion-input formControlName="name" label="Nombre" [(ngModel)]="patient.person.name"></ion-input>
                 </ion-item>

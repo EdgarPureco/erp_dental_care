@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CheckboxCustomEvent } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -12,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class DentistsAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -25,6 +26,8 @@ export class DentistsAComponent implements OnInit {
   dentist: any = null
   maxDateBirth: Date;
   maxDate = new Date();
+  imageSrc: SafeResourceUrl | undefined;
+  base64String: string | undefined;
 
   dentistForm = this.formBuilder.group({
     name: null,
@@ -67,14 +70,15 @@ export class DentistsAComponent implements OnInit {
   modalDetails = false
   modalEdit = false
   modalDelete = false
-  maxPL = 6
 
+  maxPL = 6
+  
   ngOnInit() {
     this.getData();
   }
 
   getData() {
-    this.api.getDentists().then((response:any) => { this.data = response.data });
+    this.api.getDentists().then((response: any) => { this.data = response.data });
   }
 
   openAdd() {
@@ -82,59 +86,70 @@ export class DentistsAComponent implements OnInit {
   }
 
   onSubmit() {
- 
-    this.api.insertDentist(this.dentistForm.value).then(
-      (response:any) => {
+
+    this.api.insertDentist(this.dentistForm.value, this.base64String).then(
+      (response: any) => {
         this.modalAdd = false
         this.dentistForm.reset();
+        this.imageSrc = undefined
+        this.base64String = undefined
         this.getData()
       }
     );
   }
-
+  
   onWillDismiss() {
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
     this.modalDelete = false
+    this.imageSrc = undefined
+    this.base64String = undefined
   }
 
-  onSubmitEdit() {
-    this.api.updateDentist(this.dentist.id, this.dentistEditForm.value).then(
-      (response:any) => { this.modalEdit = false, console.log(response.data) }, (e:any) => console.log(e.data)
-      
-    );
-    this.dentistEditForm.reset();
-  }
-
+  
   openDetails(id: any) {
 
     this.modalDetails = true
 
-    this.api.getDentist(id).then((response:any) => {
+    this.api.getDentist(id).then((response: any) => {
       this.dentist = response.data;
     })
   }
 
   openEdit(id: any) {
     this.modalEdit = true
-    this.api.getDentist(id).then((response:any) => {
+    this.api.getDentist(id).then((response: any) => {
       this.dentist = response.data
       this.dentistEditForm.value.sex = this.dentist.person.sex
+      this.imageSrc = this.getImgSrcFromBase64(response.data.user.image)
+      this.base64String = response.data.user.image
     })
     
   }
+  
+  onSubmitEdit() {
+    this.api.updateDentist(this.dentist.id, this.dentistEditForm.value, this.base64String).then(
+      (response: any) => {
+        this.modalEdit = false
+        this.imageSrc = undefined
+        this.base64String = undefined
+        this.getData();
+      }, (e: any) => console.log(e.data)
 
+    );
+    this.dentistEditForm.reset();
+  }
   openDelete(id: any) {
     this.modalDelete = true
-    this.api.getDentist(id).then((response:any) => {
+    this.api.getDentist(id).then((response: any) => {
       this.dentist = response.data
     })
   }
-
+  
   deleteDentist() {
     this.api.deleteDentist(this.dentist.id).then(
-      (response:any) => {
+      (response: any) => {
         this.modalDelete = false
         this.getData();
       }
@@ -142,7 +157,34 @@ export class DentistsAComponent implements OnInit {
   }
 
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
 
+      reader.onload = (e) => {
+        this.imageSrc = e.target?.result as string;
+        this.convertToBase64(file);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  convertToBase64(file: File): void {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      this.base64String = reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  getImgSrcFromBase64(base64String: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
+  }
 
   // Secondary Functions
 

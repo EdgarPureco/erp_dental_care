@@ -92,6 +92,12 @@
           <ion-list>
             <form (ngSubmit)="onSubmit()" [formGroup]="supplyForm">
               <ion-list class="ion-margin">
+                <ion-item *ngIf="imageSrc">
+                  <img [src]="imageSrc"  />
+                </ion-item>
+                <ion-item>
+                  <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>
+                </ion-item>
                 <ion-item>
                   <ion-input formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
                 </ion-item>
@@ -100,13 +106,9 @@
                     placeholder="Costo de Compra"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input formControlName="price" label="Costo de Venta" type="number"
-                    placeholder="Costo de Venta"></ion-input>
-                </ion-item>
-                <ion-item>
                   <ion-row>
                     <ion-list>
-                      <ion-radio-group formControlName="is_salable"value=true>
+                      <ion-radio-group formControlName="is_salable" value=true>
                         <ion-label>Es vendible:</ion-label>
                         <ion-row>
                           <ion-col>
@@ -119,6 +121,10 @@
                       </ion-radio-group>
                     </ion-list>
                   </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="price" label="Costo de Venta" type="number"
+                    placeholder="Costo de Venta"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-input formControlName="buy_unit" [maxlength]="60" label="Medida de Compra"
@@ -161,7 +167,7 @@
         <ion-content>
 
           <ion-card *ngIf="supply!==null">
-            <img src="https://ionicframework.com/docs/img/demos/card-media.png" />
+            <img [src]="getImgSrcFromBase64(supply.image)" />
             <ion-card-header>
               <ion-card-title>{{supply.name}}</ion-card-title>
             </ion-card-header>
@@ -201,6 +207,12 @@
           <ion-list *ngIf="supply!==null">
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="supplyEditForm">
               <ion-list class="ion-margin">
+                <ion-item *ngIf="imageSrc">
+                  <img [src]="imageSrc"  />
+                </ion-item>
+                <ion-item>
+                  <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>
+                </ion-item>
                 <ion-item>
                   <ion-input [(ngModel)]="supply.name" formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
                 </ion-item>

@@ -9,7 +9,7 @@ export interface Supply {
   image: string;
 }
 
-export function createSupply(obj: any) {
+export function createSupply(obj: any, image: any) {
 
   const supply: Supply = {
     name: obj.name,
@@ -19,7 +19,7 @@ export function createSupply(obj: any) {
     buy_unit: obj.buy_unit,
     use_unit: obj.use_unit,
     equivalence: obj.equivalence,
-    image: '',
+    image: image,
   };
   return supply
 }

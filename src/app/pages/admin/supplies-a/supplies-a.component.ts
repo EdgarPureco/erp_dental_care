@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CheckboxCustomEvent } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -12,11 +13,13 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class SuppliesAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
   }
 
   data: any[] = [];
   supply: any = null
+  imageSrc: SafeResourceUrl | undefined;
+  base64String: string | undefined;
 
   supplyForm = this.formBuilder.group({
     name: null,
@@ -26,7 +29,6 @@ export class SuppliesAComponent implements OnInit {
     buy_unit: null,
     use_unit: null,
     equivalence: null,
-    image: null
   });
 
   supplyEditForm = this.formBuilder.group({
@@ -37,7 +39,6 @@ export class SuppliesAComponent implements OnInit {
     buy_unit: null,
     use_unit: null,
     equivalence: null,
-    image: null
   });
 
   modalAdd = false
@@ -50,7 +51,7 @@ export class SuppliesAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getSupplies().then((response:any) => { this.data = response.data });
+    this.api.getSupplies().then((response: any) => { this.data = response.data });
   }
 
   openAdd() {
@@ -58,11 +59,13 @@ export class SuppliesAComponent implements OnInit {
   }
 
   onSubmit() {
- 
-    this.api.insertSupply(this.supplyForm.value).then(
-      (response:any) => {
+
+    this.api.insertSupply(this.supplyForm.value, this.base64String).then(
+      (response: any) => {
         this.modalAdd = false
         this.supplyForm.reset();
+        this.imageSrc = undefined
+        this.base64String = undefined
         this.getData()
       }
     );
@@ -73,15 +76,29 @@ export class SuppliesAComponent implements OnInit {
     this.modalDetails = false
     this.modalEdit = false
     this.modalDelete = false
+    this.imageSrc = undefined
+    this.base64String = undefined
+  }
+
+  openEdit(id: any) {
+    this.modalEdit = true
+    this.api.getSupply(id).then((response: any) => {
+      this.supply = response.data
+      this.supplyEditForm.value.is_salable = this.supply.is_salable
+      this.supplyEditForm.value.equivalence = this.supply.equivalence
+      this.imageSrc = this.getImgSrcFromBase64(response.data.image)
+      this.base64String = response.data.image
+    })
+
   }
 
   onSubmitEdit() {
-    console.log(this.supplyEditForm.value);
-    
-    this.api.updateSupply(this.supply.id, this.supplyEditForm.value).then(
-      (response:any) => { 
+    this.api.updateSupply(this.supply.id, this.supplyEditForm.value, this.base64String).then(
+      (response: any) => {
         this.supply = null
         this.modalEdit = false
+        this.imageSrc = undefined
+        this.base64String = undefined
         this.getData();
       }
     );
@@ -92,24 +109,14 @@ export class SuppliesAComponent implements OnInit {
 
     this.modalDetails = true
 
-    this.api.getSupply(id).then((response:any) => {
+    this.api.getSupply(id).then((response: any) => {
       this.supply = response.data;
     })
   }
 
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getSupply(id).then((response:any) => {
-      this.supply = response.data
-      this.supplyEditForm.value.is_salable = this.supply.is_salable
-      this.supplyEditForm.value.equivalence = this.supply.equivalence
-    })
-    
-  }
-
   openDelete(id: any) {
     this.modalDelete = true
-    this.api.getSupply(id).then((response:any) => {
+    this.api.getSupply(id).then((response: any) => {
       this.supply = response.data
     })
   }
@@ -117,13 +124,41 @@ export class SuppliesAComponent implements OnInit {
 
   deleteSupply() {
     this.api.deleteSupply(this.supply.id).then(
-      (response:any) => {
+      (response: any) => {
         this.modalDelete = false
         this.getData();
       }
     )
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        this.imageSrc = e.target?.result as string;
+        this.convertToBase64(file);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  convertToBase64(file: File): void {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      this.base64String = reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  getImgSrcFromBase64(base64String: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
+  }
 
 
 

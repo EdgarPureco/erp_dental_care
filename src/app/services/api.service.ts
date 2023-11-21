@@ -68,8 +68,8 @@ export class ApiService {
     return CapacitorHttp.get(options);
   }
 
-  public insertDentist(obj: any) {
-    const body = JSON.stringify(createDentist(obj));
+  public insertDentist(obj: any, image: any) {
+    const body = JSON.stringify(createDentist(obj, image));
     const options = {
       url: this.baseUrl + 'dentists',
       headers: this.headers,
@@ -79,14 +79,12 @@ export class ApiService {
     return CapacitorHttp.post(options)
   }
 
-  public updateDentist(id: string, obj: any) {
+  public updateDentist(id: string, obj: any, image: any) {
     const options = {
       url: this.baseUrl + 'dentists/' + id,
       headers: this.headers,
-      data: JSON.stringify(createDentist(obj))
+      data: JSON.stringify(createDentist(obj, image))
     };
-    console.log(options);
-
     return CapacitorHttp.put(options)
   }
 
@@ -117,8 +115,8 @@ export class ApiService {
     return CapacitorHttp.get(options)
   }
 
-  public insertPatient(obj: any) {
-    const body = JSON.stringify(createPatient(obj));
+  public insertPatient(obj: any, image: any) {
+    const body = JSON.stringify(createPatient(obj, image));
     const options = {
       url: this.baseUrl + 'patients',
       headers: this.headers,
@@ -128,8 +126,8 @@ export class ApiService {
     return CapacitorHttp.post(options)
   }
 
-  public updatePatient(id: string, obj: any) {
-    const body = JSON.stringify(createPatient(obj));
+  public updatePatient(id: string, obj: any, image: any) {
+    const body = JSON.stringify(createPatient(obj, image));
     const options = {
       url: this.baseUrl + 'patients/' + id,
       headers: this.headers,
@@ -234,8 +232,8 @@ export class ApiService {
     return CapacitorHttp.get(options)
   }
 
-  public insertSupply(obj: any) {
-    const body = JSON.stringify(createSupply(obj));
+  public insertSupply(obj: any, image: any) {
+    const body = JSON.stringify(createSupply(obj, image));
     const options = {
       url: this.baseUrl + 'supplies',
       headers: this.headers,
@@ -265,8 +263,8 @@ export class ApiService {
     return CapacitorHttp.post(options)
   }
 
-  public updateSupply(id: string, obj: any) {
-    const body = JSON.stringify(createSupply(obj));
+  public updateSupply(id: string, obj: any, image: any) {
+    const body = JSON.stringify(createSupply(obj, image));
     const options = {
       url: this.baseUrl + 'supplies/' + id,
       headers: this.headers,

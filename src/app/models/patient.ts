@@ -13,7 +13,7 @@ export interface Allergy {
     name: string;
   }
 
-  export function createPatient(obj: any){
+  export function createPatient(obj: any, image: any){
     const person: Person = {
       name: obj.name,
       surname: obj.surname,
@@ -31,7 +31,7 @@ export interface Allergy {
     const user: User = {
       email: obj.email,
       password: obj.password,
-      image: ''
+      image: image
   };
     const allergies: Allergy[] = 
       [ ]

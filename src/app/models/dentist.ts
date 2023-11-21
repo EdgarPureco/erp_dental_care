@@ -14,7 +14,7 @@ export interface Diploma {
   university: string;
 }
 
-export function createDentist(obj: any) {
+export function createDentist(obj: any, image: any) {
 
   const person: Person = {
     name: obj.name,
@@ -33,7 +33,7 @@ export function createDentist(obj: any) {
   const user: User = {
     email: obj.email,
     password: obj.password,
-    image: ''
+    image: image
   };
   const diplomas: Diploma[] = [];
 
