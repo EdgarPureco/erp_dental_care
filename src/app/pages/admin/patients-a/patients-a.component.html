@@ -181,7 +181,6 @@
 
           <ion-card *ngIf="patient!==null">
             <img [src]="getImgSrcFromBase64(patient.user.image)" />
-            <h5>{{patient.user.image}}</h5>
             <ion-card-header>
               <ion-card-title>{{patient.person.name + " " +
                 patient.person.surname + " " +

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { CheckboxCustomEvent } from '@ionic/angular';
+import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -12,7 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AppointmentsDComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -87,8 +87,11 @@ export class AppointmentsDComponent implements OnInit {
 
   onSubmitEdit() {
     this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
-      (response:any) => { this.modalEdit = false, this.getData() },
-      (e:any)=>{console.log("HALO", e);
+      (response:any) => { 
+        this.presentToast()
+        this.getData() 
+        this.modalEdit = false
+      }, (e:any)=>{console.log("HALO", e);
       }
     );
     this.appointmentEditForm.reset();
@@ -130,7 +133,16 @@ export class AppointmentsDComponent implements OnInit {
     )
   }
 
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
 
+    await toast.present();
+  }
 
 // Secondary Functions
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class ServicesPComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
   }
 
   data: any[] = [];
@@ -75,9 +76,10 @@ export class ServicesPComponent implements OnInit {
 
     this.api.insertService(this.serviceForm.value, this.suppliesAdded).then(
       (response:any) => {
-        this.modalAdd = false
+        this.presentToast()
         this.serviceForm.reset();
         this.getData()
+        this.modalAdd = false
       }
     );
   }
@@ -124,9 +126,10 @@ export class ServicesPComponent implements OnInit {
 
     this.api.updateService(this.service.id, this.serviceEditForm.value, this.suppliesAdded).then(
       (response:any) => {
+        this.presentToast()
         this.service = null
-        this.modalEdit = false
         this.getData();
+        this.modalEdit = false
       }
     );
     this.serviceEditForm.reset();
@@ -167,4 +170,16 @@ export class ServicesPComponent implements OnInit {
     }
     return true
 }
+
+async presentToast() {
+  const toast = await this.toastController.create({
+    message: 'Éxito !!',
+    duration: 1500,
+    position: 'top',
+    color: 'success'
+  });
+
+  await toast.present();
+}
+
 }

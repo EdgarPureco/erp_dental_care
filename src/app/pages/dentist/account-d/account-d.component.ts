@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -10,7 +11,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AccountDComponent  implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -51,7 +52,9 @@ export class AccountDComponent  implements OnInit {
 
   onSubmitEdit() {
     this.api.updateDentist(this.data.id, this.dataEditForm.value).then(
-      (response:any) => { this.modalEdit = false }, (e:any) => console.log(e.data)
+      (response:any) => { this.presentToast()
+        this.modalEdit = false 
+      }, (e:any) => console.log(e.data)
       
     );
     this.dataEditForm.reset();
@@ -60,6 +63,17 @@ export class AccountDComponent  implements OnInit {
  
   onWillDismiss() {
     this.modalEdit = false
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
+
+    await toast.present();
   }
 
    // Secondary Functions

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CheckboxCustomEvent } from '@ionic/angular';
+import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -13,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class PatientsAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -63,7 +63,7 @@ export class PatientsAComponent implements OnInit {
 
   getData() {
     this.api.getPatients().then((response: any) => {
-      this.data = response.data, console.log(response.data);
+      this.data = response.data
     });
   }
 
@@ -74,11 +74,12 @@ export class PatientsAComponent implements OnInit {
   onSubmit() {
     this.api.insertPatient(this.patientForm.value, this.base64String).then(
       (response: any) => {
-        this.modalAdd = false
+        this.presentToast()
         this.patientForm.reset();
         this.imageSrc = undefined
         this.base64String = undefined
         this.getData()
+        this.modalAdd = false
       }
     );
   }
@@ -114,11 +115,12 @@ export class PatientsAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updatePatient(this.patient.id, this.patientEditForm.value, this.base64String).then(
       (response: any) => {
+        this.presentToast()
         this.patient = null
         this.imageSrc = undefined
         this.base64String = undefined
-        this.modalEdit = false
         this.getData();
+        this.modalEdit = false
       }
     );
     this.patientEditForm.reset();
@@ -171,6 +173,16 @@ export class PatientsAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
+
+    await toast.present();
+  }
 
   // Secondary Functions
 

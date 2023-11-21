@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class LoginComponent  implements OnInit {
 
-  constructor(public api: ApiService, private formBuilder: FormBuilder, private router: Router,) {
+  constructor(public api: ApiService, private toastController: ToastController, private formBuilder: FormBuilder, private router: Router,) {
   }
 
   login: any = {"email": '', "password": ''};
@@ -52,5 +53,16 @@ export class LoginComponent  implements OnInit {
     }, (e:any)=>console.log("HALO ERROR",e)
     );
     this.loginForm.reset();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
+
+    await toast.present();
   }
 }

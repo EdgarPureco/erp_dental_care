@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CheckboxCustomEvent } from '@ionic/angular';
+import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -13,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class DentistsAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -89,11 +89,12 @@ export class DentistsAComponent implements OnInit {
 
     this.api.insertDentist(this.dentistForm.value, this.base64String).then(
       (response: any) => {
-        this.modalAdd = false
+        this.presentToast()
         this.dentistForm.reset();
         this.imageSrc = undefined
         this.base64String = undefined
         this.getData()
+        this.modalAdd = false
       }
     );
   }
@@ -131,10 +132,11 @@ export class DentistsAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updateDentist(this.dentist.id, this.dentistEditForm.value, this.base64String).then(
       (response: any) => {
-        this.modalEdit = false
+        this.presentToast()
         this.imageSrc = undefined
         this.base64String = undefined
         this.getData();
+        this.modalEdit = false
       }, (e: any) => console.log(e.data)
 
     );
@@ -186,6 +188,18 @@ export class DentistsAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
+
+    await toast.present();
+  }
+
+  
   // Secondary Functions
 
   readonly phoneMask: MaskitoOptions = {

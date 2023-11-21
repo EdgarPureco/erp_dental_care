@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CheckboxCustomEvent } from '@ionic/angular';
+import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -13,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class SuppliesAComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
   }
 
   data: any[] = [];
@@ -62,11 +62,12 @@ export class SuppliesAComponent implements OnInit {
 
     this.api.insertSupply(this.supplyForm.value, this.base64String).then(
       (response: any) => {
-        this.modalAdd = false
+        this.presentToast()
         this.supplyForm.reset();
         this.imageSrc = undefined
         this.base64String = undefined
         this.getData()
+        this.modalAdd = false
       }
     );
   }
@@ -95,11 +96,12 @@ export class SuppliesAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updateSupply(this.supply.id, this.supplyEditForm.value, this.base64String).then(
       (response: any) => {
+        this.presentToast()
         this.supply = null
-        this.modalEdit = false
         this.imageSrc = undefined
         this.base64String = undefined
         this.getData();
+        this.modalEdit = false
       }
     );
     this.supplyEditForm.reset();
@@ -160,7 +162,16 @@ export class SuppliesAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Éxito !!',
+      duration: 1500,
+      position: 'top',
+      color: 'success'
+    });
 
+    await toast.present();
+  }
 
   // Secondary Functions
 
