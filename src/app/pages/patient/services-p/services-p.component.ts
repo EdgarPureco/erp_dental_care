@@ -41,8 +41,7 @@ export class ServicesPComponent implements OnInit {
   }
 
   getData() {
-    this.api.getServices().then((response:any) => { this.data = response.data });
-    this.api.getSupplies().then((response:any) => { this.supplies = response.data });
+    this.api.getPatientServices().then((response:any) => { this.data = response.data });
   }
 
   openAdd() {

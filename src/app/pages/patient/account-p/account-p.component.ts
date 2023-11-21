@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -11,7 +12,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AccountPComponent  implements OnInit {
 
-  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, 
+    private api: ApiService, private sanitizer: DomSanitizer) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -39,17 +41,20 @@ export class AccountPComponent  implements OnInit {
     cp: null,
     phone: null,
     email: null,
+    allergies: []
     
   });
 
   getData() {
     this.api.getMyInfo('patients').then((response:any) => {
-      this.data = response.data; this.allergies=response.data.allergies;console.log( "HALO",this.data.person.name)
+      this.data = response.data; 
+      console.log( "HALO",response.data)
     });
   }
 
   openEdit() {
     this.modalEdit = true
+    this.allergiesAdded = this.data.allergies    
     this.api.getAllergies().then((response:any) => {
       this.allergies=response.data
     });
@@ -58,14 +63,15 @@ export class AccountPComponent  implements OnInit {
   onSubmitEdit() {
     console.log(this.allergiesAdded);
     
-    // this.api.updateDentist(this.data.id, this.dataEditForm.value).then(
-    //   (response:any) => { 
-      // this.modalEdit = false 
-      // this.presentToast()
-    // }, (e:any) => console.log(e.data)
+    this.api.updatePatientInfo(this.dataEditForm.value, this.allergiesAdded).then(
+      (response:any) => { 
+        this.presentToast()
+        this.modalEdit = false 
+        this.getData()
+    }, (e:any) => console.log(e.data)
       
-    // );
-    // this.dataEditForm.reset();
+    );
+    this.dataEditForm.reset();
   }
 
  
@@ -80,16 +86,6 @@ export class AccountPComponent  implements OnInit {
     });
   }
 
-  addName(e: any, id: number) {
-    this.allergiesAdded.map(item => {
-      if (item.id === id) {
-        item.name = e.detail.value
-        return item;
-      } else {
-        return item;
-      }
-    });
-  }
 
   removeAllergy(id: any) {
     this.allergiesAdded = this.allergiesAdded.filter((item) => item.id !== id);
@@ -108,10 +104,15 @@ export class AccountPComponent  implements OnInit {
   }
 
    itemExists(id: number): boolean {
-    if(this.allergiesAdded.some(item => item.supply_id === id)){
+    if(this.allergiesAdded.some(item => item.id === id)){
       return false
     }
     return true
+}
+
+
+getImgSrcFromBase64(base64String: string): SafeResourceUrl {
+  return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
 }
 
 async presentToast() {
@@ -124,6 +125,7 @@ async presentToast() {
 
   await toast.present();
 }
+
 
    // Secondary Functions
 

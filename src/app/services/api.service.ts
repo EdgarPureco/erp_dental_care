@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { createPatient } from '../models/patient'
-import { createDentist } from '../models/dentist';
+import { createPatient, updatePatientInfo } from '../models/patient'
+import { createDentist, updateDentistInfo } from '../models/dentist';
 import { createSupply } from '../models/supply';
 import { createService } from '../models/service';
 import { Capacitor, CapacitorHttp } from '@capacitor/core';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 })
 export class ApiService {
 
-  private baseUrl = Capacitor.getPlatform() == 'web' ? 'http://localhost:5000/api/' : 'http://192.168.136.233:5000/api/';
+  private baseUrl = Capacitor.getPlatform() == 'web' ? 'http://localhost:5000/api/' : 'http://192.168.210.70:5000/api/';
   private headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -88,6 +88,16 @@ export class ApiService {
     return CapacitorHttp.put(options)
   }
 
+  public updateDentistInfo(id: string, obj: any) {
+    const body = JSON.stringify(updateDentistInfo(obj));
+    const options = {
+      url: this.baseUrl + 'dentists/me',
+      headers: this.headers,
+      data: body
+    };
+    return CapacitorHttp.put(options)
+  }
+
   public deleteDentist(id: any) {
     const options = {
       url: this.baseUrl + 'dentists/' + id,
@@ -114,6 +124,28 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
+  
+  public getPatientAppointments() {
+    const options = {
+      url: this.baseUrl + 'patients/my/appointments',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+  public getPatientServices() {
+    const options = {
+      url: this.baseUrl + 'patients/my/sells',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+  public getPatientRecords() {
+    const options = {
+      url: this.baseUrl + 'patients/my/records',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
 
   public insertPatient(obj: any, image: any) {
     const body = JSON.stringify(createPatient(obj, image));
@@ -133,6 +165,18 @@ export class ApiService {
       headers: this.headers,
       data: body
     };
+    return CapacitorHttp.put(options)
+  }
+  
+  public updatePatientInfo(obj: any, allergies: any[]) {
+    const body = JSON.stringify(updatePatientInfo(obj, allergies));
+    const options = {
+      url: this.baseUrl + 'patients/me',
+      headers: this.headers,
+      data: body
+    };
+    console.log(options);
+    
     return CapacitorHttp.put(options)
   }
 

@@ -9,12 +9,12 @@ import { ApiService } from 'src/app/services/api.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent  implements OnInit {
+export class LoginComponent implements OnInit {
 
   constructor(public api: ApiService, private toastController: ToastController, private formBuilder: FormBuilder, private router: Router,) {
   }
 
-  login: any = {"email": '', "password": ''};
+  login: any = { "email": '', "password": '' };
   returnUrl: string = '';
 
   loginForm = this.formBuilder.group({
@@ -23,10 +23,27 @@ export class LoginComponent  implements OnInit {
   });
 
   ngOnInit() {
+    if (this.isLoggedIn()) {
+      var role = localStorage.getItem('role');
+      if (role) {
+        this.router.navigate(['pages/' + role.toLowerCase() + "/home"]);
+      }
+    }
+  }
+
+  isLoggedIn(): boolean {
+    let status = false;
+    if (localStorage.getItem('isLoggedIn') == "true") {
+      status = true;
+    }
+    else {
+      status = false;
+    }
+    return status;
   }
 
   onSubmitLogin() {
-    this.api.login(this.loginForm.value).then((response:any) => {
+    this.api.login(this.loginForm.value).then((response: any) => {
 
       if (response.data.message.includes("User logged successfully")) {
 
@@ -48,9 +65,9 @@ export class LoginComponent  implements OnInit {
         this.router.navigate([this.returnUrl]);
       } else {
         console.log("HALO error");
-        
+
       }
-    }, (e:any)=>console.log("HALO ERROR",e)
+    }, (e: any) => console.log("HALO ERROR", e)
     );
     this.loginForm.reset();
   }

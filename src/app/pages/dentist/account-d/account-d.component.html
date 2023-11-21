@@ -7,6 +7,7 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>Mi Cuenta</ion-card-title>
+          <img [src]="getImgSrcFromBase64(data.user.image)" />
         </ion-card-header>
         <ion-card-content>
           <ion-list *ngIf="data">
@@ -14,7 +15,7 @@
             <ion-item>
               <ion-label>
                 <h1>{{data.person.name + " " + data.person.surname + " " + data.person.lastname}}</h1>
-                <p>Sexo: {{data.person.sex}}</p>
+                <p>Sexo: {{data.person.sex == true ? "Masculino" : "Femenino" }} </p>
                 <p>Fecha de Nacimiento: {{data.person.birthday}}</p>
                 <p>Dirección: {{data.person.address}}</p>
                 <p>Código Postal: {{data.person.cp}}</p>
