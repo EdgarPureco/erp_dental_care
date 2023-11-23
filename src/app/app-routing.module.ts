@@ -19,6 +19,7 @@ import { AppointmentsDComponent } from './pages/dentist/appointments-d/appointme
 import { AppointmentsPComponent } from './pages/patient/appointments-p/appointments-p.component';
 import { ServicesPComponent } from './pages/patient/services-p/services-p.component';
 import { InventoryAComponent } from './pages/admin/inventory-a/inventory-a.component';
+import { TabsDentistPage } from './tabsDentist/tabsDentist.page';
 
 const routes: Routes = [
   {
@@ -78,7 +79,7 @@ const routes: Routes = [
       },
       {
         path: 'dentist',
-        component: TabsPage,
+        component: TabsDentistPage,
         children: [
           {
             path: 'home',

@@ -68,6 +68,22 @@ export class ApiService {
     return CapacitorHttp.get(options);
   }
 
+  public getDentistAppointments() {
+    const options = {
+      url: this.baseUrl + 'dentists/my/appointments',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
+  public getDentistRecords() {
+    const options = {
+      url: this.baseUrl + 'dentists/my/records',
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
   public insertDentist(obj: any, image: any) {
     const body = JSON.stringify(createDentist(obj, image));
     const options = {

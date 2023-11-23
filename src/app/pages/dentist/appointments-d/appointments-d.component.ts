@@ -12,18 +12,23 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AppointmentsDComponent implements OnInit {
 
+  
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
 
-  
+
   }
 
   data: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
+  supplies: any[] = [];
   suppliesAdded: any[] = [];
+  services: any[] = [];
+  servicesAdded: any[] = [];
+  finish: any = null
   appointment: any = null
 
   appointmentForm = this.formBuilder.group({
@@ -41,96 +46,129 @@ export class AppointmentsDComponent implements OnInit {
     end_date: null,
   });
 
-  modalAdd = false
+
   modalDetails = false
-  modalEdit = false
-  modalDelete = false
+  modalFinish = false
   maxPL = 6
 
   ngOnInit() {
-    this.getData();
+    this.getData();    
   }
 
   getData() {
-    this.api.getMyAppointments('dentist').then((response:any) => {
+    this.api.getDentistAppointments().then((response: any) => {
       this.data = response.data;
+      console.log(response.data);
+      
+    });
+    this.api.getPatients().then((response: any) => {
+      this.dentists = response.data;
+    });
+    this.api.getDentists().then((response: any) => {
+      this.patients = response.data;
     });
   }
 
-  openAdd() {
-    this.modalAdd = true
-  }
-
-  onSubmit() {
-
-    this.api.insertAppointment(this.appointmentForm.value).then(
-      (response:any) => {
-        this.modalAdd = false
-        console.log(response.data);
-        this.appointmentForm.reset();
-        this.getData()
-      },
-      (e:any)=>{console.log("HALO", e);
-      }
-    );
-  }
-
+ 
   onWillDismiss() {
-    this.modalAdd = false
     this.modalDetails = false
-    this.modalEdit = false
-    this.modalDelete = false
+    this.modalFinish = false
   }
 
-  handleChange(e: any) {
-  }
-
-  onSubmitEdit() {
-    this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
-      (response:any) => { 
-        this.presentToast()
-        this.getData() 
-        this.modalEdit = false
-      }, (e:any)=>{console.log("HALO", e);
-      }
-    );
-    this.appointmentEditForm.reset();
-  }
 
   openDetails(id: any) {
 
     this.modalDetails = true
 
-    this.api.getAppointment(id).then((response:any) => {
+    this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data;
+      console.log(response.data);
     })
   }
 
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getAppointment(id).then((response:any) => {
-      this.appointment = response.data,
-      console.log(this.appointment);
-      
-    })
-
-  }
-
-  openDelete(id: any) {
-    this.modalDelete = true
-    this.api.getAppointment(id).then((response:any) => {
+  openFinish(id: any) {
+    this.modalFinish = true
+    this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data
     })
+    this.api.getServices().then((response: any) => {
+      this.services = response.data
+    })
+    this.api.getSupplies().then((response: any) => {
+      response.data.map((item:any)=>{
+        if(item.is_salable){
+          this.supplies.push(item)
+        }
+      })
+      console.log(this.supplies);
+      
+    })
+  }
+
+  handleChangeSupplies(e: any) {
+    this.suppliesAdded.push(
+      {
+        "supply_id": parseInt(e.detail.value),
+        "quantity": 1
+      });
+  }
+
+  handleChangeServices(e: any) {
+    this.servicesAdded.push(
+      {
+        "service_id": parseInt(e.detail.value),
+        "quantity": 1
+      });
+  }
+
+  finishAppointment() {
+    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
+      (response: any) => {
+        this.modalFinish = false
+        this.getData();
+        console.log('HALO response', response.data);
+        
+      }
+    );
   }
 
 
-  deleteAppointment() {
-    this.api.deleteAppointment(this.appointment.id).then(
-      (response:any) => {
-        this.modalDelete = false
-        this.getData();
+  findIndexByIdServices(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.services.length; i++) {
+      if (this.services[i].id === id) {
+        index = i;
+        break;
       }
-    )
+    }
+
+    return index;
+  }
+
+  serviceExists(id: number): boolean {
+    if (this.servicesAdded.some(item => item.service_id === id)) {
+      return false
+    }
+    return true
+  }
+
+  findIndexByIdSupplies(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.supplies.length; i++) {
+      if (this.supplies[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+  supplyExists(id: number): boolean {
+    if (this.suppliesAdded.some(item => item.supply_id === id)) {
+      return false
+    }
+    return true
   }
 
   async presentToast() {
@@ -144,6 +182,38 @@ export class AppointmentsDComponent implements OnInit {
     await toast.present();
   }
 
+  
+  addQuantitySupplies(e: any, id: number) {
+    this.suppliesAdded.map(item => {
+      if (item.supply_id === id) {
+        item.quantity = parseInt(e.detail.value)
+        return item;
+      } else {
+        return item;
+      }
+    });
+  }
+
+  removeSupply(id: any) {
+    this.suppliesAdded = this.suppliesAdded.filter((item) => item.id !== id);
+  }
+
+  addQuantityServices(e: any, id: number) {
+    this.servicesAdded.map(item => {
+      if (item.service_id === id) {
+        item.quantity = parseInt(e.detail.value)
+        return item;
+      } else {
+        return item;
+      }
+    });
+  }
+
+  removeService(id: any) {
+    this.servicesAdded = this.servicesAdded.filter((item) => item.id !== id);
+  }
+
+
 // Secondary Functions
 
 formatDateToLetter(date: any) {
@@ -153,4 +223,13 @@ formatDateToLetter(date: any) {
 
   return formattedDate;
 }
+
+formatDateToNumbers(date: any) {
+  var startDate = new Date(date);
+
+  const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+
+  return formattedDate;
+}
+
 }
