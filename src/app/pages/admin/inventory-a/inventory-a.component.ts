@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -11,7 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class InventoryAComponent implements OnInit {
 
-  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
   }
 
   data: any[] = [];
@@ -56,9 +57,7 @@ export class InventoryAComponent implements OnInit {
         this.modalAdd = false
         this.supplyForm.reset();
         this.getData()
-        this.presentToast()
-        console.log(response.data);
-        
+        this.presentToast()        
       }
     );
   }
@@ -77,7 +76,7 @@ export class InventoryAComponent implements OnInit {
       this.supply = response.data;
     })
     this.api.getSupplyInventory(id).then((response:any) => {
-      this.inventory = response.data; console.log(response.data);
+      this.inventory = response.data;
       
     })
   }
@@ -99,6 +98,10 @@ export class InventoryAComponent implements OnInit {
       this.sells = response.data, console.log(response.data);
       ;
     })
+  }
+
+  getImgSrcFromBase64(base64String: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
 

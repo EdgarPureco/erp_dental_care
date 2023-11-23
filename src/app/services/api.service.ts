@@ -379,12 +379,15 @@ export class ApiService {
     return CapacitorHttp.put(options)
   }
 
-  public finishAppointment(id: any) {
+  public finishAppointment(id: any, services:any[], supplies:any[]) {
     const options = {
-      url: this.baseUrl + 'appointment/' + id,
+      url: this.baseUrl + 'appointment/' + id + '/finish',
       headers: this.headers,
+      data: JSON.stringify({services: services, supplies: supplies})
     };
-    return CapacitorHttp.delete(options)
+    console.log(JSON.stringify({services: services, supplies: supplies}));
+    
+    return CapacitorHttp.post(options)
   }
  
   public deleteAppointment(id: any) {

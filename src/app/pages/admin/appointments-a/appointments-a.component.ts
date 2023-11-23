@@ -114,6 +114,7 @@ export class AppointmentsAComponent implements OnInit {
 
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data;
+      console.log(response.data);
     })
   }
 
@@ -166,7 +167,13 @@ export class AppointmentsAComponent implements OnInit {
       this.services = response.data
     })
     this.api.getSupplies().then((response: any) => {
-      this.supplies = response.data
+      response.data.map((item:any)=>{
+        if(item.is_salable){
+          this.supplies.push(item)
+        }
+      })
+      console.log(this.supplies);
+      
     })
   }
 
@@ -174,8 +181,7 @@ export class AppointmentsAComponent implements OnInit {
     this.suppliesAdded.push(
       {
         "supply_id": parseInt(e.detail.value),
-        "quantity": 1,
-        "name": this.supplies[this.findIndexByIdSupplies(e.detail.value)].name
+        "quantity": 1
       });
   }
 
@@ -183,18 +189,19 @@ export class AppointmentsAComponent implements OnInit {
     this.servicesAdded.push(
       {
         "service_id": parseInt(e.detail.value),
-        "quantity": 1,
-        "name": this.services[this.findIndexByIdServices(e.detail.value)].name
+        "quantity": 1
       });
   }
 
   finishAppointment() {
-    this.api.finishAppointment(this.appointment.id).then(
+    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
       (response: any) => {
         this.modalFinish = false
         this.getData();
+        console.log('HALO response', response.data);
+        
       }
-    )
+    );
   }
 
   openDelete(id: any) {
@@ -270,6 +277,14 @@ export class AppointmentsAComponent implements OnInit {
     var startDate = new Date(date);
 
     const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+
+    return formattedDate;
+  }
+  
+  formatDateToNumbers(date: any) {
+    var startDate = new Date(date);
+
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
     return formattedDate;
   }
