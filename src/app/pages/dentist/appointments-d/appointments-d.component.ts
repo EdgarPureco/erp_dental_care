@@ -61,12 +61,6 @@ export class AppointmentsDComponent implements OnInit {
       console.log(response.data);
       
     });
-    this.api.getPatients().then((response: any) => {
-      this.dentists = response.data;
-    });
-    this.api.getDentists().then((response: any) => {
-      this.patients = response.data;
-    });
   }
 
  
@@ -79,18 +73,12 @@ export class AppointmentsDComponent implements OnInit {
   openDetails(id: any) {
 
     this.modalDetails = true
-
-    this.api.getAppointment(id).then((response: any) => {
-      this.appointment = response.data;
-      console.log(response.data);
-    })
+    this.appointment = this.data[this.findIndexByIdAppointments(id)]
   }
 
   openFinish(id: any) {
     this.modalFinish = true
-    this.api.getAppointment(id).then((response: any) => {
-      this.appointment = response.data
-    })
+    this.appointment = this.data[this.findIndexByIdAppointments(id)]
     this.api.getServices().then((response: any) => {
       this.services = response.data
     })
@@ -100,9 +88,45 @@ export class AppointmentsDComponent implements OnInit {
           this.supplies.push(item)
         }
       })
-      console.log(this.supplies);
       
     })
+  }
+
+
+  finishAppointment() {
+    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
+      (response: any) => {
+        this.modalFinish = false
+        this.getData();
+        console.log('HALO response', response);"{'message': 'Failed to finish the appointment, some services cannot be given due to a lack fo supplies', 'missing': [{'name': 'anstesia', 'missing': 1, 'buy_missing': 1, 'buy_unit': 'caja', 'use_unit': 'pieza'}, {'name': 'Dental Floss', 'missing': 5, 'buy_missing': 1, 'buy_unit': 'pzs', 'use_unit': 'Piece'}]}"
+        
+      }
+    );
+  }
+
+
+  findIndexByIdAppointments(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+  
+  findIndexByIdServices(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.services.length; i++) {
+      if (this.services[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
   }
 
   handleChangeSupplies(e: any) {
@@ -120,31 +144,7 @@ export class AppointmentsDComponent implements OnInit {
         "quantity": 1
       });
   }
-
-  finishAppointment() {
-    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
-      (response: any) => {
-        this.modalFinish = false
-        this.getData();
-        console.log('HALO response', response.data);
-        
-      }
-    );
-  }
-
-
-  findIndexByIdServices(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.services.length; i++) {
-      if (this.services[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
-
+  
   serviceExists(id: number): boolean {
     if (this.servicesAdded.some(item => item.service_id === id)) {
       return false
