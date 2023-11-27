@@ -62,8 +62,16 @@ export class PatientsAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getPatients().then((response: any) => {
+    this.api.getPatients('all').then((response: any) => {
       this.data = response.data
+    });
+  }
+
+  filter($e:any){
+    this.api.getPatients($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      console.log(response);
+      
     });
   }
 
@@ -139,8 +147,9 @@ export class PatientsAComponent implements OnInit {
     this.api.deletePatient(this.patient.id).then(
       (response: any) => {
         this.modalDelete = false
+        console.log(response);
         this.getData();
-      }
+      }, (e)=>{console.log(e.message);}
     )
   }
 

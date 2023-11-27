@@ -9,6 +9,11 @@
           <ion-card-title>Pacientes</ion-card-title>
           <ion-card-subtitle>
             <ion-searchbar animated="true" placeholder="Buscar"></ion-searchbar>
+            <ion-radio-group value="all" (ionChange)="filter($event)">
+              <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
+              <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
+              <ion-radio class="ion-margin" value="INACTIVO" labelPlacement="end">Inactivos</ion-radio>
+            </ion-radio-group>
           </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
@@ -35,7 +40,7 @@
                   <ion-button (click)="openEdit(item.id)">
                     <ion-icon aria-hidden="true" name="pencil"></ion-icon>
                   </ion-button>
-                  <ion-button (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
+                  <ion-button *ngIf="item.status==='ACTIVO'" (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true"
                       name="trash"></ion-icon>
                   </ion-button>
                 </ion-item-group>

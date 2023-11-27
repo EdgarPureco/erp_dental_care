@@ -20,6 +20,7 @@ import { AppointmentsPComponent } from './pages/patient/appointments-p/appointme
 import { ServicesPComponent } from './pages/patient/services-p/services-p.component';
 import { InventoryAComponent } from './pages/admin/inventory-a/inventory-a.component';
 import { TabsDentistPage } from './tabsDentist/tabsDentist.page';
+import { AllergiesAComponent } from './pages/admin/allergies-a/allergies-a.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,12 @@ const routes: Routes = [
           {
             path: 'home',
             component: HomeAComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Admin] }
+          },
+          {
+            path: 'allergies',
+            component: AllergiesAComponent,
             canActivate: [AuthGuard],
             data: { roles: [Roles.Admin] }
           },

@@ -60,7 +60,7 @@ export class AppointmentsAComponent implements OnInit {
     this.api.getAppointments().then((response: any) => {
       this.data = response.data;
     });
-    this.api.getPatients().then((response: any) => {
+    this.api.getPatients('all').then((response: any) => {
       this.dentists = response.data;
     });
     this.api.getDentists().then((response: any) => {

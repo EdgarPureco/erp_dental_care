@@ -124,12 +124,20 @@ export class ApiService {
 
   // ! Patients
 
-  public getPatients() {
-    const options = {
+  public getPatients(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'patients',
+        headers: this.headers,
+      };
+
+    }
+    options = {
       url: this.baseUrl + 'patients',
       headers: this.headers,
+      params: { status: status }
     };
-
     return CapacitorHttp.get(options)
   }
 
@@ -140,7 +148,7 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
-  
+
   public getPatientAppointments() {
     const options = {
       url: this.baseUrl + 'patients/my/appointments',
@@ -183,7 +191,7 @@ export class ApiService {
     };
     return CapacitorHttp.put(options)
   }
-  
+
   public updatePatientInfo(obj: any, allergies: any[]) {
     const body = JSON.stringify(updatePatientInfo(obj, allergies));
     const options = {
@@ -192,7 +200,7 @@ export class ApiService {
       data: body
     };
     console.log(options);
-    
+
     return CapacitorHttp.put(options)
   }
 
@@ -268,7 +276,7 @@ export class ApiService {
     };
     return CapacitorHttp.get(options)
   }
-  
+
   public getSupplyInventory(id: string) {
     const options = {
       url: this.baseUrl + 'supplies/' + id + '/inventory',
@@ -303,14 +311,14 @@ export class ApiService {
   }
 
   public buySupply(obj: any) {
-    let body:any = null;
+    let body: any = null;
 
     if (obj.expiration_date !== null) {
       const tmp: Date = new Date(obj.expiration_date);
       obj.expiration_date = this.datePipe.transform(tmp, 'yyyy-MM-dd')
       body = JSON.stringify(obj);
-    }else{
-      body = JSON.stringify({supply_id: obj.supply_id, quantity: obj.quantity});
+    } else {
+      body = JSON.stringify({ supply_id: obj.supply_id, quantity: obj.quantity });
     }
 
     const options = {
@@ -395,17 +403,17 @@ export class ApiService {
     return CapacitorHttp.put(options)
   }
 
-  public finishAppointment(id: any, services:any[], supplies:any[]) {
+  public finishAppointment(id: any, services: any[], supplies: any[]) {
     const options = {
       url: this.baseUrl + 'appointment/' + id + '/finish',
       headers: this.headers,
-      data: JSON.stringify({services: services, supplies: supplies})
+      data: JSON.stringify({ services: services, supplies: supplies })
     };
-    console.log(JSON.stringify({services: services, supplies: supplies}));
-    
+    console.log(JSON.stringify({ services: services, supplies: supplies }));
+
     return CapacitorHttp.post(options)
   }
- 
+
   public deleteAppointment(id: any) {
     const options = {
       url: this.baseUrl + 'appointment/' + id + '/finish',
@@ -434,5 +442,41 @@ export class ApiService {
     return CapacitorHttp.get(options)
   }
 
+  public getAllergy(id: string) {
+    const options = {
+      url: this.baseUrl + 'allergies/' + id,
+      headers: this.headers,
+    };
+    return CapacitorHttp.get(options)
+  }
+
+  public insertAllergy(obj: any) {
+    const body = JSON.stringify(obj);
+    const options = {
+      url: this.baseUrl + 'allergies',
+      headers: this.headers,
+      data: body
+    };
+    return CapacitorHttp.post(options)
+  }
+
+  public updateAllergy(id: string, obj: any) {
+    const body = JSON.stringify(obj);
+    const options = {
+      url: this.baseUrl + 'allergies/' + id,
+      headers: this.headers,
+      data: body
+    };
+
+    return CapacitorHttp.put(options)
+  }
+
+  public deleteAllergy(id: any) {
+    const options = {
+      url: this.baseUrl + 'allergies/' + id,
+      headers: this.headers,
+    };
+    return CapacitorHttp.delete(options)
+  }
 
 }
