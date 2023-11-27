@@ -21,6 +21,7 @@ export class AppointmentsAComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
   supplies: any[] = [];
@@ -59,6 +60,7 @@ export class AppointmentsAComponent implements OnInit {
   getData() {
     this.api.getAppointments().then((response: any) => {
       this.data = response.data;
+      this.results = [...this.data]
     });
     this.api.getPatients('all').then((response: any) => {
       this.dentists = response.data;
@@ -269,6 +271,22 @@ export class AppointmentsAComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    console.log(this.results);
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const patient = d.patient.person;
+        const dentist = d.dentist.person;
+        const fullName = `${patient.name} ${patient.lastname} ${dentist.surname} ${dentist.name} ${dentist.lastname} ${dentist.surname}`.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
   // Secondary Functions

@@ -16,6 +16,7 @@ export class InventoryAComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   inventory: any[] = [];
   buys: any[] = [];
   sells: any[] = [];
@@ -40,7 +41,9 @@ export class InventoryAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getSupplies().then((response:any) => { this.data = response.data;
+    this.api.getSupplies().then((response:any) => { 
+      this.data = response.data;
+      this.results = [...this.data]
      });
   }
 
@@ -114,6 +117,19 @@ export class InventoryAComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const fullName = d.name.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
 // Secondary Functions

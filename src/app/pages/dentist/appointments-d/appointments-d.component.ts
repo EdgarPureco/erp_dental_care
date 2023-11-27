@@ -22,6 +22,7 @@ export class AppointmentsDComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
   supplies: any[] = [];
@@ -58,7 +59,7 @@ export class AppointmentsDComponent implements OnInit {
   getData() {
     this.api.getDentistAppointments().then((response: any) => {
       this.data = response.data;
-      console.log(response.data);
+      this.results = [...this.data]
       
     });
   }
@@ -213,6 +214,19 @@ export class AppointmentsDComponent implements OnInit {
     this.servicesAdded = this.servicesAdded.filter((item) => item.id !== id);
   }
 
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const person = d.person;
+        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
+  }
 
 // Secondary Functions
 

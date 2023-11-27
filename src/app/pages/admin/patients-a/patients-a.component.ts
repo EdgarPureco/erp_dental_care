@@ -22,6 +22,7 @@ export class PatientsAComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   patient: any = null
   maxDate: Date;
   imageSrc: SafeResourceUrl | undefined;
@@ -63,14 +64,15 @@ export class PatientsAComponent implements OnInit {
 
   getData() {
     this.api.getPatients('all').then((response: any) => {
-      this.data = response.data
+      this.data = response.data;
+      this.results = [...this.data]
     });
   }
 
   filter($e:any){
     this.api.getPatients($e.detail.value).then((response: any) => {
       this.data = response.data;
-      console.log(response);
+      this.results = [...this.data]
       
     });
   }
@@ -191,6 +193,20 @@ export class PatientsAComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const person = d.person;
+        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
   // Secondary Functions

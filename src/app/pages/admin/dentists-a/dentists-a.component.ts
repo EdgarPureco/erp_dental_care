@@ -22,6 +22,7 @@ export class DentistsAComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   frequencies: any[] = [];
   dentist: any = null
   maxDateBirth: Date;
@@ -78,7 +79,7 @@ export class DentistsAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getDentists().then((response: any) => { this.data = response.data });
+    this.api.getDentists().then((response: any) => { this.data = response.data,  this.results = [...this.data] });
   }
 
   openAdd() {
@@ -197,6 +198,20 @@ export class DentistsAComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const person = d.person;
+        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
   

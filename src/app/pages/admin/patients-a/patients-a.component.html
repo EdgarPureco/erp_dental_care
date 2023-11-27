@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Pacientes</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar"></ion-searchbar>
+            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
               <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
@@ -17,9 +17,9 @@
           </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <ion-list *ngIf="data">
+          <ion-list *ngIf="results">
 
-            <ion-card *ngFor="let item of data">
+            <ion-card *ngFor="let item of results">
               <ion-card-content>
                 <ion-item-group>
                   <ion-item>

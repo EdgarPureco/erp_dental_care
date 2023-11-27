@@ -21,6 +21,7 @@ export class AppointmentsPComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
   suppliesAdded: any[] = [];
@@ -38,6 +39,7 @@ export class AppointmentsPComponent implements OnInit {
   getData() {
     this.api.getPatientAppointments().then((response:any) => {
       this.data = response.data;
+      this.results = [...this.data]
     });
   }
 
@@ -66,6 +68,20 @@ export class AppointmentsPComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const person = d.person;
+        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
   // Secondary Functions

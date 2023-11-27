@@ -16,6 +16,7 @@ export class AllergiesAComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   allergy: any = null
 
   allergyForm = this.formBuilder.group({
@@ -36,7 +37,10 @@ export class AllergiesAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getAllergies().then((response: any) => { this.data = response.data });
+    this.api.getAllergies().then((response: any) => { 
+      this.data = response.data
+      this.results = [...this.data]
+     });
   }
 
   openAdd() {
@@ -118,6 +122,21 @@ export class AllergiesAComponent implements OnInit {
     });
 
     await toast.present();
+  }
+
+  search(event:any) {
+    const query = event.target.value.toLowerCase();
+    
+    if (query==='' || query===null) {
+      this.results = [...this.data]
+    }else{
+      this.results = this.data.filter((d) => {
+        const fullName = d.name.toLowerCase();
+        console.log(fullName,query.toLowerCase());
+        
+        return fullName.includes(query.toLowerCase());
+      });
+    }
   }
 
   // Secondary Functions

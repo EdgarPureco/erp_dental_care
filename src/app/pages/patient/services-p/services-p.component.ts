@@ -14,6 +14,7 @@ export class ServicesPComponent implements OnInit {
   }
 
   data: any[] = [];
+  results: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
   service: any = null
@@ -25,7 +26,10 @@ export class ServicesPComponent implements OnInit {
   }
 
   getData() {
-    this.api.getPatientServices().then((response:any) => { this.data = response.data });
+    this.api.getPatientServices().then((response:any) => { 
+      this.data = response.data;
+      this.results = [...this.data]
+     });
   }
 
 
@@ -71,6 +75,20 @@ async presentToast() {
   });
 
   await toast.present();
+}
+
+search(event:any) {
+  const query = event.target.value.toLowerCase();
+  
+  if (query==='' || query===null) {
+    this.results = [...this.data]
+  }else{
+    this.results = this.data.filter((d) => {
+      const person = d.person;
+      const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+      return fullName.includes(query.toLowerCase());
+    });
+  }
 }
 
 }
