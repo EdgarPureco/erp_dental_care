@@ -474,13 +474,13 @@ export class ApiService {
     let options: any = null;
     if (status == 'all') {
       options = {
-        url: this.baseUrl + 'get/allergies',
+        url: this.baseUrl + 'allergies',
         headers: this.headers,
       };
 
     }
     options = {
-      url: this.baseUrl + 'get/allergies',
+      url: this.baseUrl + 'allergies',
       headers: this.headers,
       params: { status: status }
     };
