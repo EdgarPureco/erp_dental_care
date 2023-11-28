@@ -1,5 +1,5 @@
 .water-mark{
-    max-width: 4vw; 
+    max-width: 3vw; 
     position: fixed; 
     z-index: 99;
     bottom: 0;
@@ -7,7 +7,7 @@
     opacity: 50%;
 
     @media (max-width: 768px) {
-        min-width: 12vw; 
+        min-width: 9vw; 
         margin: 0 0 1vh 3vw;
     }
 }
