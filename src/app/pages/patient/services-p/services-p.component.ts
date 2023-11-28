@@ -29,17 +29,17 @@ export class ServicesPComponent implements OnInit {
     this.api.getPatientServices().then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
+      console.log(this.data);
+      
      });
   }
 
 
   openDetails(id: any) {
-
     this.modalDetails = true
-
-    this.api.getService(id).then((response:any) => {
-      this.service = response.data;
-    })
+    this.service= this.data[this.findIndexById(id)]
+    console.log(this.service);
+    
   }
   onWillDismiss() {
     this.modalDetails = false
@@ -49,8 +49,8 @@ export class ServicesPComponent implements OnInit {
 
   findIndexById(id: string): number {
     let index = -1;
-    for (let i = 0; i < this.supplies.length; i++) {
-      if (this.supplies[i].id === id) {
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i].id === id) {
         index = i;
         break;
       }
@@ -89,6 +89,18 @@ search(event:any) {
       return fullName.includes(query.toLowerCase());
     });
   }
+  
 }
+
+
+  // Secondary Functions
+
+  formatDateToLetter(date: any) {
+    var startDate = new Date(date);
+
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', month: 'numeric', day: 'numeric'}).format(startDate);
+
+    return formattedDate;
+  }
 
 }

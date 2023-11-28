@@ -7,9 +7,9 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>Servicios</ion-card-title>
-          <ion-card-subtitle>
+          <!-- <ion-card-subtitle>
             <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
-          </ion-card-subtitle>
+          </ion-card-subtitle> -->
         </ion-card-header>
         <ion-card-content>
           <ion-list *ngIf="data">
@@ -19,8 +19,9 @@
                 <ion-item-group>
                   <ion-item>
                     <ion-label>
-                      <h1>{{item.name}}</h1>
-                      <p>Precio: {{item.price}}</p>
+                      <h1>Cita: {{formatDateToLetter(item.appointment.start_date)}}</h1>
+                      <p>Creado: {{formatDateToLetter(item.created_at)}}</p>
+                      <p>Total:$ {{item.total}}</p>
                     </ion-label>
                   </ion-item>
                 </ion-item-group>
@@ -76,22 +77,56 @@
         </ion-header>
         <ion-content>
 
-          <ion-card *ngIf="service!==null">
-          
+          <ion-card *ngIf="service!==undefined">
+
             <ion-card-header>
               <ion-card-title>{{service.name}}</ion-card-title>
             </ion-card-header>
 
             <ion-card-content>
-              Precio: {{service.price}} <br><br>
-              <h2>Insumos:</h2>
-              <ion-list *ngIf="service.supplies.length">
-                <ion-item *ngFor="let supp of service.supplies" class="ion-text-capitalize">
-                  Nombre: {{supp.supply.name}} <br>
-                  Cantidad: {{supp.quantity}} <br>
-                  
-                </ion-item>
-              </ion-list>
+              <h1>Cita: {{formatDateToLetter(service.appointment.start_date)}}</h1>
+              <p>Creado: {{formatDateToLetter(service.created_at)}}</p>
+              <p>Subtotal:$ {{service.subtotal}}</p>
+              <p>I.V.A:$ {{service.vat}}</p>
+              <p>Total:$ {{service.total}}</p>
+              <br>
+                      <h3>Servicios:</h3>
+                      <ion-list>
+                        <ion-item *ngFor="let item of service.services">
+                          <ion-card style="width: 100%;">
+                            <ion-card-header>
+                              <ion-card-title>{{item.service.name}}</ion-card-title>
+                            </ion-card-header>
+
+                            <ion-card-content>
+                              Precio: {{item.price}}<br>
+                              Cantidad: {{item.quantity}}<br>
+                              SubTotal: {{item.subtotal}}<br>
+                              I.V.A: {{item.vat}}<br>
+                              Total: {{item.total}}<br>
+                            </ion-card-content>
+                          </ion-card>
+                        </ion-item>
+                      </ion-list>
+                      <br>
+                      <h3>Insumos:</h3>
+                      <ion-list>
+                        <ion-item *ngFor="let supply of service.supplies">
+                          <ion-card style="width: 100%;">
+                            <ion-card-header>
+                              <ion-card-title>{{supply.supply.name}}</ion-card-title>
+                            </ion-card-header>
+
+                            <ion-card-content>
+                              Precio: {{supply.price}}<br>
+                              Cantidad: {{supply.quantity}}<br>
+                              SubTotal: {{supply.subtotal}}<br>
+                              I.V.A: {{supply.vat}}<br>
+                              Total: {{supply.total}}<br>
+                            </ion-card-content>
+                          </ion-card>
+                        </ion-item>
+                      </ion-list>
             </ion-card-content>
           </ion-card>
 
