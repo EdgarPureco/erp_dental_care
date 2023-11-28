@@ -7,9 +7,6 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>Citas</ion-card-title>
-          <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
-          </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-list *ngIf="data">
@@ -18,17 +15,12 @@
               <ion-card-content>
                 <ion-item-group>
                   <ion-item>
-                    <ion-label>
+                    <ion-label class="ion-text-capitalize">
                       <h1>{{formatDateToLetter(item.start_date)}}</h1>
                       <p>Dentista: {{item.dentist.person.name + " "+ item.dentist.person.surname + " " + item.dentist.person.lastname}}</p>
-                      <p>Paciente: {{item.patient.person.name + " "+ item.patient.person.surname + " " + item.patient.person.lastname}}</p>
+                      <p>Termina: {{formatDateToLetter(item.end_date)}}</p>
                     </ion-label>
                   </ion-item>
-                </ion-item-group>
-                <ion-item-group>
-                  <ion-button (click)="openDetails(item.id)" color="secondary">
-                    Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
-                  </ion-button>
                 </ion-item-group>
 
               </ion-card-content>
