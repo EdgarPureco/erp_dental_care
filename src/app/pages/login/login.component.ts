@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
@@ -16,10 +16,11 @@ export class LoginComponent implements OnInit {
 
   login: any = { "email": '', "password": '' };
   returnUrl: string = '';
+  loading: boolean = false;
 
   loginForm = this.formBuilder.group({
-    email: null,
-    password: null,
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   ngOnInit() {
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmitLogin() {
+    this.loading = true
     this.api.login(this.loginForm.value).then((response: any) => {
 
       if (response.data.message.includes("User logged successfully")) {
@@ -64,20 +66,27 @@ export class LoginComponent implements OnInit {
         }
         this.router.navigate([this.returnUrl]);
       } else {
-        console.log("HALO error");
+        console.log("HALO error", response);
+        if(response.data.message.includes('exist')) {
+          this.presentToast('Correo incorrecto');
+        }else{
+        this.presentToast('Contraseña incorrecta');
 
+        }
       }
+      this.loading = false;
     }, (e: any) => console.log("HALO ERROR", e)
     );
     this.loginForm.reset();
+    this.loading = false;
   }
 
-  async presentToast() {
+  async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
+      message: message,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger'
     });
 
     await toast.present();

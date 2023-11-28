@@ -109,7 +109,7 @@
                 <ion-item>
                   <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
                     formControlName="dentist_id">
-                    <div *ngFor="let item of dentists">
+                    <div *ngFor="let item of dentistsAct">
                       <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
                         item.person.lastname}}</ion-select-option>
                     </div>
@@ -119,7 +119,7 @@
                 <ion-item>
                   <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
                     formControlName="patient_id">
-                    <div *ngFor="let item of patients">
+                    <div *ngFor="let item of patientsAct">
                       <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
                         item.person.lastname}}</ion-select-option>
                     </div>

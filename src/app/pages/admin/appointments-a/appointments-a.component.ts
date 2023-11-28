@@ -24,6 +24,8 @@ export class AppointmentsAComponent implements OnInit {
   results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
+  patientsAct: any[] = [];
+  dentistsAct: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
   services: any[] = [];
@@ -63,10 +65,16 @@ export class AppointmentsAComponent implements OnInit {
       this.results = [...this.data]
     });
     this.api.getPatients('all').then((response: any) => {
-      this.dentists = response.data;
+      this.patients = response.data;
+    });
+    this.api.getPatients('activo').then((response: any) => {
+      this.patientsAct = response.data;
     });
     this.api.getDentists('all').then((response: any) => {
-      this.patients = response.data;
+      this.dentists = response.data;
+    });
+    this.api.getDentists('activo').then((response: any) => {
+      this.dentistsAct = response.data;
     });
   }
 
@@ -165,10 +173,10 @@ export class AppointmentsAComponent implements OnInit {
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data
     })
-    this.api.getServices('all').then((response: any) => {
+    this.api.getServices('activo').then((response: any) => {
       this.services = response.data
     })
-    this.api.getSupplies('all').then((response: any) => {
+    this.api.getSupplies('activo').then((response: any) => {
       response.data.map((item:any)=>{
         if(item.is_salable){
           this.supplies.push(item)
