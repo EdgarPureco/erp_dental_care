@@ -52,7 +52,7 @@ export class SuppliesAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getSupplies().then((response: any) => { 
+    this.api.getSupplies('all').then((response: any) => { 
       this.data = response.data;
       this.results = [...this.data]
      });
@@ -188,6 +188,14 @@ export class SuppliesAComponent implements OnInit {
         return fullName.includes(query.toLowerCase());
       });
     }
+  }
+
+  filter($e:any){
+    this.api.getSupplies($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      this.results = [...this.data]
+      
+    });
   }
 
   // Secondary Functions

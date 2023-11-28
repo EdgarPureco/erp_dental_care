@@ -41,7 +41,7 @@ export class InventoryAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getSupplies().then((response:any) => { 
+    this.api.getSupplies('all').then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
      });

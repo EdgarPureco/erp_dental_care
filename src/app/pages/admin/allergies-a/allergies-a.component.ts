@@ -37,7 +37,7 @@ export class AllergiesAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getAllergies().then((response: any) => { 
+    this.api.getAllergies('all').then((response: any) => { 
       this.data = response.data
       this.results = [...this.data]
      });
@@ -137,6 +137,14 @@ export class AllergiesAComponent implements OnInit {
         return fullName.includes(query.toLowerCase());
       });
     }
+  }
+
+  filter($e:any){
+    this.api.getAllergies($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      this.results = [...this.data]
+      
+    });
   }
 
   // Secondary Functions

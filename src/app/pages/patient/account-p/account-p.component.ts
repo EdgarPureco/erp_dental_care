@@ -55,7 +55,7 @@ export class AccountPComponent  implements OnInit {
   openEdit() {
     this.modalEdit = true
     this.allergiesAdded = this.data.allergies    
-    this.api.getAllergies().then((response:any) => {
+    this.api.getAllergies('all').then((response:any) => {
       this.allergies=response.data
     });
   }

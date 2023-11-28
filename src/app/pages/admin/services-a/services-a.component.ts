@@ -44,11 +44,11 @@ export class ServicesAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getServices().then((response:any) => { 
+    this.api.getServices('all').then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
      });
-    this.api.getSupplies().then((response:any) => { this.supplies = response.data });
+    this.api.getSupplies('all').then((response:any) => { this.supplies = response.data });
   }
 
   openAdd() {
@@ -199,6 +199,14 @@ search(event:any) {
       return fullName.includes(query.toLowerCase());
     });
   }
+}
+
+filter($e:any){
+  this.api.getServices($e.detail.value).then((response: any) => {
+    this.data = response.data;
+    this.results = [...this.data]
+    
+  });
 }
 
 }

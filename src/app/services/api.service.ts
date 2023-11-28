@@ -51,10 +51,19 @@ export class ApiService {
 
   // ! Dentists
 
-  public getDentists() {
-    const options = {
+  public getDentists(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'dentists',
+        headers: this.headers,
+      };
+
+    }
+    options = {
       url: this.baseUrl + 'dentists',
       headers: this.headers,
+      params: { status: status }
     };
 
     return CapacitorHttp.get(options)
@@ -214,10 +223,19 @@ export class ApiService {
 
   // ! Services
 
-  public getServices() {
-    const options = {
+  public getServices(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'services',
+        headers: this.headers,
+      };
+
+    }
+    options = {
       url: this.baseUrl + 'services',
       headers: this.headers,
+      params: { status: status }
     };
     return CapacitorHttp.get(options)
   }
@@ -261,10 +279,19 @@ export class ApiService {
 
   // ! Supplies
 
-  public getSupplies() {
-    const options = {
+  public getSupplies(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'supplies',
+        headers: this.headers,
+      };
+
+    }
+    options = {
       url: this.baseUrl + 'supplies',
       headers: this.headers,
+      params: { status: status }
     };
     return CapacitorHttp.get(options)
   }
@@ -351,13 +378,22 @@ export class ApiService {
 
   // ! Appointments
 
-  public getAppointments() {
+  public getAppointments(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'appointment/list',
+        headers: this.headers,
+      };
 
-    const options = {
+    }
+    options = {
       url: this.baseUrl + 'appointment/list',
-      headers: this.headers
+      headers: this.headers,
+      params: { status: status }
     };
-
+    console.log(options);
+    
     return CapacitorHttp.get(options)
   }
 
@@ -434,10 +470,19 @@ export class ApiService {
 
   // ! Allergies
 
-  public getAllergies() {
-    const options = {
+  public getAllergies(status: string) {
+    let options: any = null;
+    if (status == 'all') {
+      options = {
+        url: this.baseUrl + 'get/allergies',
+        headers: this.headers,
+      };
+
+    }
+    options = {
       url: this.baseUrl + 'get/allergies',
       headers: this.headers,
+      params: { status: status }
     };
     return CapacitorHttp.get(options)
   }

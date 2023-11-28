@@ -79,7 +79,7 @@ export class DentistsAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getDentists().then((response: any) => { this.data = response.data,  this.results = [...this.data] });
+    this.api.getDentists('all').then((response: any) => { this.data = response.data,  this.results = [...this.data] });
   }
 
   openAdd() {
@@ -155,6 +155,9 @@ export class DentistsAComponent implements OnInit {
       (response: any) => {
         this.modalDelete = false
         this.getData();
+        console.log(response);
+        
+      }, (response:any)=>{console.log(response);
       }
     )
   }
@@ -212,6 +215,14 @@ export class DentistsAComponent implements OnInit {
         return fullName.includes(query.toLowerCase());
       });
     }
+  }
+
+  filter($e:any){
+    this.api.getDentists($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      this.results = [...this.data]
+      
+    });
   }
 
   

@@ -80,10 +80,10 @@ export class AppointmentsDComponent implements OnInit {
   openFinish(id: any) {
     this.modalFinish = true
     this.appointment = this.data[this.findIndexByIdAppointments(id)]
-    this.api.getServices().then((response: any) => {
+    this.api.getServices('all').then((response: any) => {
       this.services = response.data
     })
-    this.api.getSupplies().then((response: any) => {
+    this.api.getSupplies('all').then((response: any) => {
       response.data.map((item:any)=>{
         if(item.is_salable){
           this.supplies.push(item)

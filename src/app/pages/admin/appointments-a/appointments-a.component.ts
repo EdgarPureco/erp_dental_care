@@ -58,14 +58,14 @@ export class AppointmentsAComponent implements OnInit {
   }
 
   getData() {
-    this.api.getAppointments().then((response: any) => {
+    this.api.getAppointments('all').then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
     });
     this.api.getPatients('all').then((response: any) => {
       this.dentists = response.data;
     });
-    this.api.getDentists().then((response: any) => {
+    this.api.getDentists('all').then((response: any) => {
       this.patients = response.data;
     });
   }
@@ -165,10 +165,10 @@ export class AppointmentsAComponent implements OnInit {
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data
     })
-    this.api.getServices().then((response: any) => {
+    this.api.getServices('all').then((response: any) => {
       this.services = response.data
     })
-    this.api.getSupplies().then((response: any) => {
+    this.api.getSupplies('all').then((response: any) => {
       response.data.map((item:any)=>{
         if(item.is_salable){
           this.supplies.push(item)
@@ -287,6 +287,14 @@ export class AppointmentsAComponent implements OnInit {
         return fullName.includes(query.toLowerCase());
       });
     }
+  }
+
+  filter($e:any){
+    this.api.getAppointments($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      this.results = [...this.data]
+      
+    });
   }
 
   // Secondary Functions
