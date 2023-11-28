@@ -91,7 +91,7 @@ export class AppointmentsPComponent implements OnInit {
   formatDateToLetter(date: any) {
     var startDate = new Date(date);
 
-    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'long', month: 'long', day: 'numeric'}).format(startDate);
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', month: 'long', day: 'numeric'}).format(startDate);
 
     return formattedDate;
   }

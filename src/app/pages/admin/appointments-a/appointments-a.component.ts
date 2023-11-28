@@ -310,7 +310,7 @@ export class AppointmentsAComponent implements OnInit {
   formatDateToLetter(date: any) {
     var startDate = new Date(date);
 
-    const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
     return formattedDate;
   }
@@ -318,7 +318,7 @@ export class AppointmentsAComponent implements OnInit {
   formatDateToNumbers(date: any) {
     var startDate = new Date(date);
 
-    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
     return formattedDate;
   }

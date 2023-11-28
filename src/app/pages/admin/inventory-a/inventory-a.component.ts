@@ -137,7 +137,7 @@ export class InventoryAComponent implements OnInit {
 formatDateToLetter(date: any) {
   var startDate = new Date(date);
 
-  const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+  const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
   return formattedDate;
 }
