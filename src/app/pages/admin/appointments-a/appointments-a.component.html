@@ -41,12 +41,14 @@
                   <ion-button (click)="openDetails(item.id)" color="secondary">
                     Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
                   </ion-button>
-
+                  <ion-button *ngIf="item.status==='AGENDADA'" (click)="openFinish(item.id)" color="success">
+                    <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
+                  </ion-button>
                   <ion-button *ngIf="item.status==='AGENDADA'" (click)="openEdit(item.id)">
                     <ion-icon aria-hidden="true" name="pencil"></ion-icon>
                   </ion-button>
-                  <ion-button *ngIf="item.status==='AGENDADA'" slot="end"
-                    (click)="openDelete(item.id)" color="danger"><ion-icon aria-hidden="true" name="ban"></ion-icon>
+                  <ion-button *ngIf="item.status==='AGENDADA'" slot="end" (click)="openDelete(item.id)"
+                    color="danger"><ion-icon aria-hidden="true" name="ban"></ion-icon>
                   </ion-button>
                 </ion-item-group>
 
