@@ -98,7 +98,7 @@
             <form (ngSubmit)="onSubmit()" [formGroup]="supplyForm">
               <ion-list class="ion-margin">
                 <ion-item *ngIf="imageSrc">
-                  <img [src]="imageSrc"  />
+                  <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="imageSrc"  />
                 </ion-item>
                 <ion-item>
                   <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>
@@ -172,7 +172,7 @@
         <ion-content>
 
           <ion-card *ngIf="supply!==null">
-            <img [src]="getImgSrcFromBase64(supply.image)" />
+            <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(supply.image)" />
             <ion-card-header>
               <ion-card-title>{{supply.name}}</ion-card-title>
             </ion-card-header>
@@ -213,7 +213,7 @@
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="supplyEditForm">
               <ion-list class="ion-margin">
                 <ion-item *ngIf="imageSrc">
-                  <img [src]="imageSrc"  />
+                  <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="imageSrc"  />
                 </ion-item>
                 <ion-item>
                   <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>

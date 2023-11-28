@@ -7,7 +7,7 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>Mi Cuenta</ion-card-title>
-          <img [src]="getImgSrcFromBase64(data.user.image)" />
+          <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(data.user.image)" />
         </ion-card-header>
         <ion-card-content>
           <ion-list *ngIf="data">

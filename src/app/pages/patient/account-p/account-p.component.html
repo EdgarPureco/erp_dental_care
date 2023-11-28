@@ -1,47 +1,47 @@
 <div class="ion-page">
 
   <app-vertical-menu-patient></app-vertical-menu-patient>
-<ion-content>
-  <div id="main-content">
-    <div style="margin: 6% 2% 0 2%;">
-      <ion-card  *ngIf="data">
-        <ion-card-header>
-          <ion-card-title>Mi Cuenta</ion-card-title>
-          <img [src]="getImgSrcFromBase64(data.user.image)" />
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list>
-  
-            <ion-item>
-              <ion-label>
-                <h1>{{data.person.name + " " + data.person.surname + " " + data.person.lastname}}</h1>
-                <p>Sexo: {{data.person.sex == true ? "Masculino" : "Femenino" }} </p>
-                <p>Fecha de Nacimiento: {{data.person.birthday}}</p>
-                <p>Dirección: {{data.person.address}}</p>
-                <p>Código Postal: {{data.person.cp}}</p>
-                <p>Teléfono: {{data.person.phone}}</p>
-                <p>Correo Electrónico: {{data.user.email}}</p>
-                <br>
-                <h1>Alergias:</h1>
-              <ion-list *ngIf="data.allergies.length">
-                <ion-item *ngFor="let al of data.allergies" class="ion-text-capitalize">
-                  {{al.name}}
-                </ion-item>
-              </ion-list>
-              <ng-template [ngIf]="data.allergies.length===0">
-                <h2>Sin alergias.</h2>
-              </ng-template>
-              </ion-label>
-            </ion-item>
-  
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
+  <ion-content>
+    <div id="main-content">
+      <div style="margin: 6% 2% 0 2%;">
+        <ion-card *ngIf="data">
+          <ion-card-header>
+            <ion-card-title>Mi Cuenta</ion-card-title>
+            <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(data.user.image)" />
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
 
-  
-  
+              <ion-item>
+                <ion-label>
+                  <h1>{{data.person.name + " " + data.person.surname + " " + data.person.lastname}}</h1>
+                  <p>Sexo: {{data.person.sex == true ? "Masculino" : "Femenino" }} </p>
+                  <p>Fecha de Nacimiento: {{data.person.birthday}}</p>
+                  <p>Dirección: {{data.person.address}}</p>
+                  <p>Código Postal: {{data.person.cp}}</p>
+                  <p>Teléfono: {{data.person.phone}}</p>
+                  <p>Correo Electrónico: {{data.user.email}}</p>
+                  <br>
+                  <h1>Alergias:</h1>
+                  <ion-list *ngIf="data.allergies.length">
+                    <ion-item *ngFor="let al of data.allergies" class="ion-text-capitalize">
+                      {{al.name}}
+                    </ion-item>
+                  </ion-list>
+                  <ng-template [ngIf]="data.allergies.length===0">
+                    <h2>Sin alergias.</h2>
+                  </ng-template>
+                </ion-label>
+              </ion-item>
+
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+
+
 
     <ion-fab (click)="openEdit()" style="margin-right: 1vw;" slot="fixed" vertical="bottom" horizontal="end">
       <ion-fab-button>
@@ -68,20 +68,23 @@
               <ion-list class="ion-margin">
                 <ion-item>
                   <ion-label>Nombre</ion-label>
-                  <ion-input [(ngModel)]="data.person.name" formControlName="name" [maxlength]="45" placeholder="Nombre"></ion-input>
+                  <ion-input [(ngModel)]="data.person.name" formControlName="name" [maxlength]="45"
+                    placeholder="Nombre"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Apellido Paterno</ion-label>
-                  <ion-input [(ngModel)]="data.person.surname" formControlName="surname" [maxlength]="45" placeholder="Apellido Paterno"></ion-input>
+                  <ion-input [(ngModel)]="data.person.surname" formControlName="surname" [maxlength]="45"
+                    placeholder="Apellido Paterno"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Apellido Materno</ion-label>
-                  <ion-input [(ngModel)]="data.person.lastname" formControlName="lastname" [maxlength]="45" placeholder="Apellido Materno"></ion-input>
+                  <ion-input [(ngModel)]="data.person.lastname" formControlName="lastname" [maxlength]="45"
+                    placeholder="Apellido Materno"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Cumpleaños</ion-label>
-                  <ion-datetime presentation="day-month-year" [(ngModel)]="data.person.birthday" formControlName="birthday" display-format="DD.MM.YYYY"
-                    [max]="maxDateBirth"></ion-datetime>
+                  <ion-datetime presentation="day-month-year" [(ngModel)]="data.person.birthday"
+                    formControlName="birthday" display-format="DD.MM.YYYY" [max]="maxDateBirth"></ion-datetime>
                 </ion-item>
                 <ion-item>
                   <ion-row>
@@ -102,40 +105,41 @@
                 </ion-item>
                 <ion-item>
                   <ion-label>Dirección</ion-label>
-                  <ion-input [(ngModel)]="data.person.address" formControlName="address" [maxlength]="255" placeholder="Dirección"></ion-input>
+                  <ion-input [(ngModel)]="data.person.address" formControlName="address" [maxlength]="255"
+                    placeholder="Dirección"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Código Postal</ion-label>
-                  <ion-input [(ngModel)]="data.person.cp" formControlName="cp" [maxlength]="5" type="text" placeholder="Código Postal"></ion-input>
+                  <ion-input [(ngModel)]="data.person.cp" formControlName="cp" [maxlength]="5" type="text"
+                    placeholder="Código Postal"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input [(ngModel)]="data.person.phone" formControlName="phone" label="Teléfono" type="tel" placeholder="000-000-00-00"
-                    [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
+                  <ion-input [(ngModel)]="data.person.phone" formControlName="phone" label="Teléfono" type="tel"
+                    placeholder="000-000-00-00" [maskito]="phoneMask" [maskitoElement]="maskPredicate"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Correo</ion-label>
-                  <ion-input [(ngModel)]="data.user.email" formControlName="email" [maxlength]="100" type="email" placeholder="ejemplo@ejemplo.com"></ion-input>
+                  <ion-input [(ngModel)]="data.user.email" formControlName="email" [maxlength]="100" type="email"
+                    placeholder="ejemplo@ejemplo.com"></ion-input>
                 </ion-item>
                 <br>
                 <label>Agregar Alergia</label>
                 <ion-item>
-                  <ion-select
-                    aria-label="Seleccionar Alergia"
-                    placeholder="Seleccionar Alergia"
-                    (ionChange)="handleChange($event)"
-                  >
-                  <div *ngFor="let item of allergies">
-                    <ion-select-option class="ion-text-capitalize" *ngIf="itemExists(item.id)" [id]="item.id" [value]="item.id">{{item.name}}</ion-select-option>
-                  </div>
+                  <ion-select aria-label="Seleccionar Alergia" placeholder="Seleccionar Alergia"
+                    (ionChange)="handleChange($event)">
+                    <div *ngFor="let item of allergies">
+                      <ion-select-option class="ion-text-capitalize" *ngIf="itemExists(item.id)" [id]="item.id"
+                        [value]="item.id">{{item.name}}</ion-select-option>
+                    </div>
                   </ion-select>
                 </ion-item>
                 <br>
                 <label *ngIf="allergiesAdded.length">Mis Alergias</label>
 
                 <ion-item *ngFor="let item of allergiesAdded">
-                      <ion-label class="ion-text-capitalize">{{allergies[findIndexById(item.id)].name}}</ion-label>
-                    <ion-button style="margin-left: 10px;" (click)="removeAllergy(item.id)" color="danger"><ion-icon aria-hidden="true"
-                      name="trash"></ion-icon>
+                  <ion-label class="ion-text-capitalize">{{allergies[findIndexById(item.id)].name}}</ion-label>
+                  <ion-button style="margin-left: 10px;" (click)="removeAllergy(item.id)" color="danger"><ion-icon
+                      aria-hidden="true" name="trash"></ion-icon>
                   </ion-button>
                 </ion-item>
 
@@ -145,7 +149,7 @@
                 </ion-button>
               </ion-list>
             </form>
-            
+
           </ion-list>
         </ion-content>
       </ng-template>
@@ -154,7 +158,7 @@
 
 
 
-   
+
 
     <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 

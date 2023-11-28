@@ -207,7 +207,7 @@
         <ion-content>
 
           <ion-card *ngIf="supply!==null">
-            <img [src]="getImgSrcFromBase64(supply.image)" />
+            <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(supply.image)" />
             <ion-card-header>
               <ion-card-title>{{supply.name}}</ion-card-title>
             </ion-card-header>

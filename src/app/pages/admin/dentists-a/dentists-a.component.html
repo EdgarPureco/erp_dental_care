@@ -101,7 +101,7 @@
             <form (ngSubmit)="onSubmit()" [formGroup]="dentistForm">
               <ion-list class="ion-margin">
                 <ion-item *ngIf="imageSrc">
-                  <img [src]="imageSrc"  />
+                  <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="imageSrc"  />
                 </ion-item>
                 <ion-item>
                   <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>
@@ -201,7 +201,7 @@
         <ion-content>
 
           <ion-card *ngIf="dentist!==null">
-            <img [src]="getImgSrcFromBase64(dentist.user.image)" />
+            <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(dentist.user.image)" />
             <ion-card-header>
               <ion-card-title>{{dentist.person.name + " " +
                 dentist.person.surname + " " +
@@ -244,7 +244,7 @@
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="dentistEditForm">
               <ion-list class="ion-margin">
                 <ion-item *ngIf="imageSrc">
-                  <img [src]="imageSrc"  />
+                  <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="imageSrc"  />
                 </ion-item>
                 <ion-item>
                   <input type="file" (change)="onFileSelected($event)" id="file" class="inputfile"/>
