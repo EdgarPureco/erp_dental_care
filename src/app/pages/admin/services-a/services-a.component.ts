@@ -19,13 +19,13 @@ export class ServicesAComponent implements OnInit {
   results: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
+  suppliesActives: any[] = [];
   service: any = null
 
   serviceForm = this.formBuilder.group({
     name: [null, [Validators.required]],
     price: [null, [Validators.required]],
     supplies: null
-
   });
 
   serviceEditForm = this.formBuilder.group({
@@ -48,7 +48,7 @@ export class ServicesAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
      });
-    this.api.getSupplies('all').then((response:any) => { this.supplies = response.data });
+    this.api.getSupplies('activo').then((response:any) => { this.suppliesActives = response.data });
   }
 
   openAdd() {
@@ -81,9 +81,13 @@ export class ServicesAComponent implements OnInit {
   onSubmit() {
 
     this.api.insertService(this.serviceForm.value, this.suppliesAdded).then(
-      (response:any) => {
-        this.presentToast()
-        this.serviceForm.reset();
+      (response: any) => {
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Servicio registrado', 'success')
+          this.serviceForm.reset();
+        }
         this.getData()
         this.modalAdd = false
       }
@@ -111,6 +115,7 @@ export class ServicesAComponent implements OnInit {
 
   openEdit(id: any) {
     this.modalEdit = true
+    this.api.getSupplies('all').then((response:any) => { this.supplies = response.data });
     this.api.getService(id).then((response:any) => {
 
       this.service = response.data
@@ -131,8 +136,12 @@ export class ServicesAComponent implements OnInit {
     console.log(this.suppliesAdded);
 
     this.api.updateService(this.service.id, this.serviceEditForm.value, this.suppliesAdded).then(
-      (response:any) => {
-        this.presentToast()
+      (response: any) => {
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Servicio actualizado', 'success')
+        }
         this.service = null
         this.getData();
         this.modalEdit = false
@@ -177,12 +186,12 @@ export class ServicesAComponent implements OnInit {
     return true
 }
 
-async presentToast() {
+async presentToast(message:string, type:string) {
   const toast = await this.toastController.create({
-    message: 'Éxito !!',
+    message: message,
     duration: 1500,
     position: 'top',
-    color: 'success'
+    color: type
   });
 
   await toast.present();

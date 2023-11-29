@@ -130,11 +130,11 @@
 
                 <ion-item>
                   <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime formControlName="start_date"></ion-datetime>
+                  <ion-datetime formControlName="start_date" [min]="minDate"></ion-datetime>
                 </ion-item>
                 <ion-item>
                   <ion-label>Hora de Fin</ion-label>
-                  <ion-datetime formControlName="end_date"></ion-datetime>
+                  <ion-datetime formControlName="end_date" [min]="minDate"></ion-datetime>
                 </ion-item>
 
 
@@ -284,17 +284,17 @@
 
                 <ion-item>
                   <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.start_date" formControlName="start_date"></ion-datetime>
+                  <ion-datetime [(ngModel)]="appointment.start_date" formControlName="start_date" [min]="minDate"></ion-datetime>
                 </ion-item>
                 <ion-item>
                   <ion-label>Hora de Salida</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.end_date" formControlName="end_date"></ion-datetime>
+                  <ion-datetime [(ngModel)]="appointment.end_date" formControlName="end_date" [min]="minDate"></ion-datetime>
                 </ion-item>
 
 
               </ion-list>
               <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!appointmentForm.valid">
+                [disabled]="!appointmentEditForm.valid">
                 Guardar <ion-icon slot="end" name="save"></ion-icon>
               </ion-button>
             </form>
@@ -335,13 +335,13 @@
               <label *ngIf="servicesAdded.length">Servicios</label>
               <ion-item *ngFor="let item of servicesAdded">
                 <ion-input [id]="item.service_id" [label]="services[findIndexByIdServices(item.service_id)].name"
-                  type="number" (ionChange)="addQuantityServices($event, item.service_id)"
+                  type="number" min="1" (ionChange)="addQuantityServices($event, item.service_id)"
                   [value]="item.quantity"></ion-input>
                 <ion-button style="margin-left: 10px;" (click)="removeSupply(item.id)" color="danger"><ion-icon
                     aria-hidden="true" name="trash"></ion-icon>
                 </ion-button>
               </ion-item>
-
+              <br>
               <ion-item>
                 <ion-select aria-label="Agregar Insumo" placeholder="Agregar Insumo"
                   (ionChange)="handleChangeSupplies($event)">
@@ -354,7 +354,7 @@
               <label *ngIf="suppliesAdded.length">Insumos</label>
               <ion-item *ngFor="let item of suppliesAdded">
                 <ion-input [id]="item.supply_id" [label]="supplies[findIndexByIdSupplies(item.supply_id)].name"
-                  type="number" (ionChange)="addQuantitySupplies($event, item.supply_id)"
+                  type="number" min="1" (ionChange)="addQuantitySupplies($event, item.supply_id)"
                   [value]="item.quantity"></ion-input>
                 <ion-button style="margin-left: 10px;" (click)="removeSupply(item.id)" color="danger"><ion-icon
                     aria-hidden="true" name="trash"></ion-icon>

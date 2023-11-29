@@ -184,6 +184,13 @@
                   </ion-card-content>
                 </ion-card>
               </ion-item>
+              
+              <ion-item *ngIf="buys.length===0">
+                <ion-label>
+                  No hay compras
+                </ion-label>
+              </ion-item>
+
             </ion-list>
 
           </ion-card-content>

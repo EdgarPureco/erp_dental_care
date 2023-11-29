@@ -66,12 +66,12 @@ export class ServicesPComponent implements OnInit {
     return true
 }
 
-async presentToast() {
+async presentToast(message:string, type:string) {
   const toast = await this.toastController.create({
-    message: 'Éxito !!',
+    message: message,
     duration: 1500,
     position: 'top',
-    color: 'success'
+    color: type
   });
 
   await toast.present();

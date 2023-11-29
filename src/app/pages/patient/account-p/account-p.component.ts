@@ -65,7 +65,7 @@ export class AccountPComponent  implements OnInit {
     
     this.api.updatePatientInfo(this.dataEditForm.value, this.allergiesAdded).then(
       (response:any) => { 
-        this.presentToast()
+        this.presentToast('Exito', 'success')
         this.modalEdit = false 
         this.getData()
     }, (e:any) => console.log(e.data)
@@ -115,12 +115,12 @@ getImgSrcFromBase64(base64String: string): SafeResourceUrl {
   return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
 }
 
-async presentToast() {
+async presentToast(message:string, type:string) {
   const toast = await this.toastController.create({
-    message: 'Éxito !!',
+    message: message,
     duration: 1500,
     position: 'top',
-    color: 'success'
+    color: type
   });
 
   await toast.present();

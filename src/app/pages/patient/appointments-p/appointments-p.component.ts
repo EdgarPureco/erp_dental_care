@@ -61,16 +61,16 @@ export class AppointmentsPComponent implements OnInit {
 
 
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
   search(event:any) {
     const query = event.target.value.toLowerCase();

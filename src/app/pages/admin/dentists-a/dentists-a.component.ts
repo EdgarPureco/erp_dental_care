@@ -14,19 +14,19 @@ import { ApiService } from 'src/app/services/api.service';
 export class DentistsAComponent implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
-    let fechaActual = new Date();
+    let todayDate = new Date();
+    let maxBirthDate = new Date(`${todayDate.getFullYear() - 20}-12-31`);
+    this.maxDate = todayDate.toISOString()
 
-    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
-
-    this.maxDateBirth = fechaActual;
+    this.maxDateBirth = maxBirthDate.toISOString();
   }
 
   data: any[] = [];
   results: any[] = [];
   frequencies: any[] = [];
   dentist: any = null
-  maxDateBirth: Date;
-  maxDate = new Date();
+  maxDateBirth: any;
+  maxDate: any;
   imageSrc: SafeResourceUrl | undefined;
   base64String: string | undefined;
 
@@ -37,7 +37,7 @@ export class DentistsAComponent implements OnInit {
     birthday: [null, [Validators.required]],
     sex: [null, [Validators.required]],
     address: [null, [Validators.required]],
-    cp: [null, [Validators.required]],
+    cp: [null, [Validators.required, Validators.minLength(5)]],
     phone: [null, [Validators.required]],
 
     email: [null, [Validators.required, Validators.email]],
@@ -73,13 +73,16 @@ export class DentistsAComponent implements OnInit {
   modalDelete = false
 
   maxPL = 6
-  
+
   ngOnInit() {
     this.getData();
   }
 
   getData() {
-    this.api.getDentists('all').then((response: any) => { this.data = response.data,  this.results = [...this.data] });
+    this.api.getDentists('all').then((response: any) => {
+      this.data = response.data, this.results = [...this.data], console.log(this.results);
+      
+    });
   }
 
   openAdd() {
@@ -90,16 +93,23 @@ export class DentistsAComponent implements OnInit {
 
     this.api.insertDentist(this.dentistForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
-        this.dentistForm.reset();
-        this.imageSrc = undefined
-        this.base64String = undefined
-        this.getData()
-        this.modalAdd = false
+        if (response.data.message) {
+          this.presentToast('Error: Hay otro usuario con el mismo correo', 'danger')
+        } else {
+          this.presentToast('Éxito: Dentista registrado', 'success')
+          this.dentistForm.reset();
+          this.imageSrc = undefined
+          this.base64String = undefined
+          this.getData()
+          this.modalAdd = false
+        }
+
+      }, (e) => {
+        console.log('Error', e);
       }
     );
   }
-  
+
   onWillDismiss() {
     this.modalAdd = false
     this.modalDetails = false
@@ -109,7 +119,7 @@ export class DentistsAComponent implements OnInit {
     this.base64String = undefined
   }
 
-  
+
   openDetails(id: any) {
 
     this.modalDetails = true
@@ -127,16 +137,21 @@ export class DentistsAComponent implements OnInit {
       this.imageSrc = this.getImgSrcFromBase64(response.data.user.image)
       this.base64String = response.data.user.image
     })
-    
+
   }
-  
+
   onSubmitEdit() {
     this.api.updateDentist(this.dentist.id, this.dentistEditForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
-        this.imageSrc = undefined
-        this.base64String = undefined
-        this.getData();
+        if (response.data.message) {
+          this.presentToast('Error: Hay otro usuario con el mismo correo', 'danger')
+        } else {
+          this.presentToast('Éxito: Dentista actualizado', 'success')
+          this.dentistEditForm.reset();
+          this.imageSrc = undefined
+          this.base64String = undefined
+          this.getData()
+        }
         this.modalEdit = false
       }, (e: any) => console.log(e.data)
 
@@ -149,23 +164,27 @@ export class DentistsAComponent implements OnInit {
       this.dentist = response.data
     })
   }
-  
-  deleteDentist() {
-    this.api.deleteDentist(this.dentist.id).then(
+
+  async deleteDentist() {
+    await this.api.deleteDentist(this.dentist.id).then(
       (response: any) => {
-        this.modalDelete = false
+        if(response.status===200){
+          this.presentToast('Éxito: Dentista eliminado', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.modalDelete = false;
         this.getData();
-        console.log(response);
-        
-      }, (response:any)=>{console.log(response);
       }
-    )
+    );
+
   }
+
 
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
-    
+
     if (file) {
       const reader = new FileReader();
 
@@ -192,23 +211,23 @@ export class DentistsAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
-  async presentToast() {
+  async presentToast(message: string, type: string) {
     const toast = await this.toastController.create({
-      message: 'Éxito !!',
+      message: message,
       duration: 1500,
       position: 'top',
-      color: 'success'
+      color: type
     });
 
     await toast.present();
   }
 
-  search(event:any) {
+  search(event: any) {
     const query = event.target.value.toLowerCase();
-    
-    if (query==='' || query===null) {
+
+    if (query === '' || query === null) {
       this.results = [...this.data]
-    }else{
+    } else {
       this.results = this.data.filter((d) => {
         const person = d.person;
         const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
@@ -217,15 +236,15 @@ export class DentistsAComponent implements OnInit {
     }
   }
 
-  filter($e:any){
+  filter($e: any) {
     this.api.getDentists($e.detail.value).then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
-      
+
     });
   }
 
-  
+
   // Secondary Functions
 
   readonly phoneMask: MaskitoOptions = {

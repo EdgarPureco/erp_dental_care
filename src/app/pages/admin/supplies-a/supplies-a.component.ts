@@ -21,11 +21,12 @@ export class SuppliesAComponent implements OnInit {
   supply: any = null
   imageSrc: SafeResourceUrl | undefined;
   base64String: string | undefined;
+  isSalable: boolean = true;
 
   supplyForm = this.formBuilder.group({
     name: [null, [Validators.required]],
-    cost: [null, [Validators.required]],
-    price: [null, [Validators.required]],
+    cost: [null, [Validators.required, Validators.min(1)]],
+    price: [null, [ Validators.min(1)]],
     is_salable: [null, [Validators.required]],
     buy_unit: [null, [Validators.required]],
     use_unit: [null, [Validators.required]],
@@ -34,8 +35,8 @@ export class SuppliesAComponent implements OnInit {
 
   supplyEditForm = this.formBuilder.group({
     name: [null, [Validators.required]],
-    cost: [null, [Validators.required]],
-    price: [null, [Validators.required]],
+    cost: [null, [Validators.required, Validators.min(1)]],
+    price: [null, [ Validators.min(1)]],
     is_salable: [null, [Validators.required]],
     buy_unit: [null, [Validators.required]],
     use_unit: [null, [Validators.required]],
@@ -66,10 +67,14 @@ export class SuppliesAComponent implements OnInit {
 
     this.api.insertSupply(this.supplyForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
-        this.supplyForm.reset();
-        this.imageSrc = undefined
-        this.base64String = undefined
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Insumo registrado', 'success')
+          this.supplyForm.reset();
+          this.imageSrc = undefined
+          this.base64String = undefined
+        }
         this.getData()
         this.modalAdd = false
       }
@@ -90,6 +95,7 @@ export class SuppliesAComponent implements OnInit {
     this.api.getSupply(id).then((response: any) => {
       this.supply = response.data
       this.supplyEditForm.value.is_salable = this.supply.is_salable
+      this.isSalable = this.supply.is_salable
       this.supplyEditForm.value.equivalence = this.supply.equivalence
       this.imageSrc = this.getImgSrcFromBase64(response.data.image)
       this.base64String = response.data.image
@@ -100,7 +106,11 @@ export class SuppliesAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updateSupply(this.supply.id, this.supplyEditForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Insumo actualizado', 'success')
+        }
         this.supply = null
         this.imageSrc = undefined
         this.base64String = undefined
@@ -131,7 +141,12 @@ export class SuppliesAComponent implements OnInit {
   deleteSupply() {
     this.api.deleteSupply(this.supply.id).then(
       (response: any) => {
-        this.modalDelete = false
+        if(response.status===200){
+          this.presentToast('Éxito: Insumo eliminado', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.modalDelete = false;
         this.getData();
       }
     )
@@ -166,16 +181,16 @@ export class SuppliesAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
   search(event:any) {
     const query = event.target.value.toLowerCase();

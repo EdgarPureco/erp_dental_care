@@ -13,10 +13,8 @@ import { ApiService } from 'src/app/services/api.service';
 export class AppointmentsAComponent implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
-    let fechaActual = new Date();
-
-    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
-
+    let todayDate = new Date();
+    this.minDate = todayDate.toISOString()
 
   }
 
@@ -31,6 +29,7 @@ export class AppointmentsAComponent implements OnInit {
   services: any[] = [];
   servicesAdded: any[] = [];
   finish: any = null
+  minDate: any = null
   appointment: any = null
 
   appointmentForm = this.formBuilder.group({
@@ -87,7 +86,7 @@ export class AppointmentsAComponent implements OnInit {
     this.api.insertAppointment(this.appointmentForm.value).then(
       (response: any) => {
         console.log(response.data);
-        this.presentToast()
+        this.presentToast('Exito', 'success')
         this.appointmentForm.reset();
         this.getData()
         this.modalAdd = false
@@ -111,7 +110,7 @@ export class AppointmentsAComponent implements OnInit {
     this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
       (response: any) => { this.modalEdit = false, this.getData() },
       (e: any) => {
-        this.presentToast()
+        this.presentToast('Exito', 'success')
         console.log("HALO", e);
       }
     );
@@ -270,16 +269,16 @@ export class AppointmentsAComponent implements OnInit {
     return true
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
   search(event:any) {
     const query = event.target.value.toLowerCase();

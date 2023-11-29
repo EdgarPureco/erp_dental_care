@@ -27,8 +27,8 @@
                       <h1>{{item.person.name + " " +
                         item.person.surname + " " +
                         item.person.lastname}}</h1>
-                      <p>22 años</p>
-                      <p>Proxima cita: Lunes 15 de febrero</p>
+                      <p>Contratado: {{(item.hired_at)}}</p>
+                      <p>Puesto: {{item.position}}</p>
                     </ion-label>
                   </ion-item>
                 </ion-item-group>
@@ -118,6 +118,7 @@
                     placeholder="Apellido Materno"></ion-input>
                 </ion-item>
                 <ion-item>
+                  <ion-label>Fecha Nacimiento:</ion-label>
                   <ion-datetime presentation="day-month-year" formControlName="birthday" display-format="DD.MM.YYYY"
                     [max]="maxDateBirth"></ion-datetime>
                 </ion-item>
@@ -165,6 +166,7 @@
                     placeholder="Licencia Profesional"></ion-input>
                 </ion-item>
                 <ion-item>
+                  <ion-label>Fecha de Contratación:</ion-label>
                   <ion-datetime presentation="day-month-year" formControlName="hired_at" display-format="DD.MM.YYYY"
                     [max]="maxDate"></ion-datetime>
                 </ion-item>
@@ -206,10 +208,15 @@
               <ion-card-title>{{dentist.person.name + " " +
                 dentist.person.surname + " " +
                 dentist.person.lastname}}</ion-card-title>
-              <ion-card-subtitle>Fecha Nacimiento: {{dentist.person.birthday}}</ion-card-subtitle>
+              <ion-card-subtitle>
+                Fecha de Contratación: {{dentist.hired_at}} <br>
+                Puesto: {{dentist.position}} <br>
+                Licencia: {{dentist.professional_license}} <br>
+              </ion-card-subtitle>
             </ion-card-header>
 
             <ion-card-content>
+              Fecha Nacimiento: {{dentist.person.birthday}} <br>
               Dirección: {{dentist.person.address}} <br>
               Sexo: {{dentist.person.sex == true ? "Masculino" : "Femenino" }} <br>
               C.P: {{dentist.person.cp}} <br>
@@ -314,7 +321,7 @@
 
               </ion-list>
               <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!dentistForm.valid">
+                [disabled]="!dentistEditForm.valid">
                 Guardar <ion-icon slot="end" name="save"></ion-icon>
               </ion-button>
             </form>
@@ -341,7 +348,7 @@
 
           <ion-list>
             <ion-item>
-              <h3>¿Estás seguro de eliminar este paciente?</h3>
+              <h3>¿Estás seguro de eliminar este dentista?</h3>
             </ion-item>
           </ion-list>
 

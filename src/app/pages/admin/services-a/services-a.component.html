@@ -101,7 +101,7 @@
                   <ion-input formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input formControlName="price" label="Precio" type="number"
+                  <ion-input formControlName="price" label="Precio" type="number" min="1"
                     placeholder="Precio"></ion-input>
                 </ion-item>
 
@@ -111,7 +111,7 @@
                     placeholder="Agregar Insumo"
                     (ionChange)="handleChange($event)"
                   >
-                  <div *ngFor="let item of supplies">
+                  <div *ngFor="let item of suppliesActives">
                     <ion-select-option [value]="item.id">{{item.name}}</ion-select-option>
                   </div>
                   </ion-select>
@@ -121,7 +121,7 @@
                 <ion-item *ngFor="let item of suppliesAdded">
                       <ion-input [id]="item.supply_id" [label]="supplies[findIndexById(item.supply_id)].name" type="number"
                       (ionChange)="addQuantity($event, item.supply_id)"
-                    [value]="item.quantity"></ion-input>
+                    [value]="item.quantity" min="1"></ion-input>
                     <ion-button style="margin-left: 10px;" (click)="removeSupply(item.id)" color="danger"><ion-icon aria-hidden="true"
                       name="trash"></ion-icon>
                   </ion-button>
@@ -202,7 +202,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-input [(ngModel)]="service.price" formControlName="price" label="Precio" type="number"
-                    placeholder="Costo de Venta"></ion-input>
+                  min="1" placeholder="Costo de Venta"></ion-input>
                 </ion-item>
 
                 <ion-item>
@@ -211,7 +211,7 @@
                     placeholder="Agregar Insumo"
                     (ionChange)="handleChange($event)"
                   >
-                  <div *ngFor="let item of supplies">
+                  <div *ngFor="let item of suppliesActives">
                     <ion-select-option *ngIf="itemExists(item.id)" [value]="item.id">{{item.name}}</ion-select-option>
                   </div>
                   </ion-select>
@@ -221,7 +221,7 @@
                 <ion-item *ngFor="let item of suppliesAdded">
                       <ion-input [id]="item.supply_id"  [label]="supplies[findIndexById(item.supply_id)].name" type="number"
                       (ionChange)="addQuantity($event, item.supply_id)"
-                    [value]="item.quantity"></ion-input>
+                    [value]="item.quantity" min="1"></ion-input>
                     <ion-button style="margin-left: 10px;" (click)="removeSupply(item.id)" color="danger"><ion-icon aria-hidden="true"
                       name="trash"></ion-icon>
                   </ion-button>
@@ -231,7 +231,7 @@
 
               </ion-list>
               <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!serviceForm.valid">
+                [disabled]="!serviceEditForm.valid">
                 Guardar <ion-icon slot="end" name="save"></ion-icon>
               </ion-button>
             </form>

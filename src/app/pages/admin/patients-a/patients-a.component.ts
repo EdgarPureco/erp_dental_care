@@ -14,17 +14,14 @@ import { ApiService } from 'src/app/services/api.service';
 export class PatientsAComponent implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
-    let fechaActual = new Date();
-
-    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
-
-    this.maxDate = fechaActual;
+    let todayDate = new Date();
+    this.maxDate = todayDate.toISOString();
   }
 
   data: any[] = [];
   results: any[] = [];
   patient: any = null
-  maxDate: Date;
+  maxDate: any;
   imageSrc: SafeResourceUrl | undefined;
   base64String: string | undefined;
 
@@ -35,7 +32,7 @@ export class PatientsAComponent implements OnInit {
     birthday: [null, [Validators.required]],
     sex: [null, [Validators.required]],
     address: [null, [Validators.required]],
-    cp: [null, [Validators.required]],
+    cp: [null, [Validators.required, Validators.minLength(5)]],
     phone: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required]],
@@ -48,7 +45,7 @@ export class PatientsAComponent implements OnInit {
     birthday: [null, [Validators.required]],
     sex: [null, [Validators.required]],
     address: [null, [Validators.required]],
-    cp: [null, [Validators.required]],
+    cp: [null, [Validators.required, Validators.minLength(5)]],
     phone: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.email]],
   });
@@ -66,6 +63,8 @@ export class PatientsAComponent implements OnInit {
     this.api.getPatients('all').then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
+      console.log(this.results);
+      
     });
   }
 
@@ -84,12 +83,16 @@ export class PatientsAComponent implements OnInit {
   onSubmit() {
     this.api.insertPatient(this.patientForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
-        this.patientForm.reset();
-        this.imageSrc = undefined
-        this.base64String = undefined
-        this.getData()
-        this.modalAdd = false
+        if (response.data.message) {
+          this.presentToast('Error: Hay otro usuario con el mismo correo', 'danger')
+        } else {
+          this.presentToast('Éxito: Paciente registrado', 'success')
+          this.patientForm.reset();
+          this.imageSrc = undefined
+          this.base64String = undefined
+          this.getData()
+          this.modalAdd = false
+        }
       }
     );
   }
@@ -125,11 +128,16 @@ export class PatientsAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updatePatient(this.patient.id, this.patientEditForm.value, this.base64String).then(
       (response: any) => {
-        this.presentToast()
-        this.patient = null
-        this.imageSrc = undefined
-        this.base64String = undefined
-        this.getData();
+        if (response.data.message) {
+          this.presentToast('Error: Hay otro usuario con el mismo correo', 'danger')
+        } else {
+          this.presentToast('Éxito: Paciente actualizado', 'success')
+          this.patientEditForm.reset();
+          this.imageSrc = undefined
+          this.base64String = undefined
+          this.patient = null
+          this.getData()
+        }
         this.modalEdit = false
       }
     );
@@ -148,8 +156,12 @@ export class PatientsAComponent implements OnInit {
   deletePatient() {
     this.api.deletePatient(this.patient.id).then(
       (response: any) => {
-        this.modalDelete = false
-        console.log(response);
+        if(response.status===200){
+          this.presentToast('Éxito: Paciente eliminado', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.modalDelete = false;
         this.getData();
       }, (e)=>{console.log(e.message);}
     )
@@ -184,16 +196,16 @@ export class PatientsAComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
   search(event:any) {
     const query = event.target.value.toLowerCase();

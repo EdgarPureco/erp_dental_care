@@ -55,7 +55,7 @@ export class AccountDComponent implements OnInit {
   onSubmitEdit() {
     this.api.updateDentistInfo(this.data.id, this.dataEditForm.value).then(
       (response: any) => {
-        this.presentToast()
+        this.presentToast('Exito', 'success')
         this.modalEdit = false
       }, (e: any) => console.log(e.data)
 
@@ -73,16 +73,16 @@ export class AccountDComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
 
   // Secondary Functions

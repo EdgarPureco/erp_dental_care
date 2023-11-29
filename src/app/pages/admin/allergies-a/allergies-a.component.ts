@@ -51,10 +51,15 @@ export class AllergiesAComponent implements OnInit {
 
     this.api.insertAllergy(this.allergyForm.value).then(
       (response: any) => {
-        this.presentToast()
-        this.allergyForm.reset();
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Alergia registrada', 'success')
+          this.allergyForm.reset();
+        }
         this.getData()
         this.modalAdd = false
+        
       }
     );
   }
@@ -77,7 +82,11 @@ export class AllergiesAComponent implements OnInit {
   onSubmitEdit() {
     this.api.updateAllergy(this.allergy.id, this.allergyEditForm.value).then(
       (response: any) => {
-        this.presentToast()
+        if(response.status==400){
+          this.presentToast('Error: Ya existe este registro', 'danger')
+        }else{
+          this.presentToast('Éxito: Alergia actualizada', 'success')
+        }
         this.allergy = null
         this.getData();
         this.modalEdit = false
@@ -106,23 +115,28 @@ export class AllergiesAComponent implements OnInit {
   deleteAllergy() {
     this.api.deleteAllergy(this.allergy.id).then(
       (response: any) => {
-        this.modalDelete = false
+        if(response.status===200){
+          this.presentToast('Éxito: Alergia eliminado', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.modalDelete = false;
         this.getData();
       }
     )
   }
 
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Éxito !!',
-      duration: 1500,
-      position: 'top',
-      color: 'success'
-    });
+  async presentToast(message:string, type:string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 1500,
+    position: 'top',
+    color: type
+  });
 
-    await toast.present();
-  }
+  await toast.present();
+}
 
   search(event:any) {
     const query = event.target.value.toLowerCase();

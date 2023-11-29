@@ -107,13 +107,13 @@
                   <ion-input formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input formControlName="cost" label="Costo de Compra" type="number"
+                  <ion-input formControlName="cost" label="Costo de Compra" type="number" min="1"
                     placeholder="Costo de Compra"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-row>
                     <ion-list>
-                      <ion-radio-group formControlName="is_salable" value=true>
+                      <ion-radio-group formControlName="is_salable" [value]="isSalable" (ionChange)="isSalable=!isSalable">
                         <ion-label>Es vendible:</ion-label>
                         <ion-row>
                           <ion-col>
@@ -127,8 +127,8 @@
                     </ion-list>
                   </ion-row>
                 </ion-item>
-                <ion-item>
-                  <ion-input formControlName="price" label="Costo de Venta" type="number"
+                <ion-item *ngIf="isSalable">
+                  <ion-input formControlName="price" label="Costo de Venta" type="number" min="1"
                     placeholder="Costo de Venta"></ion-input>
                 </ion-item>
                 <ion-item>
@@ -179,8 +179,8 @@
 
             <ion-card-content>
               Costo: {{supply.cost}} <br>
-              Precio: {{supply.price}} <br>
               Es vendible: {{supply.is_salable == true ? "Si" : "No" }} <br>
+              <p *ngIf="supply.is_salable">Precio: {{supply.price}} </p>
               Unidad de compra: {{supply.buy_unit}} <br>
               Unidad de uso: {{supply.use_unit}} <br>
               Equivalencia: {{supply.equivalence}} <br><br>
@@ -222,17 +222,13 @@
                   <ion-input [(ngModel)]="supply.name" formControlName="name" label="Nombre" [maxlength]="45" placeholder="Nombre"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input [(ngModel)]="supply.cost" formControlName="cost" label="Costo de Compra" type="number"
+                  <ion-input [(ngModel)]="supply.cost" formControlName="cost" min="1" label="Costo de Compra" type="number"
                     placeholder="Costo de Compra"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-input [(ngModel)]="supply.price" formControlName="price" label="Costo de Venta" type="number"
-                    placeholder="Costo de Venta"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-row>
                     <ion-list>
-                      <ion-radio-group formControlName="is_salable" name="Vendible" [(ngModel)]="supply.is_salable">
+                      <ion-radio-group (ionChange)="isSalable=!isSalable" formControlName="is_salable" name="Vendible" [(ngModel)]="supply.is_salable">
                         <ion-label>Es vendible:</ion-label>
                         <ion-row>
                           <ion-col>
@@ -245,6 +241,10 @@
                       </ion-radio-group>
                     </ion-list>
                   </ion-row>
+                </ion-item>
+                <ion-item *ngIf="isSalable">
+                  <ion-input [(ngModel)]="supply.price" formControlName="price" min="1" label="Costo de Venta" type="number"
+                    placeholder="Costo de Venta"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-input [(ngModel)]="supply.buy_unit" formControlName="buy_unit" [maxlength]="60" label="Medida de Compra"
@@ -261,7 +261,7 @@
 
               </ion-list>
               <ion-button style="margin: 10px 20px 0px 20px;" expand="block" type="submit"
-                [disabled]="!supplyForm.valid">
+                [disabled]="!supplyEditForm.valid">
                 Guardar <ion-icon slot="end" name="save"></ion-icon>
               </ion-button>
             </form>
