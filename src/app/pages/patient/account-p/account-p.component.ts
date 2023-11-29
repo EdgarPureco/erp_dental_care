@@ -14,18 +14,17 @@ export class AccountPComponent  implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, 
     private api: ApiService, private sanitizer: DomSanitizer) {
-    let fechaActual = new Date();
-
-    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
-
-    this.maxDateBirth = fechaActual;
+      let todayDate = new Date();
+      let maxBirthDate = new Date(`${todayDate.getFullYear() - 5}-12-31`);
+  
+      this.maxDateBirth = maxBirthDate.toISOString();
   }
 
   ngOnInit() {
     this.getData();
   }
 
-  maxDateBirth: Date;
+  maxDateBirth: any;
   data: any = null
   allergies:any[] = []
   allergiesAdded:any[] = []

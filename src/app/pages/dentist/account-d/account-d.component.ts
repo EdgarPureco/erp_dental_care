@@ -12,20 +12,19 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AccountDComponent implements OnInit {
 
-  constructor(private toastController: ToastController, private formBuilder: FormBuilder, 
+  constructor(private toastController: ToastController, private formBuilder: FormBuilder,
     private api: ApiService, private sanitizer: DomSanitizer) {
-    let fechaActual = new Date();
+    let todayDate = new Date();
+    let maxBirthDate = new Date(`${todayDate.getFullYear() - 5}-12-31`);
 
-    fechaActual.setFullYear(fechaActual.getFullYear() - 5);
-
-    this.maxDateBirth = fechaActual;
+    this.maxDateBirth = maxBirthDate.toISOString();
   }
 
   ngOnInit() {
     this.getData();
   }
 
-  maxDateBirth: Date;
+  maxDateBirth: any;
   data: any = null
   modalEdit = false
 
@@ -73,16 +72,16 @@ export class AccountDComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(base64String);
   }
 
-  async presentToast(message:string, type:string) {
-  const toast = await this.toastController.create({
-    message: message,
-    duration: 1500,
-    position: 'top',
-    color: type
-  });
+  async presentToast(message: string, type: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: 'top',
+      color: type
+    });
 
-  await toast.present();
-}
+    await toast.present();
+  }
 
 
   // Secondary Functions
