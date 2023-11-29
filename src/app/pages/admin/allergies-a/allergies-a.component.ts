@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -20,11 +20,11 @@ export class AllergiesAComponent implements OnInit {
   allergy: any = null
 
   allergyForm = this.formBuilder.group({
-    name: null,
+    name: ['', [Validators.required]],
   });
 
   allergyEditForm = this.formBuilder.group({
-    name: null,
+    name: ['', [Validators.required]],
   });
 
   modalAdd = false

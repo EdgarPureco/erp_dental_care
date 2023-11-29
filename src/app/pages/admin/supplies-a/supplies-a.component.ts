@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
@@ -23,23 +23,23 @@ export class SuppliesAComponent implements OnInit {
   base64String: string | undefined;
 
   supplyForm = this.formBuilder.group({
-    name: null,
-    cost: null,
-    price: null,
-    is_salable: null,
-    buy_unit: null,
-    use_unit: null,
-    equivalence: null,
+    name: [null, [Validators.required]],
+    cost: [null, [Validators.required]],
+    price: [null, [Validators.required]],
+    is_salable: [null, [Validators.required]],
+    buy_unit: [null, [Validators.required]],
+    use_unit: [null, [Validators.required]],
+    equivalence: [null, [Validators.required]],
   });
 
   supplyEditForm = this.formBuilder.group({
-    name: null,
-    cost: null,
-    price: null,
-    is_salable: null,
-    buy_unit: null,
-    use_unit: null,
-    equivalence: null,
+    name: [null, [Validators.required]],
+    cost: [null, [Validators.required]],
+    price: [null, [Validators.required]],
+    is_salable: [null, [Validators.required]],
+    buy_unit: [null, [Validators.required]],
+    use_unit: [null, [Validators.required]],
+    equivalence: [null, [Validators.required]],
   });
 
   modalAdd = false

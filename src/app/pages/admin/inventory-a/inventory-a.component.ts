@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
@@ -25,8 +25,8 @@ export class InventoryAComponent implements OnInit {
   expires = false
 
   supplyForm = this.formBuilder.group({
-    supply_id: null,
-    quantity: null,
+    supply_id: [null, [Validators.required]],
+    quantity: [null, [Validators.required]],
     expiration_date: null
   });
 

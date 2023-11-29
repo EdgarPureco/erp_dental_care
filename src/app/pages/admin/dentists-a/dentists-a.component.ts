@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
@@ -31,39 +31,39 @@ export class DentistsAComponent implements OnInit {
   base64String: string | undefined;
 
   dentistForm = this.formBuilder.group({
-    name: null,
-    surname: null,
-    lastname: null,
-    birthday: null,
-    sex: null,
-    address: null,
-    cp: null,
-    phone: null,
+    name: [null, [Validators.required]],
+    surname: [null, [Validators.required]],
+    lastname: [null, [Validators.required]],
+    birthday: [null, [Validators.required]],
+    sex: [null, [Validators.required]],
+    address: [null, [Validators.required]],
+    cp: [null, [Validators.required]],
+    phone: [null, [Validators.required]],
 
-    email: null,
-    password: null,
+    email: [null, [Validators.required]],
+    password: [null, [Validators.required]],
 
-    professional_license: null,
-    hired_at: null,
-    position: null,
+    professional_license: [null, [Validators.required]],
+    hired_at: [null, [Validators.required]],
+    position: [null, [Validators.required]],
     time: null
   });
 
   dentistEditForm = this.formBuilder.group({
-    name: null,
-    surname: null,
-    lastname: null,
-    birthday: null,
-    sex: null,
-    address: null,
-    cp: null,
-    phone: null,
+    name: [null, [Validators.required]],
+    surname: [null, [Validators.required]],
+    lastname: [null, [Validators.required]],
+    birthday: [null, [Validators.required]],
+    sex: [null, [Validators.required]],
+    address: [null, [Validators.required]],
+    cp: [null, [Validators.required]],
+    phone: [null, [Validators.required]],
 
-    email: null,
+    email: [null, [Validators.required]],
 
-    professional_license: null,
-    hired_at: null,
-    position: null,
+    professional_license: [null, [Validators.required]],
+    hired_at: [null, [Validators.required]],
+    position: [null, [Validators.required]],
     time: null
   });
 

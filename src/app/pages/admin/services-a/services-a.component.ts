@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
 import { SuppliesAComponent } from '../supplies-a/supplies-a.component';
 import { ToastController } from '@ionic/angular';
@@ -22,15 +22,15 @@ export class ServicesAComponent implements OnInit {
   service: any = null
 
   serviceForm = this.formBuilder.group({
-    name: null,
-    price: null,
+    name: [null, [Validators.required]],
+    price: [null, [Validators.required]],
     supplies: null
 
   });
 
   serviceEditForm = this.formBuilder.group({
-    name: null,
-    price: null,
+    name: [null, [Validators.required]],
+    price: [null, [Validators.required]],
     supplies: null
   });
 

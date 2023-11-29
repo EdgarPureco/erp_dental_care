@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CheckboxCustomEvent, ToastController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiService } from 'src/app/services/api.service';
@@ -34,18 +34,18 @@ export class AppointmentsAComponent implements OnInit {
   appointment: any = null
 
   appointmentForm = this.formBuilder.group({
-    dentist_id: null,
-    patient_id: null,
-    start_date: null,
-    end_date: null,
+    dentist_id: [null, [Validators.required]],
+    patient_id: [null, [Validators.required]],
+    start_date: [null, [Validators.required]],
+    end_date: [null, [Validators.required]],
 
   });
 
   appointmentEditForm = this.formBuilder.group({
-    dentist_id: null,
-    patient_id: null,
-    start_date: null,
-    end_date: null,
+    dentist_id: [null, [Validators.required]],
+    patient_id: [null, [Validators.required]],
+    start_date: [null, [Validators.required]],
+    end_date: [null, [Validators.required]],
   });
 
   modalAdd = false
