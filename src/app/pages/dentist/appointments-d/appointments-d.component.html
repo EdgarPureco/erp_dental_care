@@ -9,35 +9,36 @@
           <ion-card-title>Citas</ion-card-title>
           <ion-card-subtitle>
             <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-radio-group value="all" (ionChange)="filter($event)">
+              <ion-radio class="ion-margin" value="all" labelPlacement="end">Todas</ion-radio>
+              <ion-radio class="ion-margin" value="AGENDADA" labelPlacement="end">Agendadas</ion-radio>
+              <ion-radio class="ion-margin" value="ATENDIDA" labelPlacement="end">Finalizadas</ion-radio>
+              <ion-radio class="ion-margin" value="CANCELADA" labelPlacement="end">Canceladas</ion-radio>
+            </ion-radio-group>
           </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <ion-list *ngIf="data">
+          <ion-list *ngIf="results">
 
-            <ion-card *ngFor="let item of data">
-              <ion-card-content>
+            <ion-card *ngFor="let item of results">
+              <ion-card-content *ngIf="item.status==='AGENDADA'">
                 <ion-item-group>
                   <ion-item>
-                    <ion-label>
+                    <ion-label class="ion-text-capitalize">
                       <h1>{{formatDateToLetter(item.start_date)}}</h1>
-                      <p>Dentista: {{item.dentist.person.name + " "+ item.dentist.person.surname + " " +
-                        item.dentist.person.lastname}}</p>
                       <p>Paciente: {{item.patient.person.name + " "+ item.patient.person.surname + " " +
                         item.patient.person.lastname}}</p>
+                      <p>Termina: {{formatDateToLetter(item.end_date)}}</p>
                     </ion-label>
                   </ion-item>
                 </ion-item-group>
                 <ion-item-group>
-                  <ion-button *ngIf="item.status==='AGENDADA'" (click)="openFinish(item.id)"
-                    color="success">
-                    <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
-                  </ion-button>
-                  <ion-button (click)="openDetails(item.id)" color="secondary">
-                    Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
-                  </ion-button>
-
+                  <ion-item>
+                    <ion-button *ngIf="item.status==='AGENDADA'" (click)="openFinish(item.id)" color="success">
+                      <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
+                    </ion-button>
+                  </ion-item>
                 </ion-item-group>
-
               </ion-card-content>
             </ion-card>
 
@@ -70,6 +71,8 @@
 
     </div>
 
+
+
     <!-- Start Details Cita -->
     <ion-modal [isOpen]="modalDetails" (willDismiss)="onWillDismiss()">
       <ng-template>
@@ -85,8 +88,8 @@
 
           <ion-card *ngIf="appointment!==null">
             <ion-card-header>
-              <ion-card-title>Inicio: {{formatDateToNumbers(appointment.start_date)}}</ion-card-title>
-              <ion-card-subtitle>Fin: {{formatDateToNumbers(appointment.end_date)}}</ion-card-subtitle>
+              <ion-card-title>Inicio: {{formatDateToLetter(appointment.start_date)}}</ion-card-title>
+              <ion-card-subtitle>Fin: {{formatDateToLetter(appointment.end_date)}}</ion-card-subtitle>
             </ion-card-header>
 
             <ion-card-content>
@@ -96,62 +99,6 @@
               Paciente: {{appointment.patient.person.name + " " +
               appointment.patient.person.surname + " " +
               appointment.patient.person.lastname}} <br>
-              <br>
-              <h2>Información:</h2>
-              <ion-list>
-                <ion-item *ngFor="let sell of appointment.sells">
-                  <ion-card style="width: 100%;">
-                    <ion-card-header>
-                      <ion-card-title
-                        class="ion-text-capitalize">{{formatDateToLetter(sell.created_at)}}</ion-card-title>
-                    </ion-card-header>
-
-                    <ion-card-content>
-                      SubTotal: {{sell.subtotal}}<br>
-                      I.V.A: {{sell.vat}}<br>
-                      Total: {{sell.total}}<br>
-                      <br>
-                      <h3>Servicios:</h3>
-                      <ion-list>
-                        <ion-item *ngFor="let service of sell.services">
-                          <ion-card style="width: 100%;">
-                            <ion-card-header>
-                              <ion-card-title>{{service.service.name}}</ion-card-title>
-                            </ion-card-header>
-
-                            <ion-card-content>
-                              Precio: {{service.price}}<br>
-                              Cantidad: {{service.quantity}}<br>
-                              SubTotal: {{service.subtotal}}<br>
-                              I.V.A: {{service.vat}}<br>
-                              Total: {{service.total}}<br>
-                            </ion-card-content>
-                          </ion-card>
-                        </ion-item>
-                      </ion-list>
-                      <br>
-                      <h3>Insumos:</h3>
-                      <ion-list>
-                        <ion-item *ngFor="let supply of sell.supplies">
-                          <ion-card style="width: 100%;">
-                            <ion-card-header>
-                              <ion-card-title>{{supply.supply.name}}</ion-card-title>
-                            </ion-card-header>
-
-                            <ion-card-content>
-                              Precio: {{supply.price}}<br>
-                              Cantidad: {{supply.quantity}}<br>
-                              SubTotal: {{supply.subtotal}}<br>
-                              I.V.A: {{supply.vat}}<br>
-                              Total: {{supply.total}}<br>
-                            </ion-card-content>
-                          </ion-card>
-                        </ion-item>
-                      </ion-list>
-                    </ion-card-content>
-                  </ion-card>
-                </ion-item>
-              </ion-list>
             </ion-card-content>
           </ion-card>
 
@@ -161,6 +108,36 @@
     <!-- End Details Cita -->
 
 
+
+    <!-- Start Delete Cita -->
+    <!-- <ion-modal [isOpen]="modalDelete" (willDismiss)="onWillDismiss()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Eliminar Cita</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modalDelete=false"><ion-icon name="close"></ion-icon></ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <ion-list>
+            <ion-item>
+              <h3>¿Estás seguro de cancelar esta cita?</h3>
+            </ion-item>
+          </ion-list>
+
+          <div style="margin: 45% 20px 0 20px">
+            <ion-button expand="block" color="danger" (click)="modalDelete=false"><ion-icon aria-hidden="true"
+                name="close"></ion-icon>Cancelar</ion-button>
+            <ion-button expand="block" (click)="deleteAppointment()"><ion-icon aria-hidden="true"
+                name="checkmark"></ion-icon> Aceptar</ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal> -->
+    <!-- End Delete Cita -->
 
     <!-- Start Finish Cita -->
     <ion-modal [isOpen]="modalFinish" (willDismiss)="onWillDismiss()">

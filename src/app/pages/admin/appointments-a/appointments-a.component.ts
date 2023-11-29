@@ -291,7 +291,7 @@ export class AppointmentsAComponent implements OnInit {
       this.results = this.data.filter((d) => {
         const patient = d.patient.person;
         const dentist = d.dentist.person;
-        const fullName = `${patient.name} ${patient.lastname} ${dentist.surname} ${dentist.name} ${dentist.lastname} ${dentist.surname}`.toLowerCase();
+        const fullName = `${patient.name} ${patient.surname} ${patient.lastname} ${dentist.name} ${dentist.lastname} ${dentist.surname}`.toLowerCase();
         return fullName.includes(query.toLowerCase());
       });
     }

@@ -12,7 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AppointmentsDComponent implements OnInit {
 
-  
+
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
     let fechaActual = new Date();
 
@@ -53,18 +53,18 @@ export class AppointmentsDComponent implements OnInit {
   maxPL = 6
 
   ngOnInit() {
-    this.getData();    
+    this.getData();
   }
 
   getData() {
     this.api.getDentistAppointments().then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
-      
+
     });
   }
 
- 
+
   onWillDismiss() {
     this.modalDetails = false
     this.modalFinish = false
@@ -80,16 +80,16 @@ export class AppointmentsDComponent implements OnInit {
   openFinish(id: any) {
     this.modalFinish = true
     this.appointment = this.data[this.findIndexByIdAppointments(id)]
-    this.api.getServices('all').then((response: any) => {
+    this.api.getServices('activo').then((response: any) => {
       this.services = response.data
     })
-    this.api.getSupplies('all').then((response: any) => {
-      response.data.map((item:any)=>{
-        if(item.is_salable){
+    this.api.getSupplies('activo').then((response: any) => {
+      response.data.map((item: any) => {
+        if (item.is_salable) {
           this.supplies.push(item)
         }
       })
-      
+
     })
   }
 
@@ -99,8 +99,8 @@ export class AppointmentsDComponent implements OnInit {
       (response: any) => {
         this.modalFinish = false
         this.getData();
-        console.log('HALO response', response);"{'message': 'Failed to finish the appointment, some services cannot be given due to a lack fo supplies', 'missing': [{'name': 'anstesia', 'missing': 1, 'buy_missing': 1, 'buy_unit': 'caja', 'use_unit': 'pieza'}, {'name': 'Dental Floss', 'missing': 5, 'buy_missing': 1, 'buy_unit': 'pzs', 'use_unit': 'Piece'}]}"
-        
+        console.log('HALO response', response); "{'message': 'Failed to finish the appointment, some services cannot be given due to a lack fo supplies', 'missing': [{'name': 'anstesia', 'missing': 1, 'buy_missing': 1, 'buy_unit': 'caja', 'use_unit': 'pieza'}, {'name': 'Dental Floss', 'missing': 5, 'buy_missing': 1, 'buy_unit': 'pzs', 'use_unit': 'Piece'}]}"
+
       }
     );
   }
@@ -117,7 +117,7 @@ export class AppointmentsDComponent implements OnInit {
 
     return index;
   }
-  
+
   findIndexByIdServices(id: string): number {
     let index = -1;
     for (let i = 0; i < this.services.length; i++) {
@@ -145,7 +145,7 @@ export class AppointmentsDComponent implements OnInit {
         "quantity": 1
       });
   }
-  
+
   serviceExists(id: number): boolean {
     if (this.servicesAdded.some(item => item.service_id === id)) {
       return false
@@ -183,7 +183,7 @@ export class AppointmentsDComponent implements OnInit {
     await toast.present();
   }
 
-  
+
   addQuantitySupplies(e: any, id: number) {
     this.suppliesAdded.map(item => {
       if (item.supply_id === id) {
@@ -214,36 +214,47 @@ export class AppointmentsDComponent implements OnInit {
     this.servicesAdded = this.servicesAdded.filter((item) => item.id !== id);
   }
 
-  search(event:any) {
+
+  search(event: any) {
     const query = event.target.value.toLowerCase();
-    
-    if (query==='' || query===null) {
+    console.log(this.results);
+
+    if (query === '' || query === null) {
       this.results = [...this.data]
-    }else{
+    } else {
       this.results = this.data.filter((d) => {
-        const person = d.person;
-        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
+        const patient = d.patient.person;
+        const fullName = `${patient.name} ${patient.surname} ${patient.lastname}`.toLowerCase();
         return fullName.includes(query.toLowerCase());
       });
     }
   }
 
-// Secondary Functions
+  filter($e: any) {
+    this.api.getAppointments($e.detail.value).then((response: any) => {
+      this.data = response.data;
+      this.results = [...this.data]
 
-formatDateToLetter(date: any) {
-  var startDate = new Date(date);
+    });
+  }
 
-  const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
 
-  return formattedDate;
-}
+  // Secondary Functions
 
-formatDateToNumbers(date: any) {
-  var startDate = new Date(date);
+  formatDateToLetter(date: any) {
+    var startDate = new Date(date);
 
-  const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'}).format(startDate);
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }).format(startDate);
 
-  return formattedDate;
-}
+    return formattedDate;
+  }
+
+  formatDateToNumbers(date: any) {
+    var startDate = new Date(date);
+
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }).format(startDate);
+
+    return formattedDate;
+  }
 
 }

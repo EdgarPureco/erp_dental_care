@@ -87,7 +87,7 @@ export class ApiService {
 
   public getDentistRecords() {
     const options = {
-      url: this.baseUrl + 'dentists/my/records',
+      url: this.baseUrl + 'dentists/my/record',
       headers: this.headers,
     };
     return CapacitorHttp.get(options)

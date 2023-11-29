@@ -16,8 +16,7 @@ export class HomeDComponent  implements OnInit {
   
   }
 
-  data: any[] = [];
-  results: any[] = [];
+  data: any = null;
 
   ngOnInit() {
     this.getData();
@@ -25,23 +24,16 @@ export class HomeDComponent  implements OnInit {
 
   getData() {
     this.api.getMyAppointments('dentists').then((response:any) => {
-      this.data = response.data;
-      this.results = [...this.data]
+      this.data = response.data[0];
     });
   }
 
-  search(event:any) {
-    const query = event.target.value.toLowerCase();
-    
-    if (query==='' || query===null) {
-      this.results = [...this.data]
-    }else{
-      this.results = this.data.filter((d) => {
-        const person = d.person;
-        const fullName = `${person.name} ${person.lastname} ${person.surname}`.toLowerCase();
-        return fullName.includes(query.toLowerCase());
-      });
-    }
+  formatDateToLetter(date: any) {
+    var startDate = new Date(date);
+
+    const formattedDate = new Intl.DateTimeFormat('es-ES', { hour: 'numeric', minute: 'numeric', weekday: 'short', month: 'long', day: 'numeric' }).format(startDate);
+
+    return formattedDate;
   }
 
 }

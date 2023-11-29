@@ -17,4 +17,4 @@ import { MaskitoModule } from '@maskito/angular';
   declarations: [AccountDComponent],
   exports: [AccountDComponent]
 })
-export class AccountPModule {}
+export class AccountDModule {}

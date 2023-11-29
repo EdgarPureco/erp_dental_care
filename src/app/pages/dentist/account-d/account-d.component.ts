@@ -43,7 +43,7 @@ export class AccountDComponent implements OnInit {
   });
 
   getData() {
-    this.api.getMyInfo('patients').then((response: any) => {
+    this.api.getMyInfo('dentists').then((response: any) => {
       this.data = response.data; console.log("HALO", response.data)
     });
   }

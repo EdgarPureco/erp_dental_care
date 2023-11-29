@@ -21,6 +21,8 @@ import { ServicesPComponent } from './pages/patient/services-p/services-p.compon
 import { InventoryAComponent } from './pages/admin/inventory-a/inventory-a.component';
 import { TabsDentistPage } from './tabsDentist/tabsDentist.page';
 import { AllergiesAComponent } from './pages/admin/allergies-a/allergies-a.component';
+import { AccountDComponent } from './pages/dentist/account-d/account-d.component';
+import { RecordsDComponent } from './pages/dentist/records-d/records-d.component';
 
 const routes: Routes = [
   {
@@ -96,13 +98,19 @@ const routes: Routes = [
           },
           {
             path: 'account',
-            component: HomeDComponent,
+            component: AccountDComponent,
             canActivate: [AuthGuard],
             data: { roles: [Roles.Dentist] }
           },
           {
             path: 'appointments',
             component: AppointmentsDComponent,
+            canActivate: [AuthGuard],
+            data: { roles: [Roles.Dentist] }
+          },
+          {
+            path: 'services',
+            component: RecordsDComponent,
             canActivate: [AuthGuard],
             data: { roles: [Roles.Dentist] }
           },
