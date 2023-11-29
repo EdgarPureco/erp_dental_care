@@ -94,14 +94,14 @@
               <ion-list class="ion-margin">
                 <ion-item>
                   <ion-input formControlName="quantity" label="Cantidad" type="number"
-                    placeholder="Cantidad"></ion-input>
+                    placeholder="Cantidad" min="1"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-checkbox (click)="expires=true">El insumo caduca:</ion-checkbox>
                 </ion-item>
                 <ion-item *ngIf="expires">
                   <ion-datetime presentation="date" formControlName="expiration_date"
-                    label="Fecha de Expiración"></ion-datetime>
+                    label="Fecha de Expiración" [min]="minDate"></ion-datetime>
                 </ion-item>
 
               </ion-list>

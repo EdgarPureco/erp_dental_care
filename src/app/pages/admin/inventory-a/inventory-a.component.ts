@@ -13,6 +13,9 @@ import { ApiService } from 'src/app/services/api.service';
 export class InventoryAComponent implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService, private sanitizer: DomSanitizer) {
+    let todayDate = new Date();
+    this.minDate = todayDate.toISOString()
+
   }
 
   data: any[] = [];
@@ -22,10 +25,11 @@ export class InventoryAComponent implements OnInit {
   sells: any[] = [];
   supply_id: any = null
   supply: any = null
+  minDate: any = null
   expires = false
 
   supplyForm = this.formBuilder.group({
-    supply_id: [null, [Validators.required]],
+    supply_id: null,
     quantity: [null, [Validators.required]],
     expiration_date: null
   });
@@ -54,13 +58,22 @@ export class InventoryAComponent implements OnInit {
   
   onSubmit() {
     
-    this.supplyForm.value.supply_id = this.supply
+    this.supplyForm.value.supply_id = this.supply_id
+    console.log(this.supplyForm.value);
+    
     this.api.buySupply(this.supplyForm.value).then(
-      (response:any) => {
-        this.modalAdd = false
-        this.supplyForm.reset();
-        this.getData()
-        this.presentToast('Exito', 'success')        
+      (response: any) => {
+        if (response.data.message) {
+          this.presentToast('Error', 'danger')
+        } else {
+          this.presentToast('Éxito: Compra registrada', 'success')
+          this.supplyForm.reset();
+          this.getData()
+          this.modalAdd = false
+        }
+
+      }, (e) => {
+        console.log('Error', e);
       }
     );
   }
