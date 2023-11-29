@@ -40,7 +40,7 @@ export class DentistsAComponent implements OnInit {
     cp: [null, [Validators.required]],
     phone: [null, [Validators.required]],
 
-    email: [null, [Validators.required]],
+    email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required]],
 
     professional_license: [null, [Validators.required]],
@@ -59,7 +59,7 @@ export class DentistsAComponent implements OnInit {
     cp: [null, [Validators.required]],
     phone: [null, [Validators.required]],
 
-    email: [null, [Validators.required]],
+    email: [null, [Validators.required, Validators.email]],
 
     professional_license: [null, [Validators.required]],
     hired_at: [null, [Validators.required]],

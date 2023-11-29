@@ -40,7 +40,7 @@ export class AccountPComponent  implements OnInit {
     address: [null, [Validators.required]],
     cp: [null, [Validators.required]],
     phone: [null, [Validators.required]],
-    email: [null, [Validators.required]],
+    email: [null, [Validators.required, Validators.email]],
     allergies: []
     
   });
