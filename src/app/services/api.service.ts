@@ -380,6 +380,18 @@ export class ApiService {
 
   // ! Appointments
 
+  public sendNotification(id: string) {
+
+    const options = {
+      url: this.baseUrl + 'appointment/'+id+'/notify',
+      headers: this.headers,
+      params: { id: id }
+    };
+    console.log(options);
+    
+    return CapacitorHttp.get(options)
+  }
+  
   public getAppointments(status: string) {
     let options: any = null;
     if (status == 'all') {

@@ -85,12 +85,16 @@ export class AppointmentsAComponent implements OnInit {
 
     this.api.insertAppointment(this.appointmentForm.value).then(
       (response: any) => {
-        console.log(response.data);
-        this.presentToast('Exito', 'success')
-        this.appointmentForm.reset();
+        if(response.status===200){
+          this.presentToast('Éxito: Cita registrada', 'success')
+          this.appointmentForm.reset();
+        }else{
+          this.presentToast('Error', 'danger')
+        }
         this.getData()
         this.modalAdd = false
-      },
+      }
+      ,
       (e: any) => {
         console.log("HALO", e);
       }
@@ -105,12 +109,29 @@ export class AppointmentsAComponent implements OnInit {
     this.modalDelete = false
   }
 
+  openEdit(id: any) {
+    this.modalEdit = true
+    this.api.getAppointment(id).then((response: any) => {
+      this.appointment = response.data,
+        console.log(this.appointment);
+
+    })
+
+  }
 
   onSubmitEdit() {
     this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
-      (response: any) => { this.modalEdit = false, this.getData() },
+      (response: any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Cita actualizada', 'success')
+          this.appointmentEditForm.reset();
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.getData()
+        this.modalEdit = false
+      },
       (e: any) => {
-        this.presentToast('Exito', 'success')
         console.log("HALO", e);
       }
     );
@@ -127,15 +148,6 @@ export class AppointmentsAComponent implements OnInit {
     })
   }
 
-  openEdit(id: any) {
-    this.modalEdit = true
-    this.api.getAppointment(id).then((response: any) => {
-      this.appointment = response.data,
-        console.log(this.appointment);
-
-    })
-
-  }
 
   addQuantitySupplies(e: any, id: number) {
     this.suppliesAdded.map(item => {
@@ -162,11 +174,12 @@ export class AppointmentsAComponent implements OnInit {
       }
     });
   }
-
+  
   removeService(id: any) {
     this.servicesAdded = this.servicesAdded.filter((item) => item.id !== id);
   }
 
+  
   openFinish(id: any) {
     this.modalFinish = true
     this.api.getAppointment(id).then((response: any) => {
@@ -185,6 +198,33 @@ export class AppointmentsAComponent implements OnInit {
       
     })
   }
+  
+  finishAppointment() {
+    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
+      (response: any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Cita finalizada', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+        this.getData()
+        this.modalFinish = false
+      }
+    );
+  }
+
+  notify(id: any) {
+    this.modalFinish = true
+    this.api.sendNotification(id).then(
+      (response: any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Notificación enviada', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
+      }
+    )
+  }
 
   handleChangeSupplies(e: any) {
     this.suppliesAdded.push(
@@ -202,16 +242,6 @@ export class AppointmentsAComponent implements OnInit {
       });
   }
 
-  finishAppointment() {
-    this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
-      (response: any) => {
-        this.modalFinish = false
-        this.getData();
-        console.log('HALO response', response.data);
-        
-      }
-    );
-  }
 
   openDelete(id: any) {
     this.modalDelete = true

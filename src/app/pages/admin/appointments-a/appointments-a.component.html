@@ -38,8 +38,12 @@
                     color="success">
                     <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
                   </ion-button>
+                  <ion-button (click)="notify(item.id)" color="light">
+                    <ion-icon aria-hidden="true" name="notifications"></ion-icon>
+                  </ion-button>
+                  
                   <ion-button (click)="openDetails(item.id)" color="secondary">
-                    Detalles <ion-icon aria-hidden="true" name="eye" slot="end"></ion-icon>
+                    Detalles <ion-icon aria-hidden="true" name="eye" slot="start"></ion-icon>
                   </ion-button>
                   <ion-button *ngIf="item.status==='AGENDADA'" (click)="openFinish(item.id)" color="success">
                     <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
