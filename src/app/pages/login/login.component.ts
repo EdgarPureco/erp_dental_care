@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
+import OneSignal from 'onesignal-cordova-plugin';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-login',
@@ -45,6 +47,7 @@ export class LoginComponent implements OnInit {
 
   onSubmitLogin() {
     this.loading = true
+    let email = this.loginForm.value.email
     this.api.login(this.loginForm.value).then((response: any) => {
 
       if (response.data.message.includes("User logged successfully")) {
@@ -64,13 +67,20 @@ export class LoginComponent implements OnInit {
             this.returnUrl = 'pages/dentist/home'
             break;
         }
+        if (Capacitor.getPlatform() !== 'web') {
+          if (email) {
+            OneSignal.login(email);
+          }
+        }
+
         this.router.navigate([this.returnUrl]);
+
       } else {
-        console.log("HALO error", response);
-        if(response.data.message.includes('exist')) {
+
+        if (response.data.message.includes('exist')) {
           this.presentToast('Correo incorrecto');
-        }else{
-        this.presentToast('Contraseña incorrecta');
+        } else {
+          this.presentToast('Contraseña incorrecta');
 
         }
       }

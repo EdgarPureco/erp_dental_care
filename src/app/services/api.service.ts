@@ -12,8 +12,10 @@ import { DatePipe } from '@angular/common';
 })
 export class ApiService {
 
-  private baseUrl = Capacitor.getPlatform() == 'web' ? 'http://localhost:5000/api/' : 'http://192.168.210.70:5000/api/';
-  private headers = {
+  private baseUrl = 
+    Capacitor.getPlatform() == 'web' ? 'http://localhost:5000/api/' : 'http://192.168.100.25:5000/api/';
+  
+    private headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }
