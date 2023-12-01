@@ -33,7 +33,7 @@ export function createDentist(obj: any, image: any) {
   const user: User = {
     email: obj.email,
     password: obj.password,
-    image: image
+    image: image== null ? '' : image
   };
   const diplomas: Diploma[] = [];
 

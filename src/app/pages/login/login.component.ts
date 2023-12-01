@@ -78,25 +78,29 @@ export class LoginComponent implements OnInit {
       } else {
 
         if (response.data.message.includes('exist')) {
-          this.presentToast('Correo incorrecto');
+          this.presentToast('Correo incorrecto', 'danger');
         } else {
-          this.presentToast('Contraseña incorrecta');
+          this.presentToast('Contraseña incorrecta', 'danger');
 
         }
       }
       this.loading = false;
-    }, (e: any) => console.log("HALO ERROR", e)
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
+    }
     );
     this.loginForm.reset();
     this.loading = false;
   }
 
-  async presentToast(message: string) {
+  async presentToast(message: string, type: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 3000,
       position: 'bottom',
-      color: 'danger'
+      color: type
     });
 
     await toast.present();

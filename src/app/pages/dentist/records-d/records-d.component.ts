@@ -16,6 +16,7 @@ export class RecordsDComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
@@ -28,10 +29,11 @@ export class RecordsDComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getDentistRecords().then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
-      console.log(this.data);
+      this.loading = false
       
      });
   }
@@ -44,6 +46,7 @@ export class RecordsDComponent implements OnInit {
     
   }
   onWillDismiss() {
+    this.loading = false
     this.modalDetails = false
   }
 

@@ -26,6 +26,7 @@ export class AccountPComponent  implements OnInit {
 
   maxDateBirth: any;
   data: any = null
+  loading: boolean = false;
   allergies:any[] = []
   allergiesAdded:any[] = []
   modalEdit = false
@@ -45,28 +46,33 @@ export class AccountPComponent  implements OnInit {
   });
 
   getData() {
+    this.loading = true
     this.api.getMyInfo('patients').then((response:any) => {
       this.data = response.data; 
-      console.log( "HALO",response.data)
+      this.loading = false
     });
   }
 
   openEdit() {
     this.modalEdit = true
     this.allergiesAdded = this.data.allergies    
-    this.api.getAllergies('all').then((response:any) => {
+    this.api.getAllergies('activo').then((response:any) => {
       this.allergies=response.data
     });
   }
 
   onSubmitEdit() {
-    console.log(this.allergiesAdded);
+    this.loading = true
     
     this.api.updatePatientInfo(this.dataEditForm.value, this.allergiesAdded).then(
       (response:any) => { 
-        this.presentToast('Exito', 'success')
+        if(response.status=200){
+
+          this.presentToast('Éxito: Información actualizada', 'success')
+        }
         this.modalEdit = false 
         this.getData()
+        this.loading = false
     }, (e:any) => console.log(e.data)
       
     );
@@ -75,6 +81,7 @@ export class AccountPComponent  implements OnInit {
 
  
   onWillDismiss() {
+    this.loading = false
     this.modalEdit = false
   }
 

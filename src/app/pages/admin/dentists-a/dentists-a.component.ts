@@ -22,6 +22,7 @@ export class DentistsAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   frequencies: any[] = [];
   dentist: any = null
@@ -79,9 +80,16 @@ export class DentistsAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getDentists('all').then((response: any) => {
-      this.data = response.data, this.results = [...this.data], console.log(this.results);
+      this.data = response.data
+      this.results = [...this.data]
+      this.loading = false
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -90,7 +98,7 @@ export class DentistsAComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.loading = true
     this.api.insertDentist(this.dentistForm.value, this.base64String).then(
       (response: any) => {
         if (response.data.message) {
@@ -103,14 +111,18 @@ export class DentistsAComponent implements OnInit {
           this.getData()
           this.modalAdd = false
         }
+        this.loading = false
 
       }, (e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
         console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -126,6 +138,10 @@ export class DentistsAComponent implements OnInit {
 
     this.api.getDentist(id).then((response: any) => {
       this.dentist = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
@@ -136,11 +152,16 @@ export class DentistsAComponent implements OnInit {
       this.dentistEditForm.value.sex = this.dentist.person.sex
       this.imageSrc = this.getImgSrcFromBase64(response.data.user.image)
       this.base64String = response.data.user.image
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
 
   }
 
   onSubmitEdit() {
+    this.loading = true
     this.api.updateDentist(this.dentist.id, this.dentistEditForm.value, this.base64String).then(
       (response: any) => {
         if (response.data.message) {
@@ -153,7 +174,12 @@ export class DentistsAComponent implements OnInit {
           this.getData()
         }
         this.modalEdit = false
-      }, (e: any) => console.log(e.data)
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
+      }
 
     );
     this.dentistEditForm.reset();
@@ -162,11 +188,16 @@ export class DentistsAComponent implements OnInit {
     this.modalDelete = true
     this.api.getDentist(id).then((response: any) => {
       this.dentist = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
-  async deleteDentist() {
-    await this.api.deleteDentist(this.dentist.id).then(
+  deleteDentist() {
+    this.loading = true
+    this.api.deleteDentist(this.dentist.id).then(
       (response: any) => {
         if(response.status===200){
           this.presentToast('Éxito: Dentista eliminado', 'success')
@@ -174,7 +205,12 @@ export class DentistsAComponent implements OnInit {
           this.presentToast('Error', 'danger')
         }
         this.modalDelete = false;
+        this.loading = false
         this.getData();
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
 
@@ -241,6 +277,10 @@ export class DentistsAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
 
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 

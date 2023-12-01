@@ -19,6 +19,7 @@ export class InventoryAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   inventory: any[] = [];
   buys: any[] = [];
@@ -45,9 +46,11 @@ export class InventoryAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getSupplies('all').then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
+      this.loading = false
      });
   }
 
@@ -59,11 +62,10 @@ export class InventoryAComponent implements OnInit {
   onSubmit() {
     
     this.supplyForm.value.supply_id = this.supply_id
-    console.log(this.supplyForm.value);
-    
+    this.loading = true
     this.api.buySupply(this.supplyForm.value).then(
       (response: any) => {
-        if (response.data.message) {
+        if (response.status!==200) {
           this.presentToast('Error', 'danger')
         } else {
           this.presentToast('Éxito: Compra registrada', 'success')
@@ -71,14 +73,18 @@ export class InventoryAComponent implements OnInit {
           this.getData()
           this.modalAdd = false
         }
+        this.loading = false
 
-      }, (e) => {
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
         console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
   }

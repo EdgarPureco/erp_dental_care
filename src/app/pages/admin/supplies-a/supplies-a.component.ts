@@ -17,6 +17,7 @@ export class SuppliesAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   supply: any = null
   imageSrc: SafeResourceUrl | undefined;
@@ -53,10 +54,16 @@ export class SuppliesAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getSupplies('all').then((response: any) => { 
       this.data = response.data;
       this.results = [...this.data]
-     });
+      this.loading = false
+     },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
+    });
   }
 
   openAdd() {
@@ -64,9 +71,11 @@ export class SuppliesAComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.loading = true
     this.api.insertSupply(this.supplyForm.value, this.base64String).then(
       (response: any) => {
+        console.log(response);
+        
         if(response.status==400){
           this.presentToast('Error: Ya existe este registro', 'danger')
         }else{
@@ -77,11 +86,17 @@ export class SuppliesAComponent implements OnInit {
         }
         this.getData()
         this.modalAdd = false
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -104,6 +119,7 @@ export class SuppliesAComponent implements OnInit {
   }
 
   onSubmitEdit() {
+    this.loading = true
     this.api.updateSupply(this.supply.id, this.supplyEditForm.value, this.base64String).then(
       (response: any) => {
         if(response.status==400){
@@ -116,6 +132,11 @@ export class SuppliesAComponent implements OnInit {
         this.base64String = undefined
         this.getData();
         this.modalEdit = false
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
     this.supplyEditForm.reset();
@@ -127,6 +148,10 @@ export class SuppliesAComponent implements OnInit {
 
     this.api.getSupply(id).then((response: any) => {
       this.supply = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
@@ -134,11 +159,16 @@ export class SuppliesAComponent implements OnInit {
     this.modalDelete = true
     this.api.getSupply(id).then((response: any) => {
       this.supply = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
 
   deleteSupply() {
+    this.loading = true
     this.api.deleteSupply(this.supply.id).then(
       (response: any) => {
         if(response.status===200){
@@ -148,6 +178,11 @@ export class SuppliesAComponent implements OnInit {
         }
         this.modalDelete = false;
         this.getData();
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     )
   }
@@ -210,6 +245,10 @@ export class SuppliesAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 

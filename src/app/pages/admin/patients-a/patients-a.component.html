@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Pacientes</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
               <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
@@ -51,7 +51,8 @@
 
 
           </ion-list>
-          <ion-list *ngIf="data.length===0">
+
+          <ion-list *ngIf="results && results.length===0">
             <ion-list-header>
               <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
             </ion-list-header>
@@ -341,7 +342,8 @@
     <!-- End Delete Delete Patient -->
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

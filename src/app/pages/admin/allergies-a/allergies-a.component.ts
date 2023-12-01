@@ -16,6 +16,7 @@ export class AllergiesAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   allergy: any = null
 
@@ -37,10 +38,16 @@ export class AllergiesAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getAllergies('all').then((response: any) => { 
       this.data = response.data
       this.results = [...this.data]
-     });
+      this.loading = false
+     },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
+    });
   }
 
   openAdd() {
@@ -48,7 +55,7 @@ export class AllergiesAComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.loading = true
     this.api.insertAllergy(this.allergyForm.value).then(
       (response: any) => {
         if(response.status==400){
@@ -59,12 +66,17 @@ export class AllergiesAComponent implements OnInit {
         }
         this.getData()
         this.modalAdd = false
-        
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -75,11 +87,16 @@ export class AllergiesAComponent implements OnInit {
     this.modalEdit = true
     this.api.getAllergy(id).then((response: any) => {
       this.allergy = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
 
   }
 
   onSubmitEdit() {
+      this.loading = true
     this.api.updateAllergy(this.allergy.id, this.allergyEditForm.value).then(
       (response: any) => {
         if(response.status==400){
@@ -90,6 +107,11 @@ export class AllergiesAComponent implements OnInit {
         this.allergy = null
         this.getData();
         this.modalEdit = false
+          this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
     this.allergyEditForm.reset();
@@ -101,6 +123,10 @@ export class AllergiesAComponent implements OnInit {
 
     this.api.getAllergy(id).then((response: any) => {
       this.allergy = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
@@ -108,20 +134,30 @@ export class AllergiesAComponent implements OnInit {
     this.modalDelete = true
     this.api.getAllergy(id).then((response: any) => {
       this.allergy = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
 
   deleteAllergy() {
+    this.loading = true
     this.api.deleteAllergy(this.allergy.id).then(
       (response: any) => {
         if(response.status===200){
-          this.presentToast('Éxito: Alergia eliminado', 'success')
+          this.presentToast('Éxito: Alergia eliminada', 'success')
         }else{
           this.presentToast('Error', 'danger')
         }
         this.modalDelete = false;
+        this.loading = false
         this.getData();
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     )
   }
@@ -158,6 +194,10 @@ export class AllergiesAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 

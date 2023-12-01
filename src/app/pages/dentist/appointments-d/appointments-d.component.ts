@@ -22,6 +22,7 @@ export class AppointmentsDComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
@@ -57,15 +58,27 @@ export class AppointmentsDComponent implements OnInit {
   }
 
   getData() {
-    this.api.getDentistAppointments().then((response: any) => {
-      this.data = response.data;
+    this.loading = true
+    this.api.getMyAppointments('dentists').then((response: any) => {
+      response.data.map((item: any) => {
+        if (item.status==='AGENDADA'){
+          this.data.push(item)
+        }
+      })
       this.results = [...this.data]
-
+      console.log(this.data);
+      
+      this.loading = false
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
 
   onWillDismiss() {
+    this.loading = false
     this.modalDetails = false
     this.modalFinish = false
   }
@@ -82,25 +95,42 @@ export class AppointmentsDComponent implements OnInit {
     this.appointment = this.data[this.findIndexByIdAppointments(id)]
     this.api.getServices('activo').then((response: any) => {
       this.services = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
     this.api.getSupplies('activo').then((response: any) => {
       response.data.map((item: any) => {
-        if (item.is_salable) {
+        if (item.stock>0) {
           this.supplies.push(item)
         }
       })
 
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
 
   finishAppointment() {
+    this.loading = true
     this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
       (response: any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Cita finalizada', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
         this.modalFinish = false
         this.getData();
-        console.log('HALO response', response); "{'message': 'Failed to finish the appointment, some services cannot be given due to a lack fo supplies', 'missing': [{'name': 'anstesia', 'missing': 1, 'buy_missing': 1, 'buy_unit': 'caja', 'use_unit': 'pieza'}, {'name': 'Dental Floss', 'missing': 5, 'buy_missing': 1, 'buy_unit': 'pzs', 'use_unit': 'Piece'}]}"
-
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
@@ -235,6 +265,10 @@ export class AppointmentsDComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
 
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 

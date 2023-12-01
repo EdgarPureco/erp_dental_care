@@ -31,24 +31,8 @@
           </ion-list>
           <ion-list *ngIf="data.length===0">
             <ion-list-header>
-              <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+              <h1>No hay citas próximas</h1>
             </ion-list-header>
-            <ion-item>
-              <ion-thumbnail slot="start">
-                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-              </ion-thumbnail>
-              <ion-label>
-                <h3>
-                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-                </h3>
-                <p>
-                  <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
-                </p>
-                <p>
-                  <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
-                </p>
-              </ion-label>
-            </ion-item>
           </ion-list>
         </ion-card-content>
       </ion-card>
@@ -124,7 +108,8 @@
     <!-- End Delete Cita -->
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

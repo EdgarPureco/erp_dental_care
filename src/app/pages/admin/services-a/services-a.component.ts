@@ -16,6 +16,7 @@ export class ServicesAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
@@ -44,9 +45,11 @@ export class ServicesAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getServices('all').then((response:any) => { 
       this.data = response.data;
       this.results = [...this.data]
+      this.loading = false
      });
     this.api.getSupplies('activo').then((response:any) => { this.suppliesActives = response.data });
   }
@@ -59,7 +62,7 @@ export class ServicesAComponent implements OnInit {
     this.suppliesAdded.push(
       { "supply_id": parseInt(e.detail.value), 
       "quantity": 1, 
-      "name": this.supplies[this.findIndexById(e.detail.value)].name 
+      "name": this.suppliesActives[this.findIndexByIdActives(e.detail.value)].name 
     });
   }
 
@@ -79,7 +82,7 @@ export class ServicesAComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.loading = true
     this.api.insertService(this.serviceForm.value, this.suppliesAdded).then(
       (response: any) => {
         if(response.status==400){
@@ -90,11 +93,17 @@ export class ServicesAComponent implements OnInit {
         }
         this.getData()
         this.modalAdd = false
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -133,7 +142,7 @@ export class ServicesAComponent implements OnInit {
   }
 
   onSubmitEdit() {
-    console.log(this.suppliesAdded);
+    this.loading = true
 
     this.api.updateService(this.service.id, this.serviceEditForm.value, this.suppliesAdded).then(
       (response: any) => {
@@ -145,6 +154,11 @@ export class ServicesAComponent implements OnInit {
         this.service = null
         this.getData();
         this.modalEdit = false
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
     this.serviceEditForm.reset();
@@ -159,9 +173,16 @@ export class ServicesAComponent implements OnInit {
 
 
   deleteService() {
+    this.loading = true
     this.api.deleteService(this.service.id).then(
       (response:any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Servicio eliminado', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
         this.modalDelete = false
+        this.loading = false
         this.getData();
       }
     )
@@ -171,6 +192,18 @@ export class ServicesAComponent implements OnInit {
     let index = -1;
     for (let i = 0; i < this.supplies.length; i++) {
       if (this.supplies[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+  
+  findIndexByIdActives(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.suppliesActives.length; i++) {
+      if (this.suppliesActives[i].id === id) {
         index = i;
         break;
       }
@@ -215,6 +248,10 @@ filter($e:any){
     this.data = response.data;
     this.results = [...this.data]
     
+  },(e) => {
+    this.presentToast('Error en el Servidor, ', 'danger')
+    this.loading = false
+    console.log('Error', e);
   });
 }
 

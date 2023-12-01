@@ -115,13 +115,15 @@ export class ApiService {
     return CapacitorHttp.put(options)
   }
 
-  public updateDentistInfo(id: string, obj: any) {
+  public updateDentistInfo(obj: any) {
     const body = JSON.stringify(updateDentistInfo(obj));
     const options = {
       url: this.baseUrl + 'dentists/me',
       headers: this.headers,
       data: body
     };
+    console.log(options);
+    
     return CapacitorHttp.put(options)
   }
 

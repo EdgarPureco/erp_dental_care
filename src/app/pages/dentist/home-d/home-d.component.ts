@@ -17,14 +17,19 @@ export class HomeDComponent  implements OnInit {
   }
 
   data: any = null;
+  loading: boolean = false;
 
   ngOnInit() {
     this.getData();
   }
 
   getData() {
+    this.loading = true
     this.api.getMyAppointments('dentists').then((response:any) => {
-      this.data = response.data[0];
+      if(response.data[0].status==='AGENDADA'){
+        this.data = response.data[0];
+      }
+      this.loading = false
     });
   }
 

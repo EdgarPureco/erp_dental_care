@@ -14,11 +14,13 @@ export class AppointmentsAComponent implements OnInit {
 
   constructor(private toastController: ToastController, private formBuilder: FormBuilder, private api: ApiService) {
     let todayDate = new Date();
+    todayDate.setHours(0,0,0,0)
     this.minDate = todayDate.toISOString()
 
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
@@ -53,27 +55,50 @@ export class AppointmentsAComponent implements OnInit {
   modalFinish = false
   modalDelete = false
   maxPL = 6
+  minEndDate: any = null
 
   ngOnInit() {
     this.getData();
   }
 
   getData() {
+    this.loading = true
     this.api.getAppointments('all').then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
+      this.loading = false
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
     this.api.getPatients('all').then((response: any) => {
       this.patients = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
     this.api.getPatients('activo').then((response: any) => {
       this.patientsAct = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
     this.api.getDentists('all').then((response: any) => {
       this.dentists = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
     this.api.getDentists('activo').then((response: any) => {
       this.dentistsAct = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -82,7 +107,7 @@ export class AppointmentsAComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.loading = true
     this.api.insertAppointment(this.appointmentForm.value).then(
       (response: any) => {
         if(response.status===200){
@@ -93,15 +118,17 @@ export class AppointmentsAComponent implements OnInit {
         }
         this.getData()
         this.modalAdd = false
-      }
-      ,
-      (e: any) => {
-        console.log("HALO", e);
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -113,15 +140,23 @@ export class AppointmentsAComponent implements OnInit {
     this.modalEdit = true
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data,
-        console.log(this.appointment);
+      console.log(this.appointment);
+      this.minEndDate = this.appointment.end_date
 
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
 
   }
 
   onSubmitEdit() {
+    this.loading = true
     this.api.updateAppointment(this.appointment.id, this.appointmentEditForm.value).then(
       (response: any) => {
+        console.log(response);
+        
         if(response.status===200){
           this.presentToast('Éxito: Cita actualizada', 'success')
           this.appointmentEditForm.reset();
@@ -129,10 +164,12 @@ export class AppointmentsAComponent implements OnInit {
           this.presentToast('Error', 'danger')
         }
         this.getData()
+        this.loading = false
         this.modalEdit = false
-      },
-      (e: any) => {
-        console.log("HALO", e);
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
     this.appointmentEditForm.reset();
@@ -145,6 +182,10 @@ export class AppointmentsAComponent implements OnInit {
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data;
       console.log(response.data);
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
@@ -184,22 +225,35 @@ export class AppointmentsAComponent implements OnInit {
     this.modalFinish = true
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
     this.api.getServices('activo').then((response: any) => {
       this.services = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
     this.api.getSupplies('activo').then((response: any) => {
       response.data.map((item:any)=>{
-        if(item.is_salable){
+        if (item.stock>0) {
           this.supplies.push(item)
         }
       })
       console.log(this.supplies);
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
   
   finishAppointment() {
+    this.loading = true
     this.api.finishAppointment(this.appointment.id, this.servicesAdded, this.suppliesAdded).then(
       (response: any) => {
         if(response.status===200){
@@ -208,13 +262,18 @@ export class AppointmentsAComponent implements OnInit {
           this.presentToast('Error', 'danger')
         }
         this.getData()
+        this.loading = false
         this.modalFinish = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   notify(id: any) {
-    this.modalFinish = true
+    this.loading = true
     this.api.sendNotification(id).then(
       (response: any) => {
         if(response.status===200){
@@ -222,6 +281,11 @@ export class AppointmentsAComponent implements OnInit {
         }else{
           this.presentToast('Error', 'danger')
         }
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     )
   }
@@ -241,21 +305,41 @@ export class AppointmentsAComponent implements OnInit {
         "quantity": 1
       });
   }
+  
+  setEndDate(e: any) {
+    this.minEndDate = e.detail.value
+    
+  }
 
 
   openDelete(id: any) {
     this.modalDelete = true
     this.api.getAppointment(id).then((response: any) => {
       this.appointment = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
 
   deleteAppointment() {
+    this.loading = true
     this.api.deleteAppointment(this.appointment.id).then(
       (response: any) => {
+        if(response.status===200){
+          this.presentToast('Éxito: Cita eliminada', 'success')
+        }else{
+          this.presentToast('Error', 'danger')
+        }
         this.modalDelete = false
         this.getData();
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     )
   }
@@ -331,6 +415,10 @@ export class AppointmentsAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 

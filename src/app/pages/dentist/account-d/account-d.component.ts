@@ -26,6 +26,7 @@ export class AccountDComponent implements OnInit {
 
   maxDateBirth: any;
   data: any = null
+  loading: boolean = false;
   modalEdit = false
 
   dataEditForm = this.formBuilder.group({
@@ -42,8 +43,14 @@ export class AccountDComponent implements OnInit {
   });
 
   getData() {
+    this.loading = true
     this.api.getMyInfo('dentists').then((response: any) => {
-      this.data = response.data; console.log("HALO", response.data)
+      this.data = response.data; 
+      this.loading = false
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -52,11 +59,23 @@ export class AccountDComponent implements OnInit {
   }
 
   onSubmitEdit() {
-    this.api.updateDentistInfo(this.data.id, this.dataEditForm.value).then(
+    this.loading = true
+    this.api.updateDentistInfo(this.dataEditForm.value).then(
       (response: any) => {
-        this.presentToast('Exito', 'success')
+        console.log(response);
+        
+        if (response.status==200) {
+          
+          this.presentToast('Éxito: Información actualizada', 'success')
+        }
+        this.getData();
+        this.loading = false
         this.modalEdit = false
-      }, (e: any) => console.log(e.data)
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
+      }
 
     );
     this.dataEditForm.reset();
@@ -64,6 +83,7 @@ export class AccountDComponent implements OnInit {
 
 
   onWillDismiss() {
+    this.loading = false
     this.modalEdit = false
   }
 

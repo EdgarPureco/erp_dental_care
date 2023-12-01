@@ -21,6 +21,7 @@ export class AppointmentsPComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   patients: any[] = [];
   dentists: any[] = [];
@@ -37,15 +38,17 @@ export class AppointmentsPComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getPatientAppointments().then((response:any) => {
       this.data = response.data;
       this.results = [...this.data]
-      console.log(this.results);
+      this.loading = false
       
     });
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalDetails = false
   }
 

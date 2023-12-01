@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsDentistPage } from './tabsDentist.page';
-import { HomePComponent } from '../pages/patient/home-p/home-p.component';
+import { HomeDComponent } from '../pages/dentist/home-d/home-d.component';
 
 const routes: Routes = [
   {
@@ -10,15 +10,19 @@ const routes: Routes = [
     children: [
       {
         path: 'tab1',
-        component: HomePComponent
+        component: HomeDComponent
       },
       {
         path: 'tab2',
-        component: HomePComponent
+        component: HomeDComponent
       },
       {
         path: 'tab3',
-        component: HomePComponent
+        component: HomeDComponent
+      },
+      {
+        path: 'tab4',
+        component: HomeDComponent
       },
       {
         path: '',

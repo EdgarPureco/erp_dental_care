@@ -4,10 +4,10 @@
   <ion-content>
     <div id="main-content">
       <div style="margin: 6% 2% 0 2%;">
-        <ion-card *ngIf="data">
+        <ion-card *ngIf="data!==null">
           <ion-card-header>
             <ion-card-title>Mi Cuenta</ion-card-title>
-            <img style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(data.user.image)" />
+            <img *ngIf="data.user.image" style="max-width: 25vw; margin: 10px auto 10px auto;"  [src]="getImgSrcFromBase64(data.user.image)" />
           </ion-card-header>
           <ion-card-content>
             <ion-list>
@@ -160,7 +160,8 @@
 
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Insumos</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
               <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
@@ -140,7 +140,7 @@
                     placeholder="mms/pz/g"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input formControlName="equivalence" type="number" label="Equivalencia"
+                  <ion-input formControlName="equivalence" min="1" type="number" label="Equivalencia"
                     placeholder="Equivalencia"></ion-input>
                 </ion-item>
 
@@ -255,7 +255,7 @@
                     placeholder="mms/pz/g"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-input [(ngModel)]="supply.equivalence" formControlName="equivalence" type="number" label="Equivalencia"
+                  <ion-input [(ngModel)]="supply.equivalence" min="1" formControlName="equivalence" type="number" label="Equivalencia"
                     placeholder="Equivalencia"></ion-input>
                 </ion-item>
 
@@ -304,7 +304,8 @@
     <!-- End Delete Delete Supply -->
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Alergias</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
               <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
@@ -176,7 +176,8 @@
     <!-- End Delete Delete Allergy -->
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

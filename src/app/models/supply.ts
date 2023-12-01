@@ -14,12 +14,12 @@ export function createSupply(obj: any, image: any) {
   const supply: Supply = {
     name: obj.name,
     cost: obj.cost,
-    price: obj.price,
+    price: obj.price == null ? 0 : obj.price,
     is_salable: obj.is_salable,
     buy_unit: obj.buy_unit,
     use_unit: obj.use_unit,
     equivalence: obj.equivalence,
-    image: image,
+    image: image== null ? '' : image
   };
   return supply
 }

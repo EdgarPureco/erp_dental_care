@@ -14,6 +14,7 @@ export class ServicesPComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   supplies: any[] = [];
   suppliesAdded: any[] = [];
@@ -26,10 +27,11 @@ export class ServicesPComponent implements OnInit {
   }
 
   getData() {
-    this.api.getPatientServices().then((response:any) => { 
+    this.loading = true
+    this.api.getPatientServices().then((response:any) => {
       this.data = response.data;
       this.results = [...this.data]
-      console.log(this.data);
+      this.loading = false
       
      });
   }
@@ -38,10 +40,10 @@ export class ServicesPComponent implements OnInit {
   openDetails(id: any) {
     this.modalDetails = true
     this.service= this.data[this.findIndexById(id)]
-    console.log(this.service);
-    
   }
+  
   onWillDismiss() {
+    this.loading = false
     this.modalDetails = false
   }
 

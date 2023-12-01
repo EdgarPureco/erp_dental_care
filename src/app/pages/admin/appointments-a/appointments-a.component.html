@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Citas</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todas</ion-radio>
               <ion-radio class="ion-margin" value="AGENDADA" labelPlacement="end">Agendadas</ion-radio>
@@ -40,11 +40,11 @@
                     color="success">
                     <ion-icon aria-hidden="true" name="checkmark-done"></ion-icon>
                   </ion-button>
-                  
+
                   <ion-button *ngIf="item.status==='AGENDADA'" (click)="notify(item.id)" color="light">
                     <ion-icon aria-hidden="true" name="notifications"></ion-icon>
                   </ion-button>
-                  
+
                   <ion-button (click)="openDetails(item.id)" color="secondary">
                     Detalles <ion-icon aria-hidden="true" name="eye" slot="start"></ion-icon>
                   </ion-button>
@@ -137,11 +137,12 @@
 
                 <ion-item>
                   <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime formControlName="start_date" [min]="minDate"></ion-datetime>
+                  <ion-datetime formControlName="start_date" [min]="minDate"
+                    (ionChange)="setEndDate($event)"></ion-datetime>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="minEndDate!==null">
                   <ion-label>Hora de Fin</ion-label>
-                  <ion-datetime formControlName="end_date" [min]="minDate"></ion-datetime>
+                  <ion-datetime formControlName="end_date" [min]="minEndDate"></ion-datetime>
                 </ion-item>
 
 
@@ -186,61 +187,58 @@
               appointment.patient.person.surname + " " +
               appointment.patient.person.lastname}} <br>
               <br>
-              <h2>Información:</h2>
-              <ion-list>
-                <ion-item *ngFor="let sell of appointment.sells">
-                  <ion-card style="width: 100%;">
-                    <ion-card-header>
-                      <ion-card-title
-                        class="ion-text-capitalize">{{formatDateToLetter(sell.created_at)}}</ion-card-title>
-                    </ion-card-header>
+              <div *ngIf="appointment.sells.length!==0">
+                <h2>Información:</h2>
+                <ion-list>
+                  <ion-item *ngFor="let sell of appointment.sells">
+                    <ion-card style="width: 100%;">
+                      <ion-card-header>
+                        <ion-card-title
+                          class="ion-text-capitalize">{{formatDateToLetter(sell.created_at)}}</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <h3>Servicios:</h3>
+                        <ion-list>
+                          <ion-item *ngFor="let service of sell.services">
+                            <ion-card style="width: 100%;">
+                              <ion-card-header>
+                                <ion-card-title>{{service.service.name}}</ion-card-title>
+                              </ion-card-header>
 
-                    <ion-card-content>
-                      SubTotal: {{sell.subtotal}}<br>
-                      I.V.A: {{sell.vat}}<br>
-                      Total: {{sell.total}}<br>
-                      <br>
-                      <h3>Servicios:</h3>
-                      <ion-list>
-                        <ion-item *ngFor="let service of sell.services">
-                          <ion-card style="width: 100%;">
-                            <ion-card-header>
-                              <ion-card-title>{{service.service.name}}</ion-card-title>
-                            </ion-card-header>
+                              <ion-card-content>
+                                Precio: {{service.price}}<br>
+                                Cantidad: {{service.quantity}}<br>
+                                SubTotal: {{service.subtotal}}<br>
+                                I.V.A: {{service.vat}}<br>
+                                Total: {{service.total}}<br>
+                              </ion-card-content>
+                            </ion-card>
+                          </ion-item>
+                        </ion-list>
+                        <br>
+                        <h3>Insumos:</h3>
+                        <ion-list>
+                          <ion-item *ngFor="let supply of sell.supplies">
+                            <ion-card style="width: 100%;">
+                              <ion-card-header>
+                                <ion-card-title>{{supply.supply.name}}</ion-card-title>
+                              </ion-card-header>
 
-                            <ion-card-content>
-                              Precio: {{service.price}}<br>
-                              Cantidad: {{service.quantity}}<br>
-                              SubTotal: {{service.subtotal}}<br>
-                              I.V.A: {{service.vat}}<br>
-                              Total: {{service.total}}<br>
-                            </ion-card-content>
-                          </ion-card>
-                        </ion-item>
-                      </ion-list>
-                      <br>
-                      <h3>Insumos:</h3>
-                      <ion-list>
-                        <ion-item *ngFor="let supply of sell.supplies">
-                          <ion-card style="width: 100%;">
-                            <ion-card-header>
-                              <ion-card-title>{{supply.supply.name}}</ion-card-title>
-                            </ion-card-header>
-
-                            <ion-card-content>
-                              Precio: {{supply.price}}<br>
-                              Cantidad: {{supply.quantity}}<br>
-                              SubTotal: {{supply.subtotal}}<br>
-                              I.V.A: {{supply.vat}}<br>
-                              Total: {{supply.total}}<br>
-                            </ion-card-content>
-                          </ion-card>
-                        </ion-item>
-                      </ion-list>
-                    </ion-card-content>
-                  </ion-card>
-                </ion-item>
-              </ion-list>
+                              <ion-card-content>
+                                Precio: {{supply.price}}<br>
+                                Cantidad: {{supply.quantity}}<br>
+                                SubTotal: {{supply.subtotal}}<br>
+                                I.V.A: {{supply.vat}}<br>
+                                Total: {{supply.total}}<br>
+                              </ion-card-content>
+                            </ion-card>
+                          </ion-item>
+                        </ion-list>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-item>
+                </ion-list>
+              </div>
             </ion-card-content>
           </ion-card>
 
@@ -268,21 +266,28 @@
           <ion-list *ngIf="appointment!==null">
             <form (ngSubmit)="onSubmitEdit()" [formGroup]="appointmentEditForm">
               <ion-list class="ion-margin">
-
+                <ion-item>
+                  <ion-card-subtitle>{{appointment.dentist.person.name}} {{appointment.dentist.person.surname}}
+                    {{appointment.dentist.person.lastname}}</ion-card-subtitle>
+                </ion-item>
                 <ion-item>
                   <ion-select aria-label="Seleccionar Dentista" placeholder="Seleccionar Dentista"
-                    formControlName="dentist_id" [(ngModel)]="appointment.dentist.id">
-                    <div *ngFor="let item of dentists">
+                    formControlName="dentist_id">
+                    <div *ngFor="let item of dentistsAct">
                       <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
                         item.person.lastname}}</ion-select-option>
                     </div>
                   </ion-select>
                 </ion-item>
-
+                <ion-card-subtitle>
+                  <ion-label>{{appointment.patient.person.name}} {{appointment.patient.person.surname}}
+                    {{appointment.patient.person.lastname}}</ion-label>
+                </ion-card-subtitle>
                 <ion-item>
+
                   <ion-select aria-label="Seleccionar Paciente" placeholder="Seleccionar Paciente"
-                    formControlName="patient_id" [(ngModel)]="appointment.patient.id">
-                    <div *ngFor="let item of patients">
+                    formControlName="patient_id">
+                    <div *ngFor="let item of patientsAct">
                       <ion-select-option [value]="item.id">{{item.person.name + " " + item.person.surname + " " +
                         item.person.lastname}}</ion-select-option>
                     </div>
@@ -291,11 +296,13 @@
 
                 <ion-item>
                   <ion-label>Hora de Inicio</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.start_date" formControlName="start_date" [min]="minDate"></ion-datetime>
+                  <ion-datetime [(ngModel)]="appointment.start_date" formControlName="start_date"
+                    [min]="minDate"></ion-datetime>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="minEndDate!==null">
                   <ion-label>Hora de Salida</ion-label>
-                  <ion-datetime [(ngModel)]="appointment.end_date" formControlName="end_date" [min]="minDate"></ion-datetime>
+                  <ion-datetime [(ngModel)]="appointment.end_date" formControlName="end_date"
+                    [min]="minEndDate"></ion-datetime>
                 </ion-item>
 
 
@@ -411,6 +418,7 @@
     <!-- End Delete Cita -->
 
 
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
     <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>

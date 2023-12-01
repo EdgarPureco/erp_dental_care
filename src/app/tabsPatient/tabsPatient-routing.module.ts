@@ -21,6 +21,10 @@ const routes: Routes = [
         component: HomePComponent
       },
       {
+        path: 'tab4',
+        component: HomePComponent
+      },
+      {
         path: '',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'

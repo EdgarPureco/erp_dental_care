@@ -19,6 +19,7 @@ export class PatientsAComponent implements OnInit {
   }
 
   data: any[] = [];
+  loading: boolean = false;
   results: any[] = [];
   patient: any = null
   maxDate: any;
@@ -60,11 +61,16 @@ export class PatientsAComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true
     this.api.getPatients('all').then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
-      console.log(this.results);
+      this.loading = false
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -73,6 +79,10 @@ export class PatientsAComponent implements OnInit {
       this.data = response.data;
       this.results = [...this.data]
       
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -81,6 +91,7 @@ export class PatientsAComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loading = true
     this.api.insertPatient(this.patientForm.value, this.base64String).then(
       (response: any) => {
         if (response.data.message) {
@@ -93,11 +104,17 @@ export class PatientsAComponent implements OnInit {
           this.getData()
           this.modalAdd = false
         }
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
   }
 
   onWillDismiss() {
+    this.loading = false
     this.modalAdd = false
     this.modalDetails = false
     this.modalEdit = false
@@ -113,6 +130,10 @@ export class PatientsAComponent implements OnInit {
 
     this.api.getPatient(id).then((response: any) => {
       this.patient = response.data;
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
@@ -122,10 +143,15 @@ export class PatientsAComponent implements OnInit {
       this.patient = response.data
       this.imageSrc = this.getImgSrcFromBase64(response.data.user.image)
       this.base64String = response.data.user.image
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
   onSubmitEdit() {
+    this.loading = true
     this.api.updatePatient(this.patient.id, this.patientEditForm.value, this.base64String).then(
       (response: any) => {
         if (response.data.message) {
@@ -139,6 +165,11 @@ export class PatientsAComponent implements OnInit {
           this.getData()
         }
         this.modalEdit = false
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
       }
     );
     this.patientEditForm.reset();
@@ -148,12 +179,17 @@ export class PatientsAComponent implements OnInit {
     this.modalDelete = true
     this.api.getPatient(id).then((response: any) => {
       this.patient = response.data
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     })
   }
 
 
 
   deletePatient() {
+    this.loading = true
     this.api.deletePatient(this.patient.id).then(
       (response: any) => {
         if(response.status===200){
@@ -163,7 +199,12 @@ export class PatientsAComponent implements OnInit {
         }
         this.modalDelete = false;
         this.getData();
-      }, (e)=>{console.log(e.message);}
+        this.loading = false
+      },(e) => {
+        this.presentToast('Error en el Servidor, ', 'danger')
+        this.loading = false
+        console.log('Error', e);
+      }
     )
   }
 

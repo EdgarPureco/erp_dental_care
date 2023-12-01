@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Expediente</ion-card-title>
           <!-- <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
           </ion-card-subtitle> -->
         </ion-card-header>
         <ion-card-content>
@@ -141,7 +141,8 @@
     <!-- End Details Add Service -->
 
 
-    <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
+    <ion-loading [isOpen]="loading" spinner="circles"></ion-loading>
+  <ion-img class="water-mark" src="../assets/logo-no-background.png" alt="AzTech"></ion-img>
 
   </ion-content>
 

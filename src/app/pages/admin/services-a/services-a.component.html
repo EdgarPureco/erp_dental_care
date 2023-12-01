@@ -8,7 +8,7 @@
         <ion-card-header>
           <ion-card-title>Servicios</ion-card-title>
           <ion-card-subtitle>
-            <ion-searchbar animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
+            <ion-searchbar *ngIf="data.length!==0" animated="true" placeholder="Buscar" (ionInput)="search($event)"></ion-searchbar>
             <ion-radio-group value="all" (ionChange)="filter($event)">
               <ion-radio class="ion-margin" value="all" labelPlacement="end">Todo</ion-radio>
               <ion-radio class="ion-margin" value="ACTIVO" labelPlacement="end">Activos</ion-radio>
@@ -119,7 +119,7 @@
                 <br>
                 <label *ngIf="suppliesAdded.length">Insumos</label>
                 <ion-item *ngFor="let item of suppliesAdded">
-                      <ion-input [id]="item.supply_id" [label]="supplies[findIndexById(item.supply_id)].name" type="number"
+                      <ion-input [id]="item.supply_id" [label]="suppliesActives[findIndexByIdActives(item.supply_id)].name" type="number"
                       (ionChange)="addQuantity($event, item.supply_id)"
                     [value]="item.quantity" min="1"></ion-input>
                     <ion-button style="margin-left: 10px;" (click)="removeSupply(item.id)" color="danger"><ion-icon aria-hidden="true"
