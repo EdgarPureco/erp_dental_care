@@ -23,9 +23,9 @@ export class HomePComponent  implements OnInit {
     this.getData();
   }
 
-  getData() {
+  async getData() {
     this.loading = true
-    this.api.getMyAppointments('patients').then((response:any) => {
+    await this.api.getMyAppointments('patients').then((response:any) => {
       if(response.data[0].status==='AGENDADA'){
         this.data = response.data[0];
       }

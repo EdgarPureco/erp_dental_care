@@ -60,9 +60,9 @@ export class PatientsAComponent implements OnInit {
     this.getData();
   }
 
-  getData() {
+  async getData() {
     this.loading = true
-    this.api.getPatients('all').then((response: any) => {
+    await this.api.getPatients('all').then((response: any) => {
       this.data = response.data;
       this.results = [...this.data]
       this.loading = false

@@ -23,9 +23,9 @@ export class HomeDComponent  implements OnInit {
     this.getData();
   }
 
-  getData() {
+  async getData() {
     this.loading = true
-    this.api.getMyAppointments('dentists').then((response:any) => {
+    await this.api.getMyAppointments('dentists').then((response:any) => {
       if(response.data[0].status==='AGENDADA'){
         this.data = response.data[0];
       }

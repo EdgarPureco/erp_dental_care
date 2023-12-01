@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { HomeAComponent } from './pages/admin/home-a/home-a.component';
 import { TabsPage } from './tabs/tabs.page';
 import { HomeDComponent } from './pages/dentist/home-d/home-d.component';
 import { HomePComponent } from './pages/patient/home-p/home-p.component';
@@ -36,12 +35,6 @@ const routes: Routes = [
         path: 'admin',
         component: TabsPage,
         children: [
-          {
-            path: 'home',
-            component: HomeAComponent,
-            canActivate: [AuthGuard],
-            data: { roles: [Roles.Admin] }
-          },
           {
             path: 'allergies',
             component: AllergiesAComponent,
