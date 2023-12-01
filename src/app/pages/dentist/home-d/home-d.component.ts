@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class HomeDComponent  implements OnInit {
 
-  constructor(private api: ApiService) {
+  constructor(private toastController: ToastController,private api: ApiService) {
     let fechaActual = new Date();
 
     fechaActual.setFullYear(fechaActual.getFullYear() - 5);
@@ -30,6 +31,10 @@ export class HomeDComponent  implements OnInit {
         this.data = response.data[0];
       }
       this.loading = false
+    },(e) => {
+      this.presentToast('Error en el Servidor, ', 'danger')
+      this.loading = false
+      console.log('Error', e);
     });
   }
 
@@ -41,4 +46,14 @@ export class HomeDComponent  implements OnInit {
     return formattedDate;
   }
 
+  async presentToast(message:string, type:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: 'top',
+      color: type
+    });
+  
+    await toast.present();
+  }
 }
